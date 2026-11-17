@@ -771,7 +771,7 @@
           h = e - 16 - 64;
         if (
           ((n.ai = p
-            ? { x: 8, y: 10, w: e - 16, h: 52, r: 26, p: 1 }
+            ? { x: 8, y: l, w: e - 16, h: 52, r: 26, p: 1 }
             : { x: e - 8 - 56, y: c, w: 56, h: 56, r: 28, p: 1 }),
           i)
         )
@@ -796,7 +796,7 @@
           (t.arcBox = null),
           (n.answer = {
             x: 8,
-            y: 10 + 52 + 8,
+            y: Math.max(10, l - 8 - b.answer),
             w: e - 16,
             h: b.answer,
             r: 28,
@@ -1569,7 +1569,7 @@
       kbBox ||
         ((kbBox = document.createElement("pre")),
         (kbBox.style.cssText =
-          "position:fixed;left:4px;bottom:4px;z-index:2147483647;margin:0;padding:4px 6px;font:11px/1.3 ui-monospace,monospace;color:#0f0;background:rgba(0,0,0,.75);pointer-events:none;white-space:pre"),
+          "position:fixed;left:4px;top:calc(env(safe-area-inset-top,0px) + 64px);z-index:2147483647;margin:0;padding:4px 6px;font:11px/1.3 ui-monospace,monospace;color:#0f0;background:rgba(0,0,0,.75);pointer-events:none;white-space:pre"),
         document.body.append(kbBox));
       const e = window.visualViewport || {};
       kbBox.textContent = `inner ${innerWidth}x${innerHeight}  vv ${Math.round(e.width)}x${Math.round(e.height)}\nvv.top ${Math.round(e.offsetTop)} page ${Math.round(e.pageTop)} scrollY ${Math.round(scrollY)}\nkb ${t.kb} ai ${t.ai} focus ${document.activeElement === q}`;
