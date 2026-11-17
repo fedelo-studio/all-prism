@@ -51,6 +51,11 @@ export default async function handler(req) {
     }
     // retouche facultative d'une réponse JSON du site réel (par exemple le style des bulles de la carte)
     if (cfg.patch && type.includes('json')) { try { const j = JSON.parse(body); if (cfg.patch(path, j) !== false) body = JSON.stringify(j); } catch (e) {} }
+    if (type.includes('html')) {
+      // contenu en français : on le dit au navigateur pour que Chrome ne propose plus de traduire
+      body = body.replace(/<html([^>]*)>/i, (m, a) => '<html' + a.replace(/\s(lang|translate)="[^"]*"/gi, '') + ' lang="fr" translate="no">')
+        .replace(/<head(\s[^>]*)?>/i, (m) => m + '<meta name="google" content="notranslate">');
+    }
     if (type.includes('html')) body = body.replace(/<\/body>/i, cfg.inject.map((s) => `<script src="${s}"></script>`).join('') + '</body>');
     const h = { 'content-type': type, 'cache-control': 'no-store' };
     if (remember) h['set-cookie'] = remember;

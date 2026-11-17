@@ -147,13 +147,11 @@
   @media (prefers-reduced-motion:reduce){#fx .fx-btn{animation:none}}
   #fx .fx-spots{margin-top:18px;display:flex;flex-direction:column}
   #fx .fx-spots h3{font-size:13px;line-height:18px;font-weight:600;color:var(--soft)}
-  #fx .fx-spot{position:relative;height:46px;margin-top:8px;padding:0 12px 0 14px;border-radius:14px;display:flex;align-items:center;gap:10px;font-size:15px;line-height:20px;font-weight:500;text-align:left;background:linear-gradient(180deg,rgba(255,255,255,.13),rgba(255,255,255,.06));box-shadow:inset 0 1px 0 rgba(255,255,255,.14),inset 0 0 0 1px rgba(255,255,255,.05);transition:background .3s,transform .3s var(--ease)}
-  #fx .fx-spot:hover{background:linear-gradient(180deg,rgba(255,255,255,.22),rgba(255,255,255,.11));transform:translateY(-1px)}
-  #fx .fx-spot:active{transform:scale(.98)}
+  #fx .fx-spot{position:relative;height:34px;padding:0 2px;display:flex;align-items:center;gap:10px;font-size:15px;line-height:20px;font-weight:500;border-bottom:1px solid rgba(255,255,255,.08)}
   #fx .fx-spot b{width:6px;height:6px;border-radius:50%;background:var(--accent);flex:none}
   #fx .fx-spot span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   #fx .fx-spot svg{flex:none;opacity:.5}
-  #fx .fx-hint{margin-top:10px;font-size:13px;line-height:18px;color:var(--soft)}
+  #fx .fx-hint{margin-top:12px;font-size:13px;line-height:18px;color:var(--soft)}
   #fx .fx-map{aspect-ratio:auto;height:188px;display:grid;place-items:center;overflow:hidden}
   #fx .fx-map svg{width:100%;height:100%;display:block}
   #fx .fx-mini header span{font-size:17px;font-weight:600;color:var(--ink)}
@@ -667,18 +665,19 @@
               : "\xC0 voir ici"),
             o.append(l);
           for (const h of f) {
-            const d = document.createElement("button");
-            (d.type = "button"),
-              (d.className = "fx-spot"),
-              (d.innerHTML = "<b></b><span></span>" + z.sep),
+            const d = document.createElement("div");
+            (d.className = "fx-spot"),
+              (d.innerHTML = "<b></b><span></span>"),
               (d.querySelector("span").textContent = h.label),
-              (d.onclick = () => At(h)),
               o.append(d);
           }
           const c = document.createElement("p");
           (c.className = "fx-hint"),
             (c.id = "fx-hint"),
-            (c.hidden = !0),
+            (c.textContent =
+              f.length > 1
+                ? "Touchez un point coloré dans la vue pour y entrer."
+                : "Touchez le point coloré dans la vue pour y entrer."),
             o.append(c);
         }
         (r("fx-rows").style.maxHeight = t.compact
@@ -1336,6 +1335,7 @@
       t.ai === "idle" && q.focus();
     }),
       q.addEventListener("focus", () => {
+        kbSettle(),
         t.ai === "idle" &&
           ((t.ai = "suggest"),
           (r("fx-who").textContent = "Suggestions"),
@@ -1361,6 +1361,7 @@
     addEventListener("keydown", Xe), addEventListener("pointerdown", _e, !0);
     for (const e of ["keydown", "keyup", "keypress"])
       q.addEventListener(e, (a) => a.stopPropagation());
+    q.addEventListener("blur", () => kbSettle());
     for (const e of ["wheel", "touchmove"])
       for (const k of ["fx-body", "fx-answer"])
         r(k).addEventListener(e, (a) => a.stopPropagation(), { passive: !0 });
@@ -1544,8 +1545,37 @@
           (n.style.transform = `translate3d(${((i.x + i.w / 2 - 79) * t.z).toFixed(1)}px,${((i.y + i.h + 16) * t.z).toFixed(1)}px,0) scale(${t.z})`),
         (ve = requestAnimationFrame(st));
     }
+    let kbT = 0;
+    function kbSettle() {
+      // iOS : le clavier s'ouvre en ~0,5 s, la page est poussée vers le haut et
+      // les événements visualViewport arrivent tard ou pas du tout. On remet la
+      // page à zéro et on recalcule à chaque image pendant 1,4 s.
+      const end = performance.now() + 1400;
+      cancelAnimationFrame(kbT);
+      const tick = () => {
+        if (t.compact && document.activeElement === q) {
+          const se = document.scrollingElement || document.documentElement;
+          (window.scrollY || se.scrollTop) && window.scrollTo(0, 0);
+          document.body && document.body.scrollTop && (document.body.scrollTop = 0);
+        }
+        F(), w(), kbDebug();
+        performance.now() < end && (kbT = requestAnimationFrame(tick));
+      };
+      kbT = requestAnimationFrame(tick);
+    }
+    let kbBox = null;
+    function kbDebug() {
+      if (!/kbdebug/.test(location.search + location.hash)) return;
+      kbBox ||
+        ((kbBox = document.createElement("pre")),
+        (kbBox.style.cssText =
+          "position:fixed;left:4px;bottom:4px;z-index:2147483647;margin:0;padding:4px 6px;font:11px/1.3 ui-monospace,monospace;color:#0f0;background:rgba(0,0,0,.75);pointer-events:none;white-space:pre"),
+        document.body.append(kbBox));
+      const e = window.visualViewport || {};
+      kbBox.textContent = `inner ${innerWidth}x${innerHeight}  vv ${Math.round(e.width)}x${Math.round(e.height)}\nvv.top ${Math.round(e.offsetTop)} page ${Math.round(e.pageTop)} scrollY ${Math.round(scrollY)}\nkb ${t.kb} ai ${t.ai} focus ${document.activeElement === q}`;
+    }
     const V = () => {
-      F(), w();
+      F(), w(), kbDebug();
     };
     addEventListener("resize", V);
     const Y = window.visualViewport;
