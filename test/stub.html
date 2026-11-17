@@ -1,0 +1,34 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>A-LL | ALL prism | Leysin365</title>
+<style>html,body{margin:0;height:100%;overflow:hidden;background:#333;font-family:sans-serif}
+#unity-canvas{position:fixed;inset:0;width:100%;height:100%;opacity:1;background:linear-gradient(160deg,#9fb0a0,#6f7d6a 40%,#555 70%,#8a7a66)}
+#poi-card-panel{position:fixed;left:0;top:0;width:300px;background:#003d69;color:#fff}
+#footer{position:fixed;right:12px;bottom:10px;color:#fff;font:600 12px sans-serif;letter-spacing:.2em}
+#interaction-hint{position:fixed;left:50%;bottom:60px;transform:translateX(-50%);color:#fff;font-size:12px}
+.camera-spatial-control{position:fixed;right:20px;bottom:20px;width:200px;height:180px}</style></head><body>
+<div id="main-content-container"><div id="unity-container"><canvas id="unity-canvas"></canvas>
+<div id="interaction-hint">cliquez et glissez</div>
+<section id="poi-card-panel" data-open="false"><article>
+<button id="poi-card-close-button">x</button>
+<img id="poi-card-image" style="display:none">
+<p id="poi-card-eyebrow" style="display:none"></p><h2 id="poi-card-title"></h2><p id="poi-card-text"></p><p id="poi-card-bullets"></p></article></section>
+<div class="camera-spatial-control" hidden><svg class="camera-spatial-map" viewBox="0 0 200 180"><path class="camera-spatial-route-edge" d="M20 150 L80 140 L110 80 L170 40" fill="none"/><path class="camera-spatial-route" d="M20 150 L80 140 L110 80 L170 40" fill="none"/><g class="camera-spatial-marker"><g><circle r="6.75" class="camera-spatial-ring" cx="20" cy="150"/><circle r="4" class="camera-spatial-dot" cx="20" cy="150"/></g></g></svg>
+<div class="camera-spatial-handle" role="slider" aria-valuenow="0"></div><button class="camera-spatial-transport">play</button></div>
+</div></div>
+<div id="footer"><img alt="ALL prism." src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='70' height='12'%3E%3Ctext y='10' fill='white' font-size='10' font-family='sans-serif' letter-spacing='2'%3EALL prism%3C/text%3E%3C/svg%3E"></div>
+<script>
+const P={
+ 'target-gare-2':{title:'Leysin Centre',eyebrow:'',img:'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22300%22%3E%3Crect width=%22400%22 height=%22300%22 fill=%22%23887766%22/%3E%3C/svg%3E',text:'• Halte souterraine\n• Altitude du quai : 1296 m\n• Dimensions du quai : 100 m de long et 3,15 m de large\n• Pente du quai : 2,5%\n• Accessible pour les personnes à mobilité réduite (Conforme Lhand)'},
+ 'gare-2-quai':{title:'Halte ferroviaire souterraine',eyebrow:'Leysin Centre',img:'',text:'• Halte souterraine\n• Altitude du quai : 1296 m\n• Dimensions du quai : 100 m de long et 3,15 m de large\n• Pente du quai : 2,5%',tour:true}
+};
+let stack=[];
+function show(id){const d=P[id]||{title:id,eyebrow:'',img:'',text:'• Texte'};const $=s=>document.querySelector(s);
+ $('#poi-card-panel').dataset.open='true';$('#poi-card-title').textContent=d.title;const e=$('#poi-card-eyebrow');e.textContent=d.eyebrow;e.style.display=d.eyebrow?'':'none';
+ const i=$('#poi-card-image');i.src=d.img;i.style.display=d.img?'':'none';$('#poi-card-text').textContent=d.text;
+ const c=$('.camera-spatial-control');if(d.tour)c.removeAttribute('hidden');else c.setAttribute('hidden','');}
+window.unityInstance={SendMessage(o,m,v){const j=JSON.parse(v);stack.push(j.targetId);show(j.targetId);}};
+document.querySelector('#poi-card-close-button').onclick=()=>{stack.pop();if(stack.length)show(stack[stack.length-1]);else{document.querySelector('#poi-card-panel').dataset.open='false';document.querySelector('#poi-card-title').textContent='';document.querySelector('.camera-spatial-control').setAttribute('hidden','')}};
+let prog=0,tm=null;document.querySelector('.camera-spatial-transport').onclick=()=>{if(tm){clearInterval(tm);tm=null}else tm=setInterval(()=>{prog=Math.min(1,prog+.01);document.querySelector('.camera-spatial-handle').setAttribute('aria-valuenow',prog)},50)};
+window.__open=show;
+</script>
+<script src="../public/skin.js"></script></body></html>
