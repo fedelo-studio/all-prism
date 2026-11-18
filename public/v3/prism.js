@@ -100,7 +100,7 @@
   /* regards */
   .pz-lens{position:relative;display:flex;gap:2px;margin:12px 12px 0;padding:3px;border-radius:16px;background:rgba(0,0,0,.22);flex:none;overflow-x:auto;scrollbar-width:none}
   .pz-lens::-webkit-scrollbar{display:none}
-  .pz-lens button{position:relative;z-index:1;flex:1 0 auto;height:30px;padding:0 12px;border-radius:13px;font-size:13px;line-height:18px;font-weight:500;color:var(--soft);transition:color .2s;white-space:nowrap}
+  .pz-lens button{position:relative;z-index:1;flex:1 0 auto;height:30px;padding:0 12px;text-align:center;border-radius:13px;font-size:13px;line-height:18px;font-weight:500;color:var(--soft);transition:color .2s;white-space:nowrap}
   .pz-lens button[aria-pressed=true]{color:#fff}
   .pz-lens u{position:absolute;z-index:0;top:3px;height:30px;border-radius:13px;background:var(--fill2);box-shadow:inset 0 1px 0 rgba(255,255,255,.18);transition:transform .34s var(--spring),width .34s var(--spring)}
 
@@ -113,12 +113,14 @@
   .pz-feed.out>*{transition:opacity .18s,transform .18s;opacity:0;transform:translateY(-6px)}
   .pz-photo{border-radius:18px;aspect-ratio:16/8;background:#2b2e33 center/cover no-repeat;box-shadow:inset 0 0 0 1px rgba(255,255,255,.08);margin:6px -8px 0}
   .pz-lead{font-size:22px;line-height:28px;font-weight:600;letter-spacing:-.02em;text-wrap:balance}
+  .pz-feed>.pz-b:first-child>.pz-lead{margin-top:10px}
   .pz-lead .w{display:inline-block;animation:pz-w .42s var(--ease) backwards}
   @keyframes pz-w{from{opacity:0;filter:blur(5px);transform:translateY(3px)}}
   .pz-story{font-size:15px;line-height:22px;color:var(--soft);text-wrap:pretty}
   .pz-story b{color:var(--ink);font-weight:500}
   .pz-k{font-size:11px;line-height:14px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--soft);margin-bottom:8px;display:flex;align-items:center;gap:6px}
   .pz-tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+  .pz-tile:last-child:nth-child(odd){grid-column:1/-1}
   .pz-tile{padding:12px 14px;border-radius:16px;background:var(--fill);box-shadow:inset 0 1px 0 rgba(255,255,255,.07)}
   .pz-tile strong{display:block;font-size:20px;line-height:24px;font-weight:600;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
   .pz-tile span{display:block;margin-top:2px;font-size:13px;line-height:17px;color:var(--soft)}
@@ -258,8 +260,11 @@
   .pz-c.pz-vb .pz-lens{margin-top:8px}
   .pz-c.pz-vb .pz-lens button{height:28px;font-size:12px;padding:0 10px}
   .pz-c.pz-vb .pz-tiles{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
-  .pz-c.pz-vb .pz-tile{padding:10px}
+  .pz-c.pz-vb .pz-tile{padding:10px;grid-column:auto}
+  #pz-mini .scrub .pre{font-weight:inherit}
+  .pz-c #pz-mini .scrub .pre{display:none}
   .pz-c.pz-vb .pz-tile strong{font-size:17px;line-height:22px}
+  .pz-c.pz-vb .pz-tile.lg strong{font-size:14px;letter-spacing:-.03em}
   .pz-c.pz-vb .pz-tile span{font-size:12px;line-height:15px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
   .pz-c.pz-vb .pz-lead{font-size:19px;line-height:24px}
   .pz-c.pz-vb .pz-tour{display:none}
@@ -269,7 +274,7 @@
   #pz-plansh,#pz-plan,#pz-planmk{position:fixed;z-index:2147482990;pointer-events:none;right:4vw;bottom:5vh;height:min(56vh,500px);opacity:0;
     transform:perspective(900px) rotateX(30deg) translateY(24px);transform-origin:50% 100%;transition:opacity .9s cubic-bezier(.2,.7,.2,1),transform 1.2s cubic-bezier(.2,.7,.2,1)}
   #pz-plan{mix-blend-mode:screen}
-  #pz-plansh.on{opacity:1;transform:perspective(900px) rotateX(30deg)}
+  #pz-plansh.on{transform:perspective(900px) rotateX(30deg)}
   #pz-plan.on{opacity:.62;transform:perspective(900px) rotateX(30deg)}
   #pz-planmk.on{opacity:1;transform:perspective(900px) rotateX(30deg)}
   #pz-plansh svg,#pz-plan svg,#pz-planmk svg{height:100%;width:auto;display:block;overflow:visible}
@@ -279,9 +284,12 @@
   #pz-plan path.camera-spatial-route-edge{fill:none!important;stroke:rgba(255,255,255,.35)!important;stroke-width:9px!important;stroke-linecap:round;stroke-linejoin:round}
   #pz-plan path.camera-spatial-route{fill:none!important;stroke:#fff!important;stroke-width:2.6px!important;stroke-linecap:round;stroke-linejoin:round}
   #pz-plan .camera-spatial-track-hit,#pz-plan .camera-spatial-marker{display:none}
-  #pz-plansh svg>*:not(.camera-spatial-route-edge){display:none}
-  #pz-plansh path.camera-spatial-route-edge{fill:none!important;stroke:rgba(0,0,0,.22)!important;stroke-width:7px!important;stroke-linecap:round;stroke-linejoin:round}
-  #pz-plansh{filter:blur(3px)}
+  #pz-plansh{mix-blend-mode:multiply;filter:blur(.6px)}
+  #pz-plansh.on{opacity:.9}
+  #pz-plansh svg>*:not(.camera-spatial-route-edge):not(.camera-spatial-route):not(.camera-spatial-context){display:none}
+  #pz-plansh path.camera-spatial-route-edge{fill:none!important;stroke:rgba(12,22,34,.14)!important;stroke-width:11px!important;stroke-linecap:round;stroke-linejoin:round}
+  #pz-plansh path.camera-spatial-route{fill:none!important;stroke:rgba(12,22,34,.55)!important;stroke-width:5px!important;stroke-linecap:round;stroke-linejoin:round}
+  #pz-plansh .camera-spatial-context path{fill:none!important;stroke:rgba(12,22,34,.4)!important;stroke-width:2.4px!important}
   #pz-planmk svg>*:not(.camera-spatial-marker){visibility:hidden}
   #pz-planmk .camera-spatial-ring{fill:rgba(255,255,255,.95)!important;stroke:none!important}
   #pz-planmk .camera-spatial-dot{fill:var(--pz-acc)!important;stroke:none!important}
@@ -388,6 +396,8 @@
   }
   const isAccess = (s) => /mobilit|lhand|pmr|accessib|pente|ascenseur|rampe|escalier|fauteuil/i.test(s);
   function headline(v) { // une valeur courte et forte pour une tuile
+    const d = v.match(/^([\d.,'’]+)\s*(m|cm|km)\s+de\s+long(?:ueur)?\s+(?:et|sur|x|×)\s+([\d.,'’]+)\s*\2\s+de\s+large(?:ur)?$/i);
+    if (d) return [`${d[1]}\u202f×\u202f${d[3]}\u202f${d[2]}`, ''];
     const m = v.match(/^([\d'’\s.,]+\s?[^\s\d]{0,3})(.*)$/);
     return m && m[1].trim().length <= 9 ? [m[1].trim(), m[2].replace(/^\s*(de|d’|d')\s*/i, '').trim()] : [v, ''];
   }
@@ -538,7 +548,7 @@
       case 'story': el.innerHTML = `<p class="pz-story">${b.html || esc(b.text)}</p>`; break;
       case 'facts': {
         el.innerHTML = k(b.title) + '<div class="pz-tiles"></div>';
-        for (const f of b.items || []) { const [big, rest] = headline(f.value); const d = document.createElement('div'); d.className = 'pz-tile';
+        for (const f of b.items || []) { const [big, rest] = headline(f.value); const d = document.createElement('div'); d.className = 'pz-tile' + (big.length > 9 ? ' lg' : '');
           d.innerHTML = `<strong>${esc(big)}</strong><span>${esc(f.label)}${rest ? ' · ' + esc(rest) : ''}</span>`; el.lastChild.append(d); }
         break;
       }
@@ -822,7 +832,7 @@
           `<button type="button" class="bt round" data-a="open" aria-label="Ouvrir la fiche">${I.up}</button>`;
       } else {
         miniEl.innerHTML = `<button type="button" class="pp" data-a="play" aria-label="Lecture">${I.play}</button>` +
-          `<div class="scrub"><small><span>Parcours · ${esc(S.title)}</span><em>0 %</em></small><div class="trk" role="slider" tabindex="0" aria-label="Avancer dans le parcours" aria-valuemin="0" aria-valuemax="100"><i></i><u></u></div></div>` +
+          `<div class="scrub"><small><span><b class="pre">Parcours · </b>${esc(S.title)}</span><em>0 %</em></small><div class="trk" role="slider" tabindex="0" aria-label="Avancer dans le parcours" aria-valuemin="0" aria-valuemax="100"><i></i><u></u></div></div>` +
           `<button type="button" class="bt" data-a="exit">${I.close}<span>Quitter</span></button><button type="button" class="bt round" data-a="open" aria-label="Ouvrir la fiche">${I.up}</button>`;
         bindScrub(miniEl.querySelector('.trk'));
       }
