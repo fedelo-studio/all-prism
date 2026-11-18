@@ -22,6 +22,8 @@
   const $ = (s, r = document) => r.querySelector(s);
   const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const Q = new URLSearchParams(location.search);
+  const SHOW_K = 1.25; // mode Showroom : tout passe à 125 % (lien /showroom, ou #showroom ajouté à n'importe quel lien)
+  const showOn = () => /showroom/i.test(location.pathname + location.hash + location.search);
   const ROOT = (document.title.split('|').pop() || '').trim() || 'Vue d’ensemble';
   const accent = (getComputedStyle(document.documentElement).getPropertyValue('--all-prism-theme-accent-color') || '#ed695a').trim() || '#ed695a';
   const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
@@ -312,6 +314,15 @@
   .pz-hcm #pz-pin .gl{width:20px;height:20px;margin:-10px 0 0 -10px}
   .pz-hcm #pz-pin .co{width:8px;height:8px;margin:-4px 0 0 -4px}
   @keyframes pz-pulse{from{transform:scale(.55);opacity:.7}to{transform:scale(1.15);opacity:0}}
+  /* mode Showroom (grand écran tactile, casque) : le calque entier passe à 125 %, comme le mode « Showroom » du design system Figma.
+     Barre 70, boutons 50, fiche 500, rayon 35, marge 28 ; verre plus clair. Le calque est réduit à 80 % puis agrandi : il couvre toujours l'écran. */
+  #pz.pz-show{right:auto;bottom:auto;width:80%;height:80%;transform:scale(1.25);transform-origin:0 0;--glass:rgba(48,50,54,.5)}
+  .pz-show.pz-vb #pz-panel{left:22.4px;bottom:22.4px;max-height:min(680px,calc(100% - 100.8px))}
+  .pz-show.pz-vb #pz-cap{left:22.4px}
+  .pz-hshow #pz-plansh,.pz-hshow #pz-plan,.pz-hshow #pz-planmk{height:min(56vh,625px)}
+  .pz-hshow #pz-pin .ha{width:50px;height:50px;margin:-25px 0 0 -25px}
+  .pz-hshow #pz-pin .gl{width:30px;height:30px;margin:-15px 0 0 -15px}
+  .pz-hshow #pz-pin .co{width:11px;height:11px;margin:-5.5px 0 0 -5.5px}
   @media (prefers-reduced-motion:reduce){#pz-pin .ha{animation:none;opacity:.35}}
   /* voile depuis le coin bas droit : repris de la maquette Figma « Pastilles · V2 » (Ombre douce du plan : noir à 20 %, flou 140),
      rendu ici en dégradé radial qui reproduit le flou (gaussienne d'écart-type 70) autour de l'ellipse 760 x 620 centrée sur le coin d'une vue de 1512 x 757 */
@@ -366,7 +377,7 @@
   const S = {
     open: false, title: '', eyebrow: '', facts: [], photo: '', hasTour: false, key: '',
     stations: [], hotspots: [], seen: {}, busy: false, noBrain: false,
-    compact: false, narr: null, voice: false, gen: 0, ready: false, hold: 0,
+    compact: false, show: false, narr: null, voice: false, gen: 0, ready: false, hold: 0,
   };
 
   /* ---------- lecture du viewer ---------- */
@@ -796,10 +807,12 @@
 
   function layout() {
     S.compact = innerWidth < 640;
+    S.show = showOn() && !S.compact; // grand écran tactile ou casque ; jamais sur téléphone
+    root.classList.toggle('pz-show', S.show); document.documentElement.classList.toggle('pz-hshow', S.show);
     root.classList.toggle('pz-c', S.compact); document.documentElement.classList.toggle('pz-hc', S.compact); document.documentElement.classList.toggle('pz-hcm', S.compact);
     kb();
   }
-  addEventListener('resize', layout);
+  addEventListener('resize', layout); addEventListener('hashchange', layout);
 
   /* ---------- données du projet ---------- */
   const cfgP = Q.get('config') ? fetch(Q.get('config')).then((r) => r.json()).then((j) => {
@@ -820,9 +833,9 @@
     const r0 = panel.getBoundingClientRect();
     S.shut = v; panel.classList.toggle('shut', v); miniSig = ''; mini();
     if (!v && !RM && !quiet) { panel.classList.add('enter'); clearTimeout(enterT); enterT = setTimeout(() => panel.classList.remove('enter'), 520); }
-    const r1 = panel.getBoundingClientRect();
+    const r1 = panel.getBoundingClientRect(), k = S.show ? SHOW_K : 1; // les mesures sont à l'écran, l'animation vit dans le calque agrandi
     if (!RM && !quiet && (Math.abs(r1.width - r0.width) > 2 || Math.abs(r1.height - r0.height) > 2))
-      panel.animate([{ width: r0.width + 'px', height: r0.height + 'px', borderRadius: '28px' }, { width: r1.width + 'px', height: r1.height + 'px' }],
+      panel.animate([{ width: r0.width / k + 'px', height: r0.height / k + 'px', borderRadius: '28px' }, { width: r1.width / k + 'px', height: r1.height / k + 'px' }],
         { duration: 340, easing: 'cubic-bezier(.2,.9,.26,1.05)' });
   }
   const miniEl = R('pz-mini');
@@ -994,7 +1007,7 @@
   layout(); tick(true);
 
   window.__prism = {
-    destroy() { clearInterval(timer); clearTimeout(composeT); cancelAnimationFrame(planRaf); endNarr(); root.remove(); pin.remove(); plan.remove(); planMk.remove(); planSh.remove(); planSc.remove(); css.remove(); removeEventListener('pointerdown', onCanvas, true); removeEventListener('keydown', onKey); removeEventListener('resize', layout); document.documentElement.classList.remove('pz-hc', 'pz-hcm', 'pz-mt'); },
+    destroy() { clearInterval(timer); clearTimeout(composeT); cancelAnimationFrame(planRaf); endNarr(); root.remove(); pin.remove(); plan.remove(); planMk.remove(); planSh.remove(); planSc.remove(); css.remove(); removeEventListener('pointerdown', onCanvas, true); removeEventListener('keydown', onKey); removeEventListener('resize', layout); removeEventListener('hashchange', layout); document.documentElement.classList.remove('pz-hc', 'pz-hcm', 'pz-mt', 'pz-hshow'); },
     state: S, compose, ask, narrate,
   };
 })();

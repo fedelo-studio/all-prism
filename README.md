@@ -62,7 +62,7 @@ La barre d'outils Vercel est coupée dans les réglages du projet (Settings > Ge
   (licence MIT, `assets/regular/person-arms-spread.svg` du dépôt phosphor-icons/core), à la place du bonhomme tracé à la main.
 - Poignée grise en haut de la fiche sur téléphone retirée en variante B (le chevron de repli suffit) ; l'en-tête reprend 12 px de marge haute.
 
-### La barre (seule interface de la branche `v2` ; `/` et `/b` ouvrent la même chose)
+### La barre (seule interface de la branche `v2` ; `/` et `/b` ouvrent la même chose, `/showroom` l'ouvre en mode Showroom)
 La variante A (la fiche) est supprimée sur cette branche, avec son interrupteur A/B ; `main` (1.5) et `v1` ne bougent pas.
 Même cerveau et mêmes blocs, mais l'IA vit dans une barre en bas au centre. Repliée, la barre devient un mini widget
 qui change selon l'écran : vue d'ensemble = « Demander à Leysin365 » + Raconter ; lieu = nom, repère, retour ;
@@ -77,6 +77,13 @@ parcours guidé = lecture, curseur pour avancer, Quitter. Sur téléphone elle r
 - Vitesse : plus de bouton de vitesse (retiré à la demande de Felipe). Le parcours tourne à une seule vitesse rapide, 2× celle du viewer (0,5 % par seconde d'origine, soit ~100 s pour tout le parcours).
   On ajoute de petites avances (flèche droite du curseur du viewer) pendant qu'il joue, sans le mettre en pause ; la constante `SPEED` de `public/v3/prism.js` règle le facteur.
 - La maquette locale (`test/stub-v3.html`) imite maintenant cette commande (`data-playing`, `pointerdown` puis `click`, 0,5 % par seconde, flèche droite plus longue en lecture) et a un second point de parcours (`gare-1-quai`).
+
+### Mode Showroom (réactivé le 18 novembre 2026 à la demande de Felipe)
+Pour un grand écran tactile ou un casque : toute l'interface passe à 125 %, comme le mode « Showroom » de la collection « Écran » du design system Figma
+(barre 70, boutons 50, fiche 500, rayon 35, marge 28, verre plus clair). Le plan du parcours et son repère suivent.
+- On l'ouvre avec le lien `/showroom`, ou en ajoutant `#showroom` à n'importe quel lien du prototype (le changement est pris à chaud). Aucun bouton dans l'interface : la version reste propre.
+- Jamais sur téléphone (largeur sous 640 px) : le lien y ouvre l'interface normale.
+- Technique : `#pz` est réduit à 80 % puis agrandi par `transform:scale(1.25)` (`SHOW_K` dans `public/v3/prism.js`) ; `vercel.json` envoie `/showroom` vers l'entrée avec `showroom=1` et `api/px.js` ajoute `#showroom` à la redirection.
 
 ### Version propre et dernière passe de code (18 novembre 2026)
 - Retiré de l'interface : badge « IA démo / IA en direct », mention « Composé à partir de la fiche du viewer », commutateur Origine / Prisme et son bouton du coin,

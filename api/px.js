@@ -14,10 +14,11 @@ export default async function handler(req) {
   const known = !secret || given === secret || cookie.split(/;\s*/).includes('pk=' + secret);
   const remember = secret && given === secret ? `pk=${secret}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=2592000` : null;
 
-  // Entrée : / redirige vers l'adresse d'entrée du viewer
+  // Entrée : / (ou /b, /showroom) redirige vers l'adresse d'entrée du viewer
   if (url.searchParams.has('entry')) {
     if (!known) return denied();
-    const h = { location: cfg.entry(origin), 'cache-control': 'no-store' };
+    // /showroom ouvre la même entrée avec #showroom : l'interface passe en mode Showroom (125 %)
+    const h = { location: cfg.entry(origin) + (url.searchParams.has('showroom') ? '#showroom' : ''), 'cache-control': 'no-store' };
     if (remember) h['set-cookie'] = remember;
     return new Response(null, { status: 302, headers: h });
   }

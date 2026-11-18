@@ -9,6 +9,10 @@
       "destination": "/api/px?entry=1"
     },
     {
+      "source": "/showroom",
+      "destination": "/api/px?entry=1&showroom=1"
+    },
+    {
       "source": "/build-from-unity/:path*",
       "destination": "https://staging.wrapper.all-prism.app/build-from-unity/:path*"
     },
