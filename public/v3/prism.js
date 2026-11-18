@@ -1,4 +1,4 @@
-/* ALL prism, V3 « Prisme vivant » — Fedelo Studio
+/* ALL prism, V2 « Prisme vivant » (dossier technique v3 ; la version précédente, skin.js, s'appelle 1.5) — Fedelo Studio
  *
  * Idée : une seule surface. Plus de fiche figée d'un côté et de barre IA de l'autre :
  * la fiche EST la réponse de l'IA. Elle se compose à chaque arrêt de caméra à partir

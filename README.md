@@ -22,7 +22,11 @@ Ce dépôt est créé à partir du modèle `fedelo-proto-overlay`.
 Voir l'en-tête de `public/skin.js` : étiquettes dessinées dans le canvas Unity (non restylables d'ici),
 commande IA en réponses d'exemple, pas de déplacement à la main sur le tracé du parcours.
 
-## V3 « Prisme vivant » (branche de travail, la v2 reste sur main)
+## V2 « Prisme vivant » (branche de travail)
+Noms convenus avec Felipe le 18 novembre 2026 : cette version s'appelle **V2** (solution finale) et la précédente,
+celle de `main` (`public/skin.js`), s'appelle **1.5**. Les dossiers et fichiers gardent leur nom technique (`public/v3/`).
+La barre d'outils Vercel est coupée dans les réglages du projet (Settings > General > Vercel Toolbar : Off).
+
 `proto.config.mjs` injecte `public/v3/prism.js` au lieu de `public/skin.js`.
 - Une seule surface : la fiche est composée par l'IA à chaque arrêt de caméra, à partir d'un registre de blocs
   (phrase-titre, chiffres, récit, accessibilité, lieux, comparaison, parcours, questions suivantes).
