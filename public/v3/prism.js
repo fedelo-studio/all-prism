@@ -235,7 +235,7 @@
   #pz-mini .scrub{flex:1;min-width:120px;display:flex;flex-direction:column;gap:7px;padding:4px 0;cursor:default}
   #pz-mini .scrub small{font-size:13px;line-height:17px;color:var(--soft);display:flex;justify-content:space-between;gap:8px;white-space:nowrap}
   #pz-mini .scrub small span{overflow:hidden;text-overflow:ellipsis}
-  #pz-mini .scrub small em{font-style:normal;font-variant-numeric:tabular-nums;color:var(--ink)}
+  #pz-mini .scrub small em{font-style:normal;font-variant-numeric:tabular-nums;color:var(--ink);min-width:5ch;text-align:right;flex:none}
   #pz-mini .trk{position:relative;height:20px;cursor:pointer;touch-action:none}
   #pz-mini .trk::before{content:"";position:absolute;left:0;right:0;top:8px;height:4px;border-radius:2px;background:var(--faint)}
   #pz-mini .trk i{position:absolute;left:0;top:8px;height:4px;border-radius:2px;background:#fff;width:var(--v,0%)}
@@ -265,20 +265,30 @@
   .pz-c.pz-vb .pz-tour{display:none}
   .pz-c.pz-vb #pz-cap{left:8px;right:8px;width:auto}
   /* plan du parcours : posé dans la profondeur de la 3D, fondu par mode de fusion */
-  #pz-plan,#pz-planmk{position:fixed;z-index:2147482990;pointer-events:none;right:3vw;bottom:9vh;width:min(54vw,780px);opacity:0;
-    transform:perspective(1200px) rotateX(56deg) rotateZ(-6deg) translateY(30px);transform-origin:50% 100%;transition:opacity .9s var(--ease,ease),transform 1.2s cubic-bezier(.2,.7,.2,1)}
-  #pz-plan{mix-blend-mode:overlay}
-  #pz-plan.on{opacity:.95;transform:perspective(1200px) rotateX(56deg) rotateZ(-6deg)}
-  #pz-planmk.on{opacity:1;transform:perspective(1200px) rotateX(56deg) rotateZ(-6deg)}
-  #pz-plan svg,#pz-planmk svg{width:100%;height:auto;display:block;overflow:visible}
-  #pz-plan path{fill:none!important;stroke-linecap:round;stroke-linejoin:round}
-  #pz-plan path.camera-spatial-route-edge{stroke:#fff!important;stroke-width:9px!important;opacity:.55}
-  #pz-plan path.camera-spatial-route{stroke:#fff!important;stroke-width:3px!important}
-  #pz-plan circle,#pz-plan .camera-spatial-marker{display:none}
-  #pz-planmk path{display:none}
-  #pz-planmk circle{fill:${accent}!important;stroke:#fff!important;stroke-width:1.5px!important;filter:drop-shadow(0 0 4px ${accent})}
-  html.pz-orig #pz-plan,html.pz-orig #pz-planmk{display:none}
-  .pz-hcm #pz-plan,.pz-hcm #pz-planmk{right:auto;left:6vw;bottom:auto;top:16vh;width:88vw}
+  /* trois calques superposés : une ombre douce, le tracé fondu dans la scène (fusion « écran »), le repère de position net */
+  #pz-plansh,#pz-plan,#pz-planmk{position:fixed;z-index:2147482990;pointer-events:none;right:4vw;bottom:5vh;height:min(56vh,500px);opacity:0;
+    transform:perspective(900px) rotateX(30deg) translateY(24px);transform-origin:50% 100%;transition:opacity .9s cubic-bezier(.2,.7,.2,1),transform 1.2s cubic-bezier(.2,.7,.2,1)}
+  #pz-plan{mix-blend-mode:screen}
+  #pz-plansh.on{opacity:1;transform:perspective(900px) rotateX(30deg)}
+  #pz-plan.on{opacity:.62;transform:perspective(900px) rotateX(30deg)}
+  #pz-planmk.on{opacity:1;transform:perspective(900px) rotateX(30deg)}
+  #pz-plansh svg,#pz-plan svg,#pz-planmk svg{height:100%;width:auto;display:block;overflow:visible}
+  #pz-plan svg *,#pz-plansh svg *{vector-effect:non-scaling-stroke}
+  #pz-plan .camera-spatial-surfaces path{fill:rgba(255,255,255,.5)!important;stroke:none!important}
+  #pz-plan .camera-spatial-context path{fill:none!important;stroke:rgba(255,255,255,.75)!important;stroke-width:1.2px!important;stroke-linejoin:round}
+  #pz-plan path.camera-spatial-route-edge{fill:none!important;stroke:rgba(255,255,255,.35)!important;stroke-width:9px!important;stroke-linecap:round;stroke-linejoin:round}
+  #pz-plan path.camera-spatial-route{fill:none!important;stroke:#fff!important;stroke-width:2.6px!important;stroke-linecap:round;stroke-linejoin:round}
+  #pz-plan .camera-spatial-track-hit,#pz-plan .camera-spatial-marker{display:none}
+  #pz-plansh svg>*:not(.camera-spatial-route-edge){display:none}
+  #pz-plansh path.camera-spatial-route-edge{fill:none!important;stroke:rgba(0,0,0,.22)!important;stroke-width:7px!important;stroke-linecap:round;stroke-linejoin:round}
+  #pz-plansh{filter:blur(3px)}
+  #pz-planmk svg>*:not(.camera-spatial-marker){visibility:hidden}
+  #pz-planmk .camera-spatial-ring{fill:rgba(255,255,255,.95)!important;stroke:none!important}
+  #pz-planmk .camera-spatial-dot{fill:var(--pz-acc)!important;stroke:none!important}
+  #pz-planmk .camera-spatial-marker{filter:drop-shadow(0 0 5px var(--pz-acc))}
+  html.pz-orig #pz-plan,html.pz-orig #pz-planmk,html.pz-orig #pz-plansh{display:none}
+  .pz-hcm #pz-plansh,.pz-hcm #pz-plan,.pz-hcm #pz-planmk{right:5vw;bottom:calc(84px + env(safe-area-inset-bottom));top:auto;height:min(34vh,300px)}
+  html:not(.pz-orig) vercel-live-feedback{display:none!important}
   #pz-vars{display:flex;gap:2px;padding:4px;border-radius:22px;pointer-events:auto}
   #pz-vars button{height:32px;padding:0 12px;border-radius:16px;font-size:13px;line-height:18px;color:var(--soft)}
   #pz-vars button[aria-pressed=true]{background:var(--fill2);color:#fff}
@@ -310,9 +320,9 @@
       <p id="pz-cap-t"></p><div class="pz-pips" id="pz-pips"></div>
     </section>`;
   document.body.append(root);
-  const plan = document.createElement('div'), planMk = document.createElement('div');
-  plan.id = 'pz-plan'; planMk.id = 'pz-planmk'; plan.setAttribute('aria-hidden', 'true'); planMk.setAttribute('aria-hidden', 'true');
-  if (VB) document.body.append(plan, planMk);
+  const plan = document.createElement('div'), planMk = document.createElement('div'), planSh = document.createElement('div'); planSh.id = 'pz-plansh'; planSh.setAttribute('aria-hidden', 'true');
+  plan.id = 'pz-plan'; planMk.id = 'pz-planmk'; document.documentElement.style.setProperty('--pz-acc', accent); plan.setAttribute('aria-hidden', 'true'); planMk.setAttribute('aria-hidden', 'true');
+  if (VB) document.body.append(planSh, plan, planMk);
   const R = (id) => document.getElementById(id);
   const panel = R('pz-panel'), feed = R('pz-feed'), input = R('pz-in');
 
@@ -887,18 +897,18 @@
   function planSync() {
     if (!VB) return;
     const on = S.hasTour && !S.narr;
-    plan.classList.toggle('on', on); planMk.classList.toggle('on', on);
+    plan.classList.toggle('on', on); planMk.classList.toggle('on', on); planSh.classList.toggle('on', on);
     if (!on) return;
     const m = V.ctrl()?.querySelector('svg.camera-spatial-map'); if (!m || m.outerHTML === planSrc) return;
     planSrc = m.outerHTML;
-    for (const host of [plan, planMk]) { const c = m.cloneNode(true); c.removeAttribute('style'); c.removeAttribute('class'); host.replaceChildren(c); }
+    for (const host of [planSh, plan, planMk]) { const c = m.cloneNode(true); c.removeAttribute('style'); c.removeAttribute('class'); host.replaceChildren(c); }
   }
   timer = setInterval(tick, 200);
   S.brain = 'pending';
   layout(); tick(true);
 
   window.__prism = {
-    destroy() { clearInterval(timer); endNarr(); root.remove(); plan.remove(); planMk.remove(); css.remove(); removeEventListener('pointerdown', onCanvas, true); removeEventListener('keydown', onKey); removeEventListener('resize', layout); document.documentElement.classList.remove('pz-orig'); },
+    destroy() { clearInterval(timer); endNarr(); root.remove(); plan.remove(); planMk.remove(); planSh.remove(); css.remove(); removeEventListener('pointerdown', onCanvas, true); removeEventListener('keydown', onKey); removeEventListener('resize', layout); document.documentElement.classList.remove('pz-orig'); },
     state: S, compose, ask, narrate,
   };
 })();
