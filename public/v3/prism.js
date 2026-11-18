@@ -288,16 +288,15 @@
   #pz-planmk svg>*:not(.camera-spatial-marker){visibility:hidden}
   /* repère de position : un disque à la couleur du client, liseré blanc, halo qui respire */
   #pz-planmk .camera-spatial-marker circle{transform-box:fill-box;transform-origin:center}
-  #pz-planmk .camera-spatial-ring{fill:var(--pz-acc)!important;stroke:#fff!important;stroke-width:2.5px!important;vector-effect:non-scaling-stroke;transform:scale(1.9)}
+  #pz-planmk .camera-spatial-ring{display:inline!important;opacity:1!important;visibility:visible!important;fill:var(--pz-acc)!important;stroke:#fff!important;stroke-width:2.5px!important;vector-effect:non-scaling-stroke;transform:scale(var(--mk,1.2))}
   #pz-planmk .camera-spatial-dot{display:none}
   #pz-planmk{filter:drop-shadow(0 0 6px var(--pz-acc)) drop-shadow(0 1px 2px rgba(0,0,0,.45))}
   #pz-planmk.on{animation:pz-mk 2s ease-in-out infinite}
   @keyframes pz-mk{50%{filter:drop-shadow(0 0 14px var(--pz-acc)) drop-shadow(0 1px 2px rgba(0,0,0,.45))}}
   @media (prefers-reduced-motion:reduce){#pz-planmk.on{animation:none}}
-  .pz-hcm #pz-planmk .camera-spatial-ring{transform:scale(2.4)}
   /* léger dégradé depuis le coin bas droit : le plan se détache sans faire panneau */
   #pz-plansc{position:fixed;z-index:2147482989;pointer-events:none;right:0;bottom:0;width:min(78vw,1100px);height:min(92vh,860px);opacity:0;transition:opacity .9s cubic-bezier(.2,.7,.2,1);
-    background:radial-gradient(ellipse 100% 100% at 100% 100%,rgba(6,10,16,.46) 0%,rgba(6,10,16,.3) 30%,rgba(6,10,16,.12) 55%,rgba(6,10,16,0) 78%)}
+    background:radial-gradient(ellipse 100% 100% at 100% 100%,rgba(6,10,16,.4) 0%,rgba(6,10,16,.24) 32%,rgba(6,10,16,.08) 58%,rgba(6,10,16,0) 76%)}
   #pz-plansc.on{opacity:1}
   .pz-hcm #pz-plansc{width:100vw;height:62vh}
   html.pz-orig #pz-plansc{display:none}
@@ -919,6 +918,9 @@
     const m = V.ctrl()?.querySelector('svg.camera-spatial-map'); if (!m || m.outerHTML === planSrc) return;
     planSrc = m.outerHTML;
     for (const host of [planSh, plan, planMk]) { const c = m.cloneNode(true); c.removeAttribute('style'); c.removeAttribute('class'); host.replaceChildren(c); }
+    // le repère garde la même taille à l'écran quel que soit le plan : 28 px (22 px sur téléphone), hors liseré
+    const ring = planMk.querySelector('.camera-spatial-ring');
+    if (ring) { ring.style.transform = 'none'; const w = ring.getBoundingClientRect().width; ring.style.transform = ''; if (w > 1) planMk.style.setProperty('--mk', ((S.compact ? 22 : 28) / w).toFixed(3)); }
   }
   timer = setInterval(tick, 200);
   S.brain = 'pending';
