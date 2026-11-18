@@ -41,6 +41,14 @@ La barre d'outils Vercel est coupée dans les réglages du projet (Settings > Ge
 - Test local : `python3 -m http.server 8765` à la racine, puis
   `http://localhost:8765/test/stub-v3.html?config=config.json&manifestUrl=manifest.json`.
 
+### Repasse fluidité (18 novembre 2026)
+- L'état du viewer n'est pris en compte qu'une fois stable (110 ms pour un état qui s'ajoute, 330 ms pour un qui disparaît) :
+  la fiche ne s'ouvre plus et ne se ferme plus plusieurs fois à l'arrivée. Une seule composition au démarrage, et une mise à jour
+  sur place quand un détail du même lieu arrive après coup.
+- Durées raccourcies (fiche 0,4 s, blocs 0,38 s avec décalage de 45 ms) ; fondu d'entrée sur le widget, le fil d'Ariane, la légende du récit.
+- Le plan du parcours n'est reconstruit que si le tracé change ; le repère de position suit la caméra image par image
+  (pastille HTML `#pz-pin` posée sur l'ancre du calque incliné). Les animations infinies sont en pause quand elles ne se voient pas.
+
 ### Variante B « la barre » (`/b`, ou bouton « B · Barre » en haut à droite)
 Même cerveau et mêmes blocs, mais l'IA vit dans une barre en bas au centre. Repliée, la barre devient un mini widget
 qui change selon l'écran : vue d'ensemble = « Demander à Leysin365 » + Raconter ; lieu = nom, repère, retour ;

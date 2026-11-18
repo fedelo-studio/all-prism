@@ -57,7 +57,7 @@
   css.id = 'pz-style';
   css.textContent = `
   html:not(.pz-orig) #poi-card-panel,html:not(.pz-orig) .camera-spatial-control,html:not(.pz-orig) #interaction-hint{opacity:0!important;pointer-events:none!important}
-  .pz-orig #pz>*:not(#pz-top):not(svg){display:none!important}
+  .pz-orig #pz>*:not(#pz-top):not(svg){opacity:0!important;visibility:hidden!important;pointer-events:none!important;transition:opacity .22s,visibility 0s .22s!important}
   #pz{position:fixed;inset:0;z-index:2147483000;pointer-events:none;
     font:400 15px/20px -apple-system,BlinkMacSystemFont,"SF Pro Text","Inter","Helvetica Neue",Arial,sans-serif;letter-spacing:-.01em;color:var(--ink);
     -webkit-font-smoothing:antialiased;text-align:left;
@@ -78,12 +78,13 @@
 
   /* --- le prisme : la colonne vivante --- */
   #pz-panel{position:absolute;left:20px;bottom:20px;width:384px;max-height:calc(100% - 40px);border-radius:28px;display:flex;flex-direction:column;
-    transition:transform .52s var(--ease),opacity .34s var(--ease),max-height .34s var(--ease)}
+    transition:transform .4s var(--ease),opacity .26s var(--ease),max-height .28s var(--ease)}
   #pz-panel::before{content:"";position:absolute;inset:-1px;border-radius:inherit;padding:1.5px;background:var(--spectrum);opacity:0;transition:opacity .5s;
-    -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;animation:pz-turn 3.2s linear infinite}
-  #pz-panel::after{content:"";position:absolute;inset:-18px;border-radius:44px;background:var(--halo);filter:blur(34px);opacity:0;transition:opacity .6s;z-index:-1;pointer-events:none;animation:pz-turn 3.2s linear infinite}
+    -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;animation:pz-turn 3.2s linear infinite paused}
+  #pz-panel::after{content:"";position:absolute;inset:-18px;border-radius:44px;background:var(--halo);filter:blur(34px);opacity:0;transition:opacity .6s;z-index:-1;pointer-events:none;animation:pz-turn 3.2s linear infinite paused}
   #pz.busy #pz-panel::before{opacity:.9}
   #pz.busy #pz-panel::after{opacity:.22}
+  #pz.busy #pz-panel::before,#pz.busy #pz-panel::after{animation-play-state:running}
   #pz.narrating #pz-panel{transform:translateX(calc(-100% - 40px));opacity:0;pointer-events:none}
 
   .pz-head{display:flex;align-items:center;gap:6px;padding:12px 12px 0 12px;min-height:52px;flex:none}
@@ -104,13 +105,13 @@
   .pz-feed{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:none;padding:6px 20px 8px;display:flex;flex-direction:column;gap:14px;
     -webkit-mask:linear-gradient(transparent,#000 14px,#000 calc(100% - 14px),transparent);mask:linear-gradient(transparent,#000 14px,#000 calc(100% - 14px),transparent)}
   .pz-feed::-webkit-scrollbar{display:none}
-  .pz-b{animation:pz-in .52s var(--ease) backwards}
+  .pz-b{animation:pz-in .38s var(--ease) backwards}
   @keyframes pz-in{from{opacity:0;transform:translateY(10px);filter:blur(6px)}}
-  .pz-feed.out>*{transition:opacity .18s,transform .18s;opacity:0;transform:translateY(-6px)}
+  .pz-feed.out>*{transition:opacity .12s,transform .12s;opacity:0;transform:translateY(-6px)}
   .pz-photo{border-radius:18px;aspect-ratio:16/8;background:#2b2e33 center/cover no-repeat;box-shadow:inset 0 0 0 1px rgba(255,255,255,.08);margin:6px -8px 0}
   .pz-lead{font-size:22px;line-height:28px;font-weight:600;letter-spacing:-.02em;text-wrap:balance}
   .pz-feed>.pz-b:first-child>.pz-lead{margin-top:10px}
-  .pz-lead .w{display:inline-block;animation:pz-w .42s var(--ease) backwards}
+  .pz-lead .w{display:inline-block;animation:pz-w .3s var(--ease) backwards}
   @keyframes pz-w{from{opacity:0;filter:blur(5px);transform:translateY(3px)}}
   .pz-story{font-size:15px;line-height:22px;color:var(--soft);text-wrap:pretty}
   .pz-story b{color:var(--ink);font-weight:500}
@@ -185,9 +186,10 @@
   #pz-tell:hover::before{opacity:1}
 
   /* récit : sous-titres façon documentaire */
-  #pz-cap{position:absolute;left:50%;bottom:28px;width:min(720px,calc(100% - 32px));transform:translate(-50%,24px);opacity:0;pointer-events:none;border-radius:28px;padding:12px 12px 16px;transition:opacity .4s var(--ease),transform .52s var(--ease)}
+  #pz-cap{position:absolute;left:50%;bottom:28px;width:min(720px,calc(100% - 32px));transform:translate(-50%,24px);opacity:0;pointer-events:none;border-radius:28px;padding:12px 12px 16px;transition:opacity .3s var(--ease),transform .42s var(--ease)}
   #pz.narrating #pz-cap{opacity:1;transform:translate(-50%,0);pointer-events:auto}
-  #pz-cap::before{content:"";position:absolute;inset:-1px;border-radius:inherit;padding:1.5px;background:var(--spectrum);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;opacity:.8;animation:pz-turn 3.2s linear infinite;pointer-events:none}
+  #pz.narrating #pz-cap::before{animation-play-state:running}
+  #pz-cap::before{content:"";position:absolute;inset:-1px;border-radius:inherit;padding:1.5px;background:var(--spectrum);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;opacity:.8;animation:pz-turn 3.2s linear infinite paused;pointer-events:none}
   .pz-cap-h{display:flex;align-items:center;gap:8px;margin-bottom:8px;padding:4px 0 0 8px}
   .pz-cap-h .k{font-size:11px;line-height:14px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--soft)}
   .pz-cap-h .n{font-size:17px;line-height:22px;font-weight:600}
@@ -195,7 +197,7 @@
   .pz-cap-h button{width:32px;height:32px;margin-top:-4px;align-self:flex-start;border-radius:50%;display:grid;place-items:center;background:var(--fill)!important}
   .pz-cap-h button:hover{background:var(--fill2)!important}
   #pz-cap-t{font-size:20px;line-height:28px;font-weight:500;letter-spacing:-.015em;text-wrap:pretty;min-height:56px;margin:0 8px;overflow-wrap:anywhere}
-  #pz-cap-t .w{display:inline-block;animation:pz-w .42s var(--ease) backwards}
+  #pz-cap-t .w{display:inline-block;animation:pz-w .3s var(--ease) backwards}
   .pz-pips{display:flex;gap:6px;margin:14px 8px 0}
   .pz-pips i{flex:1;height:3px;border-radius:2px;background:var(--faint);overflow:hidden}
   .pz-pips i b{display:block;height:100%;background:#fff;transform-origin:0 50%;transform:scaleX(0)}
@@ -217,7 +219,7 @@
   .pz-grab{display:none}
   .pz-c.pz-kb #pz-panel{max-height:none;top:calc(16px + env(safe-area-inset-top))}
   /* ===== variante B : la barre ===== */
-  .pz-vb #pz-panel{left:20px;transform:none;width:400px;max-height:min(680px,calc(100% - 96px));transition:opacity .34s var(--ease)}
+  .pz-vb #pz-panel{left:20px;transform:none;width:400px;max-height:min(680px,calc(100% - 96px));transition:opacity .26s var(--ease)}
   #pz.pz-vb.narrating #pz-panel{transform:none;opacity:0;pointer-events:none}
   .pz-vb #pz-cap{left:20px;transform:translate(0,24px);width:min(560px,calc(100% - 40px))}
   #pz.pz-vb.narrating #pz-cap{transform:none}
@@ -265,7 +267,7 @@
   /* plan du parcours : posé dans la profondeur de la 3D, fondu par mode de fusion */
   /* trois calques superposés : une ombre douce, le tracé fondu dans la scène (fusion « écran »), le repère de position net */
   #pz-plansh,#pz-plan,#pz-planmk{position:fixed;z-index:2147482990;pointer-events:none;right:4vw;bottom:5vh;height:min(56vh,500px);opacity:0;
-    transform:perspective(900px) rotateX(30deg) translateY(24px);transform-origin:50% 100%;transition:opacity .9s cubic-bezier(.2,.7,.2,1),transform 1.2s cubic-bezier(.2,.7,.2,1)}
+    transform:perspective(900px) rotateX(30deg) translateY(24px);transform-origin:50% 100%;transition:opacity .5s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1)}
   #pz-plan{mix-blend-mode:screen}
   #pz-plansh.on{transform:perspective(900px) rotateX(30deg)}
   #pz-plan.on{opacity:.62;transform:perspective(900px) rotateX(30deg)}
@@ -284,20 +286,30 @@
   #pz-plansh path.camera-spatial-route{fill:none!important;stroke:rgba(12,22,34,.55)!important;stroke-width:5px!important;stroke-linecap:round;stroke-linejoin:round}
   #pz-plansh .camera-spatial-context path{fill:none!important;stroke:rgba(12,22,34,.4)!important;stroke-width:2.4px!important}
   #pz-planmk svg>*:not(.camera-spatial-marker){visibility:hidden}
-  /* repère de position : un disque à la couleur du client, liseré blanc, halo qui respire */
-  #pz-planmk .camera-spatial-marker circle{transform-box:fill-box;transform-origin:center}
-  #pz-planmk .camera-spatial-ring{display:inline!important;opacity:1!important;visibility:visible!important;fill:var(--pz-acc)!important;stroke:#fff!important;stroke-width:2.5px!important;vector-effect:non-scaling-stroke;transform:scale(var(--mk,1.2))}
-  #pz-planmk .camera-spatial-dot{display:none}
-  #pz-planmk{filter:drop-shadow(0 0 6px var(--pz-acc)) drop-shadow(0 1px 2px rgba(0,0,0,.45))}
-  #pz-planmk.on{animation:pz-mk 2s ease-in-out infinite}
-  @keyframes pz-mk{50%{filter:drop-shadow(0 0 14px var(--pz-acc)) drop-shadow(0 1px 2px rgba(0,0,0,.45))}}
-  @media (prefers-reduced-motion:reduce){#pz-planmk.on{animation:none}}
+  /* repère de position : une pastille de verre, un cœur à la couleur du client, une onde qui part du centre.
+     Il est dessiné à plat par-dessus le plan incliné ; le calque du plan ne sert que d'ancre pour sa place. */
+  #pz-planmk{visibility:hidden}
+  #pz-planmk svg>*:not(.camera-spatial-marker){display:none}
+  #pz-planmk .camera-spatial-ring{display:inline!important}
+  #pz-pin{position:fixed;left:0;top:0;width:0;height:0;z-index:2147482993;pointer-events:none;opacity:0;transition:opacity .35s var(--ease)}
+  #pz-pin.on{opacity:1}
+  #pz-pin i{position:absolute;left:0;top:0;border-radius:50%}
+  #pz-pin .ha{width:68px;height:68px;margin:-34px 0 0 -34px;background:radial-gradient(closest-side,color-mix(in srgb,var(--pz-acc) 55%,transparent) 50%,color-mix(in srgb,var(--pz-acc) 0%,transparent));animation:pz-pulse 2.4s cubic-bezier(.2,.6,.3,1) infinite}
+  #pz-pin:not(.on) .ha{animation-play-state:paused}
+  #pz-pin .gl{width:36px;height:36px;margin:-18px 0 0 -18px;background:linear-gradient(160deg,rgba(255,255,255,.55),rgba(255,255,255,.14));-webkit-backdrop-filter:blur(8px) saturate(170%);backdrop-filter:blur(8px) saturate(170%);
+    box-shadow:inset 0 0 0 1.25px rgba(255,255,255,.78),inset 0 1.5px 0 rgba(255,255,255,.95),0 10px 22px -8px rgba(0,0,0,.55)}
+  #pz-pin .co{width:16px;height:16px;margin:-8px 0 0 -8px;background:radial-gradient(circle at 34% 28%,color-mix(in srgb,var(--pz-acc) 40%,#fff),var(--pz-acc) 62%);box-shadow:0 0 0 2.25px #fff,0 3px 10px color-mix(in srgb,var(--pz-acc) 85%,transparent)}
+  .pz-hcm #pz-pin .ha{width:56px;height:56px;margin:-28px 0 0 -28px}
+  .pz-hcm #pz-pin .gl{width:30px;height:30px;margin:-15px 0 0 -15px}
+  .pz-hcm #pz-pin .co{width:13px;height:13px;margin:-6.5px 0 0 -6.5px}
+  @keyframes pz-pulse{from{transform:scale(.5);opacity:.95}to{transform:scale(1.2);opacity:0}}
+  @media (prefers-reduced-motion:reduce){#pz-pin .ha{animation:none;opacity:.5}}
   /* léger dégradé depuis le coin bas droit : le plan se détache sans faire panneau */
-  #pz-plansc{position:fixed;z-index:2147482989;pointer-events:none;right:0;bottom:0;width:min(78vw,1100px);height:min(92vh,860px);opacity:0;transition:opacity .9s cubic-bezier(.2,.7,.2,1);
+  #pz-plansc{position:fixed;z-index:2147482989;pointer-events:none;right:0;bottom:0;width:min(78vw,1100px);height:min(92vh,860px);opacity:0;transition:opacity .5s cubic-bezier(.2,.7,.2,1);
     background:radial-gradient(ellipse 100% 100% at 100% 100%,rgba(6,10,16,.4) 0%,rgba(6,10,16,.24) 32%,rgba(6,10,16,.08) 58%,rgba(6,10,16,0) 76%)}
   #pz-plansc.on{opacity:1}
   .pz-hcm #pz-plansc{width:100vw;height:62vh}
-  html.pz-orig #pz-plansc{display:none}
+  html.pz-orig #pz-plansc,html.pz-orig #pz-pin{display:none}
   html.pz-orig #pz-plan,html.pz-orig #pz-planmk,html.pz-orig #pz-plansh{display:none}
   .pz-hcm #pz-plansh,.pz-hcm #pz-plan,.pz-hcm #pz-planmk{right:24px;bottom:calc(92px + env(safe-area-inset-bottom));top:auto;height:min(34vh,300px)}
   html:not(.pz-orig) vercel-live-feedback{display:none!important}
@@ -307,6 +319,15 @@
   .pz-c #pz-vars{display:none}
   .pz-vb #pz-tell{display:none}
   html.pz-hc:not(.pz-orig) #footer{top:calc(16px + env(safe-area-inset-top));bottom:auto!important;left:16px;right:auto!important}
+  /* entrées : tout ce qui change de texte arrive avec un court fondu, jamais d'un coup */
+  @keyframes pz-up{from{opacity:0;transform:translateY(6px)}}
+  #pz-mini.swap>*{animation:pz-up .28s var(--ease) backwards}
+  #pz-mini.swap>:nth-child(2){animation-delay:40ms}#pz-mini.swap>:nth-child(3){animation-delay:80ms}#pz-mini.swap>:nth-child(4){animation-delay:120ms}
+  .pz-crumb.swap,.pz-back.swap,#pz-cap-n.swap,#pz-cap-i.swap{animation:pz-up .28s var(--ease) backwards}
+  #pz-cap-i{display:inline-block}
+  .pz-vb #pz-panel.enter .pz-head{animation:pz-up .3s var(--ease) backwards}
+  .pz-vb #pz-panel.enter .pz-feed{animation:pz-up .34s .05s var(--ease) backwards}
+  .pz-vb #pz-panel.enter .pz-ask{animation:pz-up .34s .1s var(--ease) backwards}
   @media (prefers-reduced-motion:reduce){#pz *{animation:none!important;transition:none!important}}
   `;
   document.head.append(css);
@@ -333,7 +354,8 @@
   document.body.append(root);
   const plan = document.createElement('div'), planMk = document.createElement('div'), planSh = document.createElement('div'), planSc = document.createElement('div'); planSc.id = 'pz-plansc'; planSc.setAttribute('aria-hidden', 'true'); planSh.id = 'pz-plansh'; planSh.setAttribute('aria-hidden', 'true');
   plan.id = 'pz-plan'; planMk.id = 'pz-planmk'; document.documentElement.style.setProperty('--pz-acc', accent); plan.setAttribute('aria-hidden', 'true'); planMk.setAttribute('aria-hidden', 'true');
-  if (VB) document.body.append(planSc, planSh, plan, planMk);
+  const pin = document.createElement('div'); pin.id = 'pz-pin'; pin.setAttribute('aria-hidden', 'true'); pin.innerHTML = '<i class="ha"></i><i class="gl"></i><i class="co"></i>';
+  if (VB) document.body.append(planSc, planSh, plan, planMk, pin);
   const R = (id) => document.getElementById(id);
   const panel = R('pz-panel'), feed = R('pz-feed'), input = R('pz-in');
 
@@ -341,7 +363,7 @@
   const S = {
     open: false, title: '', eyebrow: '', facts: [], photo: '', hasTour: false, key: '',
     lens: 'essentiel', stations: [], hotspots: [], seen: {}, busy: false, brain: 'local',
-    compact: false, narr: null, voice: false, gen: 0,
+    compact: false, narr: null, voice: false, gen: 0, ready: false,
   };
 
   /* ---------- lecture du viewer ---------- */
@@ -350,7 +372,8 @@
     close: () => $('#poi-card-close-button'),
     ctrl: () => $('.camera-spatial-control'),
   };
-  function read() {
+  let pend = null; // ce que le viewer affiche en ce moment, en attente de se stabiliser
+  function read(force) {
     const p = V.panel(); if (!p) return false;
     const vis = (el) => el && getComputedStyle(el).display !== 'none';
     const title = ($('#poi-card-title')?.textContent || '').trim();
@@ -361,7 +384,14 @@
     const c = V.ctrl(); const tour = !!c && !c.hasAttribute('hidden') && getComputedStyle(c).display !== 'none';
     const open = p.dataset.open === 'true' && !!title;
     const key = [open, title, eb, facts.length, photo, tour].join('|');
-    if (key === S.key) return false;
+    if (key === S.key) { pend = null; return false; }
+    if (!force && S.key !== '') { // le viewer ouvre sa fiche en plusieurs temps et fait clignoter la commande du parcours : on n'agit que sur un état qui tient
+      const now = performance.now();
+      if (!pend || pend.key !== key) { pend = { key, t: now }; return false; }
+      const less = (S.open && !open) || (S.hasTour && !(tour && open));
+      if (now - pend.t < (less ? 330 : 110)) return false;
+    }
+    pend = null;
     Object.assign(S, { key, open, title, eyebrow: eb, facts, photo, hasTour: tour && open });
     if (open) S.seen[title] = { facts: facts.slice(), eyebrow: eb };
     return true;
@@ -377,7 +407,7 @@
       return true;
     } catch (e) { return false; }
   }
-  const back = (n = 1) => { for (let i = 0; i < n; i++) setTimeout(() => V.close()?.click(), i * 450); };
+  const back = (n = 1) => { for (let i = 0; i < n; i++) setTimeout(() => V.close()?.click(), i * 320); };
   const stationFor = (txt) => {
     const a = norm(txt); let best = null, sc = 0;
     for (const s of S.stations) {
@@ -537,12 +567,14 @@
   }
 
   /* ---------- rendu des blocs ---------- */
-  function words(el, text, step = 34) {
+  function swap(el) { if (RM) return; el.classList.remove('swap'); void el.offsetWidth; el.classList.add('swap'); } // rejoue le court fondu d'entrée
+  const put = (el, text) => { if (el.textContent !== text) { el.textContent = text; swap(el); } };
+  function words(el, text, step = 26) {
     el.textContent = '';
     text.split(' ').forEach((w, i) => { const s = document.createElement('span'); s.className = 'w'; s.style.animationDelay = (i * step) + 'ms'; s.textContent = w; el.append(s, ' '); });
   }
   function block(b, i) {
-    const el = document.createElement('div'); el.className = 'pz-b'; el.style.animationDelay = (i * 70) + 'ms';
+    const el = document.createElement('div'); el.className = 'pz-b'; el.style.animationDelay = (i * 45) + 'ms';
     const k = (t) => t ? `<div class="pz-k">${esc(t)}</div>` : '';
     switch (b.t) {
       case 'photo': el.innerHTML = `<div class="pz-photo" style="background-image:url('${esc(b.src)}')"></div>`; break;
@@ -585,8 +617,8 @@
       }
       case 'action': { const a = document.createElement('button'); a.type = 'button'; a.className = 'pz-act'; a.textContent = b.label; a.onclick = () => b.ask ? ask(b.ask) : b.id && fly(b.id); el.append(a); break; }
       case 'src': el.innerHTML = `<p class="pz-src">${esc(b.text)}</p>`; break;
-      case 'fly': setTimeout(() => fly(b.id), 700); return null;
-      case 'narrate': setTimeout(narrate, 900); return null;
+      case 'fly': setTimeout(() => fly(b.id), 400); return null;
+      case 'narrate': setTimeout(narrate, 500); return null;
       default: return null;
     }
     return el;
@@ -619,7 +651,7 @@
   }
   function morph(h0) { // la vitre change de taille d'un seul geste, sans saut
     const h1 = panel.offsetHeight; if (RM || !h0 || Math.abs(h1 - h0) < 4) return;
-    panel.animate([{ height: h0 + 'px' }, { height: h1 + 'px' }], { duration: 520, easing: 'cubic-bezier(.2,.7,.2,1)' });
+    panel.animate([{ height: h0 + 'px' }, { height: h1 + 'px' }], { duration: 340, easing: 'cubic-bezier(.2,.7,.2,1)' });
   }
   function skeleton(append) {
     const el = document.createElement('div'); el.className = 'pz-skel pz-b'; el.innerHTML = '<i></i><i></i><i></i><div><i></i><i></i></div>';
@@ -631,17 +663,27 @@
   const busy = (on) => { S.busy = on; root.classList.toggle('busy', on); };
 
   /* ---------- composer la fiche ---------- */
+  let composeT = 0;
+  const queueCompose = () => { clearTimeout(composeT); composeT = setTimeout(compose, 40); }; // plusieurs demandes rapprochées = une seule composition
+  let composedKey = ''; // « lieu|ouvert » de la dernière fiche composée
   async function compose() {
     const g = ++S.gen;
     renderHead();
-    busy(true);
-    feed.classList.add('out'); await wait(160);
-    if (g !== S.gen) return;
+    const kind = (S.open ? S.title : '') + '|' + S.open;
+    if (kind === composedKey && feed.childElementCount) { // même lieu, un détail arrive : mise à jour sur place, sans repasser par le squelette
+      const remote = await brain('compose'); if (g !== S.gen) return;
+      return render(remote || composeLocal(S.lens));
+    }
+    composedKey = kind;
+    const t0 = performance.now();
+    const slow = setTimeout(() => g === S.gen && busy(true), 450); // le halo « l'IA réfléchit » n'apparaît que si l'attente se voit
+    feed.classList.add('out'); await wait(110);
+    if (g !== S.gen) return clearTimeout(slow);
     feed.classList.remove('out');
     skeleton(false);
-    const t0 = performance.now();
     const remote = await brain('compose');
-    await wait(Math.max(0, 650 - (performance.now() - t0))); // le temps de voir la fiche se « penser »
+    await wait(Math.max(0, 300 - (performance.now() - t0))); // juste le temps de voir la fiche se composer
+    clearTimeout(slow);
     if (g !== S.gen) return;
     render(remote || composeLocal(S.lens));
     busy(false);
@@ -656,7 +698,7 @@
     const sk = skeleton(true); busy(true);
     const t0 = performance.now();
     const remote = await brain('ask', q);
-    await wait(Math.max(0, 900 - (performance.now() - t0)));
+    await wait(Math.max(0, 520 - (performance.now() - t0)));
     sk.remove(); busy(false);
     if (g !== S.gen) return;
     render(remote || answerLocal(q), { append: true });
@@ -668,9 +710,10 @@
   }
 
   /* ---------- en-tête : fil d'Ariane + regards ---------- */
+  let headSig = '';
   function renderHead() {
     const c = R('pz-crumb'); c.innerHTML = '';
-    const tr = trail();
+    const tr = trail(); const fresh = tr.join('>') !== headSig; headSig = tr.join('>');
     const old = panel.querySelector('.pz-back'); old && old.remove();
     if (tr.length > 1) {
       const b = document.createElement('button'); b.type = 'button'; b.className = 'pz-back'; b.innerHTML = I.back;
@@ -685,6 +728,7 @@
       else b.onclick = () => back(tr.length - 1 - i);
       c.append(b);
     });
+    if (fresh) { swap(c); const bk = panel.querySelector('.pz-back'); bk && swap(bk); }
   }
   /* ---------- récit : la ligne racontée ---------- */
   function narrLine(name, facts) {
@@ -713,16 +757,16 @@
     const t = R('pz-cap-t');
     R('pz-cap-n').textContent = ROOT; R('pz-cap-i').textContent = `${S.stations.length} gares`;
     words(t, `${ROOT}. ${S.stations.length} gares, une seule ligne. Je vous emmène.`, 40);
-    await speak(t.textContent); await wait(2200);
+    await speak(t.textContent); await wait(1600);
     for (let i = 0; i < S.stations.length && !run.stop; i++) {
       const st = S.stations[i]; run.i = i;
-      R('pz-cap-n').textContent = st.label; R('pz-cap-i').textContent = `${i + 1} sur ${S.stations.length}`;
+      put(R('pz-cap-n'), st.label); put(R('pz-cap-i'), `${i + 1} sur ${S.stations.length}`);
       words(t, 'En route…', 40);
       const here = () => S.open && level() === 1 && (stationFor(S.title)?.id === st.id || norm(S.title) === norm(st.label));
       const before = S.title; if (!here()) focusTarget(st.id);
       const tt = performance.now(); while (!run.stop && performance.now() - tt < 6000 && !here() && (S.title === before || !S.open)) { read() && renderHead(); await wait(150); }
       if (run.stop) break;
-      await wait(1400);
+      await wait(900);
       const line = narrLine(S.open ? S.title : st.label, S.open ? S.facts : []);
       words(t, line, 45);
       const bar = pips.children[i].firstChild; bar.style.transition = `transform ${RM ? 0 : 7}s linear`; requestAnimationFrame(() => (bar.style.transform = 'scaleX(1)'));
@@ -784,24 +828,28 @@
   addEventListener('resize', layout);
 
   /* ---------- données du projet ---------- */
-  Q.get('config') && fetch(Q.get('config')).then((r) => r.json()).then((j) => {
+  const cfgP = Q.get('config') ? fetch(Q.get('config')).then((r) => r.json()).then((j) => {
     S.stations = ((j.selectableTargetMenu || {}).targets || []).filter((a) => a && a.id && a.label);
-    R('pz-cap-i').textContent = `${S.stations.length} gares`; if (!S.open) compose();
-  }).catch(() => {});
-  Q.get('manifestUrl') && fetch(Q.get('manifestUrl')).then((r) => r.json()).then((j) => {
-    S.hotspots = (j.hotspots || []).filter((a) => a && a.id && a.label); if (S.open && level() === 1) compose();
-  }).catch(() => {});
+    R('pz-cap-i').textContent = `${S.stations.length} gares`; if (S.ready && !S.open) queueCompose();
+  }).catch(() => {}) : Promise.resolve();
+  const mfP = Q.get('manifestUrl') ? fetch(Q.get('manifestUrl')).then((r) => r.json()).then((j) => {
+    S.hotspots = (j.hotspots || []).filter((a) => a && a.id && a.label); if (S.ready && S.open && level() === 1) queueCompose();
+  }).catch(() => {}) : Promise.resolve();
+  // la première fiche attend les données du projet (ou 900 ms) : une seule composition au démarrage, pas deux
+  Promise.race([Promise.all([cfgP, mfP]), new Promise((r) => setTimeout(r, 900))]).then(() => { S.ready = true; tick(true); });
 
   /* ---------- variante B : la barre qui se replie en mini widget ---------- */
   S.shut = true;
+  let enterT = 0;
   function setShut(v, quiet) {
     if (!VB || S.shut === v) return;
     const r0 = panel.getBoundingClientRect();
     S.shut = v; panel.classList.toggle('shut', v); panel.classList.remove('min'); miniSig = ''; mini();
+    if (!v && !RM && !quiet) { panel.classList.add('enter'); clearTimeout(enterT); enterT = setTimeout(() => panel.classList.remove('enter'), 520); }
     const r1 = panel.getBoundingClientRect();
     if (!RM && !quiet && (Math.abs(r1.width - r0.width) > 2 || Math.abs(r1.height - r0.height) > 2))
       panel.animate([{ width: r0.width + 'px', height: r0.height + 'px', borderRadius: '28px' }, { width: r1.width + 'px', height: r1.height + 'px' }],
-        { duration: 480, easing: 'cubic-bezier(.2,.9,.26,1.05)' });
+        { duration: 340, easing: 'cubic-bezier(.2,.9,.26,1.05)' });
   }
   const miniEl = R('pz-mini');
   let miniSig = '';
@@ -818,6 +866,7 @@
     const sig = [m, S.title, S.facts.length, S.stations.length, S.compact].join('|');
     if (sig !== miniSig) {
       miniSig = sig;
+      swap(miniEl);
       if (m === 'idle') {
         miniEl.innerHTML = `<span class="ic">${I.spark}</span><span class="tx"><b>Demander à ${esc(ROOT)}</b><small>${S.stations.length ? S.stations.length + ' gares' + (S.compact ? '' : ' · une question, une gare, un récit') : ''}</small></span>` +
           `<button type="button" class="bt" data-a="tell">${I.play}<span>Raconter</span></button><button type="button" class="bt round" data-a="open" aria-label="Ouvrir">${I.up}</button>`;
@@ -833,8 +882,9 @@
     }
     if (m === 'tour') {
       const p = tourTarget != null ? tourTarget : tourProg();
-      miniEl.style.setProperty('--v', (Math.min(1, Math.max(0, p)) * 100).toFixed(1) + '%');
-      const em = miniEl.querySelector('.scrub em'); if (em) em.textContent = Math.round(p * 100) + '\u202F%';
+      const pv = (Math.min(1, Math.max(0, p)) * 100).toFixed(1) + '%';
+      if (miniEl.style.getPropertyValue('--v') !== pv) miniEl.style.setProperty('--v', pv);
+      const em = miniEl.querySelector('.scrub em'), tx = Math.round(p * 100) + '\u202F%'; if (em && em.textContent !== tx) em.textContent = tx;
       const pp = miniEl.querySelector('.pp'); const want = performance.now() - (S.tourMove || 0) < 700 ? 'pause' : 'play';
       if (pp && pp.dataset.s !== want) { pp.dataset.s = want; pp.innerHTML = I[want]; }
     }
@@ -894,28 +944,51 @@
   /* ---------- boucle : on suit le viewer ---------- */
   let timer = 0;
   function tick(force) {
-    if (read() || force) { if (!S.narr) compose(); context(); }
+    if (document.hidden && !force) return;
+    if (read() || force) { if (!S.narr && S.ready) queueCompose(); context(); }
     syncTour(); mini(); planSync();
   }
-  let planSrc = '';
+  // plan du parcours : les calques ne sont reconstruits que si le tracé change ; le repère, lui, suit la caméra image par image
+  let planSig = '', mkSig = '', planRaf = 0;
+  const tourOn = () => S.hasTour && !S.narr;
+  function markerSync(m) {
+    const mk = m.querySelector('.camera-spatial-marker'); const sig = mk ? mk.outerHTML : '';
+    if (sig === mkSig) return; mkSig = sig;
+    const old = planMk.querySelector('.camera-spatial-marker'); if (mk && old) old.replaceWith(mk.cloneNode(true));
+  }
+  function pinSync() {
+    const ring = planMk.querySelector('.camera-spatial-ring'); const r = ring && ring.getBoundingClientRect();
+    const ok = !!r && r.width > 0.5 && planMk.classList.contains('on');
+    if (ok) pin.style.transform = `translate3d(${(r.left + r.width / 2).toFixed(1)}px,${(r.top + r.height / 2).toFixed(1)}px,0)`;
+    pin.classList.toggle('on', ok);
+  }
+  function planFrame() {
+    planRaf = 0;
+    if (!tourOn()) { pin.classList.remove('on'); return; }
+    const m = V.ctrl()?.querySelector('svg.camera-spatial-map');
+    if (m) { markerSync(m); pinSync(); }
+    planRaf = requestAnimationFrame(planFrame);
+  }
   function planSync() {
     if (!VB) return;
-    const on = S.hasTour && !S.narr;
-    plan.classList.toggle('on', on); planMk.classList.toggle('on', on); planSh.classList.toggle('on', on); planSc.classList.toggle('on', on);
-    if (!on) return;
-    const m = V.ctrl()?.querySelector('svg.camera-spatial-map'); if (!m || m.outerHTML === planSrc) return;
-    planSrc = m.outerHTML;
-    for (const host of [planSh, plan, planMk]) { const c = m.cloneNode(true); c.removeAttribute('style'); c.removeAttribute('class'); host.replaceChildren(c); }
-    // le repère garde la même taille à l'écran quel que soit le plan : 28 px (22 px sur téléphone), hors liseré
-    const ring = planMk.querySelector('.camera-spatial-ring');
-    if (ring) { ring.style.transform = 'none'; const w = ring.getBoundingClientRect().width; ring.style.transform = ''; if (w > 1) planMk.style.setProperty('--mk', ((S.compact ? 22 : 28) / w).toFixed(3)); }
+    const on = tourOn();
+    for (const e of [plan, planMk, planSh, planSc]) e.classList.toggle('on', on);
+    if (!on) { planSig = ''; pin.classList.remove('on'); return; }
+    const m = V.ctrl()?.querySelector('svg.camera-spatial-map'); if (!m) return;
+    const sig = (m.getAttribute('viewBox') || '') + '#' + Array.from(m.querySelectorAll('path'), (e) => e.getAttribute('d') || '').join('|');
+    if (sig !== planSig) {
+      planSig = sig; mkSig = '';
+      for (const host of [planSh, plan, planMk]) { const c = m.cloneNode(true); c.removeAttribute('style'); c.removeAttribute('class'); host.replaceChildren(c); }
+    }
+    markerSync(m); pinSync();
+    if (!planRaf) planRaf = requestAnimationFrame(planFrame);
   }
-  timer = setInterval(tick, 200);
+  timer = setInterval(tick, 120);
   S.brain = 'pending';
   layout(); tick(true);
 
   window.__prism = {
-    destroy() { clearInterval(timer); endNarr(); root.remove(); plan.remove(); planMk.remove(); planSh.remove(); planSc.remove(); css.remove(); removeEventListener('pointerdown', onCanvas, true); removeEventListener('keydown', onKey); removeEventListener('resize', layout); document.documentElement.classList.remove('pz-orig'); },
+    destroy() { clearInterval(timer); clearTimeout(composeT); cancelAnimationFrame(planRaf); endNarr(); root.remove(); pin.remove(); plan.remove(); planMk.remove(); planSh.remove(); planSc.remove(); css.remove(); removeEventListener('pointerdown', onCanvas, true); removeEventListener('keydown', onKey); removeEventListener('resize', layout); document.documentElement.classList.remove('pz-orig'); },
     state: S, compose, ask, narrate,
   };
 })();
