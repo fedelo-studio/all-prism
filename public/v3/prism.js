@@ -55,8 +55,7 @@
   const css = document.createElement('style');
   css.id = 'pz-style';
   css.textContent = `
-  html:not(.pz-orig) #poi-card-panel,html:not(.pz-orig) .camera-spatial-control,html:not(.pz-orig) #interaction-hint{opacity:0!important;pointer-events:none!important}
-  .pz-orig #pz>*:not(#pz-top):not(svg){opacity:0!important;visibility:hidden!important;pointer-events:none!important;transition:opacity .22s,visibility 0s .22s!important}
+  html:root #poi-card-panel,html:root .camera-spatial-control,html:root #interaction-hint{opacity:0!important;pointer-events:none!important}
   #pz{position:fixed;inset:0;z-index:2147483000;pointer-events:none;
     font:400 15px/20px -apple-system,BlinkMacSystemFont,"SF Pro Text","Inter","Helvetica Neue",Arial,sans-serif;letter-spacing:-.01em;color:var(--ink);
     -webkit-font-smoothing:antialiased;text-align:left;
@@ -115,11 +114,6 @@
   .pz-crumb button:last-child{flex:0 1 auto}
   .pz-crumb button:hover{color:var(--ink)}
   .pz-crumb i{opacity:.4;font-style:normal}
-  .pz-brain{margin-left:auto;display:flex;align-items:center;gap:6px;height:28px;padding:0 10px;border-radius:14px;background:var(--fill);font-size:12px;line-height:16px;color:var(--soft);flex:none}
-  .pz-brain b{width:6px;height:6px;border-radius:50%;background:#5dffa8;box-shadow:0 0 8px #5dffa8}
-  .pz-brain.local b{background:#ffb547;box-shadow:0 0 8px #ffb547}
-
-  /* regards */
 
   /* fil des blocs */
   .pz-feed{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:none;padding:6px 20px 8px;display:flex;flex-direction:column;gap:14px;
@@ -163,10 +157,6 @@
   .pz-chips{display:flex;flex-wrap:wrap;gap:6px}
   .pz-chip{min-height:34px;padding:7px 12px;border-radius:17px;font-size:13px;line-height:18px;background:linear-gradient(180deg,rgba(255,255,255,.12),rgba(255,255,255,.05));box-shadow:inset 0 1px 0 rgba(255,255,255,.12),inset 0 0 0 1px rgba(255,255,255,.05);transition:background .2s,transform .2s var(--ease)}
   .pz-chip:hover{background:linear-gradient(180deg,rgba(255,255,255,.2),rgba(255,255,255,.09));transform:translateY(-1px)}
-  .pz-act{display:flex;align-items:center;justify-content:center;gap:8px;height:48px;border-radius:24px;font-size:16px;line-height:20px;font-weight:600;
-    background:linear-gradient(180deg,color-mix(in srgb,var(--accent) 84%,#fff),var(--accent))!important;color:#1d0a07!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.4),0 12px 26px -12px var(--accent);transition:transform .2s var(--ease),filter .2s}
-  .pz-act:hover{filter:brightness(1.07)}
-  .pz-act:active{transform:scale(.97)}
   .pz-tour{display:flex;flex-direction:column;gap:10px;padding:12px;border-radius:20px;background:rgba(0,0,0,.22)}
   .pz-tour svg.map{width:100%;height:auto;max-height:140px;display:block}
   .pz-tour svg.map path.camera-spatial-route-edge{stroke:rgba(255,255,255,.18);stroke-width:7;stroke-linecap:round;stroke-linejoin:round}
@@ -181,8 +171,6 @@
   .pz-skel i:nth-child(1){height:24px;width:82%}.pz-skel i:nth-child(2){width:96%}.pz-skel i:nth-child(3){width:64%}
   .pz-skel div{display:grid;grid-template-columns:1fr 1fr;gap:8px}.pz-skel div i{height:58px;border-radius:16px}
   @keyframes pz-sh{to{background-position:-200% 0}}
-  .pz-src{font-size:12px;line-height:16px;color:var(--soft);opacity:.8}
-  .pz-anchor{color:var(--ink);text-decoration:underline;text-decoration-color:rgba(255,255,255,.35);text-underline-offset:3px;cursor:pointer}
 
   /* compositeur, intégré au bas du prisme */
   .pz-ask{position:relative;display:flex;align-items:center;gap:10px;margin:4px 12px 12px;height:52px;padding:0 6px 0 16px;border-radius:16px;background:var(--ai-tint),rgba(0,0,0,.26);box-shadow:inset 0 0 0 1px rgba(255,255,255,.08);flex:none}
@@ -191,20 +179,6 @@
   .pz-ask input::placeholder{color:var(--soft)}
   .pz-ask button{width:40px;height:40px;border-radius:10px;display:grid;place-items:center;background:var(--fill2)!important;transition:background .2s,transform .2s var(--ease)}
   .pz-ask button:hover{background:rgba(255,255,255,.26)!important}
-
-  /* en haut à droite */
-  /* réglages de démonstration (variante, Origine / Prisme) : masqués au repos, ils apparaissent au survol du coin ou au clic dedans */
-  #pz-top{position:absolute;right:0;top:0;padding:20px 20px 28px 56px;display:flex;gap:8px;align-items:center;pointer-events:auto}
-  #pz-top #pz-seg{opacity:0;transform:translateY(-6px);pointer-events:none;transition:opacity .28s var(--ease),transform .34s var(--ease)}
-  #pz-top:has(:focus-visible) #pz-seg,#pz-top.show #pz-seg{opacity:1;transform:none;pointer-events:auto}
-  @media (hover:hover){#pz-top:hover #pz-seg{opacity:1;transform:none;pointer-events:auto}}
-  @media (prefers-reduced-motion:reduce){#pz-top #pz-seg{transition:none}}
-  .pz-seg{display:flex;gap:2px;padding:4px;border-radius:22px;pointer-events:auto}
-  .pz-seg button{height:32px;padding:0 14px;border-radius:16px;font-size:13px;line-height:18px;color:var(--soft);transition:background .2s,color .2s}
-  .pz-seg button[aria-pressed=true]{background:var(--fill2);color:#fff}
-  #pz-tell{pointer-events:auto;height:40px;padding:0 16px 0 12px;border-radius:20px;display:flex;align-items:center;gap:8px;font-size:14px;line-height:18px;font-weight:600;position:relative;isolation:isolate}
-  #pz-tell::before{content:"";position:absolute;inset:0;border-radius:inherit;padding:1px;background:var(--spectrum);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;opacity:.75;animation:pz-turn 6s linear infinite}
-  #pz-tell:hover::before{opacity:1}
 
   /* récit : sous-titres façon documentaire */
   #pz-cap{position:absolute;left:50%;bottom:28px;width:min(720px,calc(100% - 32px));transform:translate(-50%,24px);opacity:0;pointer-events:none;border-radius:28px;padding:12px 12px 16px;transition:opacity .3s var(--ease),transform .42s var(--ease)}
@@ -227,8 +201,6 @@
   /* téléphone : le prisme devient une feuille, le compositeur reste en bas */
   .pz-c #pz-panel{left:16px;right:16px;width:auto;bottom:calc(16px + env(safe-area-inset-bottom));max-height:62%;border-radius:28px}
   .pz-c .pz-feed{padding-left:16px;padding-right:16px}
-  .pz-c #pz-top{right:16px;top:calc(16px + env(safe-area-inset-top));padding:0;pointer-events:none}
-  .pz-c .pz-seg{display:none}
   .pz-c #pz-cap{bottom:calc(16px + env(safe-area-inset-bottom));width:calc(100% - 32px)}
   .pz-c #pz-cap-t{font-size:17px;line-height:24px;min-height:48px}
   .pz-c .pz-tiles{grid-template-columns:1fr 1fr}
@@ -275,7 +247,7 @@
   .pz-c.pz-vb #pz-mini .bt{width:40px;padding:0}
   .pz-c.pz-vb #pz-mini .tx:nth-last-child(2){padding-right:14px}
   .pz-c.pz-vb #pz-mini .scrub{min-width:0;width:calc(100vw - 32px - 16px - 80px - 20px);max-width:260px}
-  .pz-c.pz-vb .pz-photo,.pz-c.pz-vb .pz-src{display:none}
+  .pz-c.pz-vb .pz-photo{display:none}
   #pz-mini .scrub .pre{font-weight:inherit}
   .pz-c #pz-mini .scrub .pre{display:none}
   .pz-c.pz-vb .pz-lead{font-size:19px;line-height:24px}
@@ -353,12 +325,9 @@
   /* téléphone : ellipse 460 x 520 de la maquette (390 x 844), centre à 40 px du bas */
   .pz-hcm #pz-plansc{width:94.9vw;height:calc(47.4vh + 40px);
     background:radial-gradient(ellipse 100% 47.4vh at 100% calc(100% - 40px),rgba(0,0,0,.2) 0,rgba(0,0,0,.195) 27%,rgba(0,0,0,.168) 44%,rgba(0,0,0,.1) 63%,rgba(0,0,0,.032) 82%,rgba(0,0,0,0) 100%)}
-  html.pz-orig #pz-plansc,html.pz-orig #pz-pin{display:none}
-  html.pz-orig #pz-plan,html.pz-orig #pz-planmk,html.pz-orig #pz-plansh{display:none}
   .pz-hcm #pz-plansh,.pz-hcm #pz-plan,.pz-hcm #pz-planmk{right:24px;bottom:calc(92px + env(safe-area-inset-bottom));top:auto;height:min(34vh,300px)}
-  html:not(.pz-orig) vercel-live-feedback{display:none!important}
-  .pz-vb #pz-tell{display:none}
-  html.pz-hc:not(.pz-orig) #footer{top:calc(16px + env(safe-area-inset-top));bottom:auto!important;left:16px;right:auto!important}
+  vercel-live-feedback{display:none!important}
+  :root.pz-hc #footer{top:calc(16px + env(safe-area-inset-top));bottom:auto!important;left:16px;right:auto!important}
   /* entrées : tout ce qui change de texte arrive avec un court fondu, jamais d'un coup */
   @keyframes pz-up{from{opacity:0;transform:translateY(6px)}}
   #pz-mini.swap>*{animation:pz-up .28s var(--ease) backwards}
@@ -380,12 +349,10 @@
     <section id="pz-panel" class="pz-glass" aria-label="Prisme">
       <span class="pz-rg" aria-hidden="true"><u class="s"></u><u class="f"></u></span><span class="pz-bl" aria-hidden="true"><i><u class="s"></u><u class="f"></u></i></span>
       <div id="pz-mini" role="group" aria-label="Prisme replié"></div>
-      <header class="pz-head"><div id="pz-crumb" class="pz-crumb"></div><span id="pz-brain" class="pz-brain local" title=""><b></b><span>IA</span></span><button type="button" class="pz-fold" id="pz-fold" aria-label="Réduire">${I.down}</button></header>
+      <header class="pz-head"><div id="pz-crumb" class="pz-crumb"></div><button type="button" class="pz-fold" id="pz-fold" aria-label="Réduire">${I.down}</button></header>
       <div id="pz-feed" class="pz-feed" aria-live="polite"></div>
       <form id="pz-form" class="pz-ask" autocomplete="off">${I.spark}<input id="pz-in" type="text" enterkeyhint="send" placeholder="Demander à Leysin365…" aria-label="Poser une question"><button type="submit" aria-label="Envoyer">${I.send}</button></form>
     </section>
-    <div id="pz-top">
-      <div id="pz-seg" class="pz-seg pz-glass"><button type="button" data-m="off">Origine</button><button type="button" data-m="on" aria-pressed="true">Prisme</button></div><button id="pz-tell" class="pz-glass" type="button">${I.spark}<span>Raconter la ligne</span></button></div>
     <section id="pz-cap" class="pz-glass" aria-live="polite">
       <div class="pz-cap-h"><div><div class="k">Récit · <span id="pz-cap-i"></span></div><div class="n" id="pz-cap-n"></div></div><span class="sp"></span>
         <button type="button" id="pz-voice" aria-label="Voix">${I.mute}</button><button type="button" id="pz-stop" aria-label="Arrêter le récit">${I.close}</button></div>
@@ -402,7 +369,7 @@
   /* ---------- état ---------- */
   const S = {
     open: false, title: '', eyebrow: '', facts: [], photo: '', hasTour: false, key: '',
-    lens: 'essentiel', stations: [], hotspots: [], seen: {}, busy: false, brain: 'local',
+    stations: [], hotspots: [], seen: {}, busy: false, noBrain: false,
     compact: false, narr: null, voice: false, gen: 0, ready: false, hold: 0,
   };
 
@@ -411,7 +378,19 @@
     panel: () => $('#poi-card-panel'),
     close: () => $('#poi-card-close-button'),
     ctrl: () => $('.camera-spatial-control'),
+    handle: () => $('.camera-spatial-control .camera-spatial-handle'),
+    map: () => $('.camera-spatial-control svg.camera-spatial-map'),
   };
+  const tourProg = () => parseFloat(V.handle()?.getAttribute('aria-valuenow') || '0') || 0;
+  // un tracé = sa boîte de vue + ses chemins ; le repère (qui bouge à chaque image) est copié à part
+  const mapSig = (m) => (m.getAttribute('viewBox') || '') + '#' + Array.from(m.querySelectorAll('path'), (e) => e.getAttribute('d') || '').join('|');
+  function copyMarker(m, host, prev) { // recopie le repère du viewer dans `host` s'il a changé ; rend sa nouvelle signature
+    const mk = m.querySelector('.camera-spatial-marker'), sig = mk ? mk.outerHTML : '';
+    if (sig !== prev) { const old = host.querySelector('.camera-spatial-marker'); if (mk && old) old.replaceWith(mk.cloneNode(true)); }
+    return sig;
+  }
+  // la commande du viewer ne se pilote qu'avec les touches de son curseur
+  const sendKey = (h, key) => { for (const n of ['keydown', 'keyup']) h.dispatchEvent(new KeyboardEvent(n, { key, bubbles: true, cancelable: true })); };
   let pend = null; // ce que le viewer affiche en ce moment, en attente de se stabiliser
   function read(force) {
     const p = V.panel(); if (!p) return false;
@@ -477,65 +456,37 @@
   }
 
   /* ---------- compositeur local (n'invente rien : tout vient des fiches) ---------- */
-  function composeLocal(lens) {
+  function composeLocal() {
     const B = [];
-    const lv = level();
     if (!S.open) {
       const n = S.stations.length;
       B.push({ t: 'lead', text: n ? `${ROOT} : ${n} gares sur un même tracé.` : `${ROOT}, en 3D.` });
-      B.push({ t: 'story', text: lens === 'voyageur' ? 'Choisissez une gare : je vous y emmène et je vous dis ce qu’il faut savoir pour l’utiliser.'
-        : lens === 'technique' ? 'Chaque gare a sa fiche : altitudes, dimensions des quais, pentes. Ouvrez-en une, je la mets en chiffres.'
-        : lens === 'accessible' ? 'Je peux résumer l’accessibilité de chaque gare : pentes, conformité LHand, accès. Choisissez par où commencer.'
-        : 'Posez une question, choisissez une gare, ou laissez-moi raconter la ligne de bout en bout.' });
+      B.push({ t: 'story', text: 'Posez une question, choisissez une gare, ou laissez-moi raconter la ligne de bout en bout.' });
       if (n) B.push({ t: 'places', title: 'Les gares', items: S.stations.map((s) => ({ id: s.id, label: s.label, meta: S.seen[s.label] ? 'vue' : '' })) });
       if (Object.keys(S.seen).length > 1) B.push({ t: 'next', items: ['Compare les gares que j’ai vues'] });
       B.push({ t: 'next', items: ['Par où commencer ?', 'Combien de gares ?', 'Raconte-moi la ligne'] });
       return B;
     }
     const { pairs, notes } = parse(S.facts);
-    const acc = [...pairs.filter(([k, v]) => isAccess(k + ' ' + v)).map(([k, v]) => `${k} : ${v}`), ...notes.filter(isAccess)];
     const title = S.title;
-    if (S.photo && lens !== 'technique') B.push({ t: 'photo', src: S.photo });
-    // phrase-titre
+    if (S.photo) B.push({ t: 'photo', src: S.photo });
+    // phrase-titre : la première note de la fiche qui n'est ni l'accessibilité ni un écho du titre
     const same = (x) => norm(title).includes(norm(x)) || norm(x).includes(norm(title)) || norm(x).split(' ').filter((w) => w.length > 3).every((w) => norm(title).includes(w));
     const n0 = notes.find((x) => !isAccess(x) && !same(x));
-    const leadBy = {
-      essentiel: n0 ? `${title}, ${low(n0)}.` : `${title}.`,
-      voyageur: acc.length ? `${title} : accessible, ${pairs.length ? 'quai à ' + (pairs.find(([k]) => /altitude/i.test(k))?.[1] || pairs[0][1]) : 'prête à l’usage'}.` : `${title}, ce qu’il faut savoir avant d’y aller.`,
-      technique: `${title} en ${pairs.length || S.facts.length} chiffres.`,
-      accessible: acc.length ? `${title} : ${acc.length} point${acc.length > 1 ? 's' : ''} d’accessibilité.` : `${title} : la fiche ne détaille pas encore l’accessibilité.`,
-    };
-    B.push({ t: 'lead', text: leadBy[lens] || leadBy.essentiel });
-    if (lens === 'accessible') {
-      if (acc.length) B.push({ t: 'access', items: acc });
-      const rest = pairs.filter(([k, v]) => !isAccess(k + ' ' + v));
-      if (rest.length) B.push({ t: 'facts', title: 'Autres repères', items: rest.slice(0, 4).map(([k, v]) => ({ label: k, value: v })) });
-    } else if (lens === 'technique') {
-      if (pairs.length) B.push({ t: 'facts', title: 'Fiche', items: pairs.map(([k, v]) => ({ label: k, value: v })) });
-      if (notes.length) B.push({ t: 'story', text: notes.join('. ') + '.' });
-    } else if (lens === 'voyageur') {
-      const parts = [];
-      if (n0) parts.push(`Vous arrivez à une <b>${esc(low(n0))}</b>.`);
-      const alt = pairs.find(([k]) => /altitude/i.test(k)); if (alt) parts.push(`Le quai est à <b>${esc(alt[1])}</b>.`);
-      const dim = pairs.find(([k]) => /dimension|longueur/i.test(k)); if (dim) parts.push(`Il mesure <b>${esc(dim[1])}</b>.`);
-      if (acc.length) parts.push('Accessible en fauteuil, conforme à la loi sur l’égalité des personnes handicapées.');
-      B.push({ t: 'story', html: parts.join(' ') || esc(S.facts.join('. ')) });
-    } else {
-      if (notes.length > 1) B.push({ t: 'story', text: notes.slice(1).join('. ') + '.' });
-      if (pairs.length) B.push({ t: 'facts', items: pairs.slice(0, 4).map(([k, v]) => ({ label: k, value: v })) });
-    }
+    B.push({ t: 'lead', text: n0 ? `${title}, ${low(n0)}.` : `${title}.` });
+    if (notes.length > 1) B.push({ t: 'story', text: notes.slice(1).join('. ') + '.' });
+    if (pairs.length) B.push({ t: 'facts', items: pairs.slice(0, 4).map(([k, v]) => ({ label: k, value: v })) });
     if (S.hasTour) B.push({ t: 'tour' });
-    if (lv === 1) {
+    if (level() === 1) {
       const st = stationFor(title); const hs = st ? S.hotspots.filter((h) => h.visibilityGroupId === st.id) : [];
       if (hs.length) B.push({ t: 'places', title: hs.length > 1 ? `${hs.length} points à voir ici` : 'À voir ici', static: true, items: hs.map((h) => ({ label: h.label })), hint: 'Touchez un point coloré dans la vue pour y entrer.' });
     }
     const next = [];
-    if (lens !== 'accessible' && acc.length) next.push('Est-ce accessible en fauteuil ?');
+    if (pairs.some(([k, v]) => isAccess(k + ' ' + v)) || notes.some(isAccess)) next.push('Est-ce accessible en fauteuil ?');
     if (Object.keys(S.seen).length > 1) next.push('Compare avec les autres gares vues');
-    next.push(lens === 'technique' ? 'Résume en une phrase' : 'Donne-moi les chiffres');
+    next.push('Donne-moi les chiffres');
     const nxt = S.stations.find((s) => !S.seen[s.label] && norm(s.label) !== norm(title)); if (nxt) next.push(`Emmène-moi à ${nxt.label}`);
     B.push({ t: 'next', items: next.slice(0, 3) });
-    B.push({ t: 'src', text: 'Composé à partir de la fiche du viewer.' });
     return B;
   }
 
@@ -578,34 +529,28 @@
     const words = a.split(/[^a-z0-9]+/).filter((w) => w.length > 3);
     const hit = S.facts.map(nice).map((f) => [f, words.filter((w) => norm(f).includes(w)).length]).filter(([, s]) => s).sort((x, y) => y[1] - x[1]);
     if (hit.length) { B.push({ t: 'story', html: `D’après la fiche : <b>${esc(hit[0][0])}</b>.` }); return B; }
-    B.push({ t: 'story', text: 'Ce n’est pas dans la fiche de ce lieu. En version complète, je chercherais dans tous les documents du projet.' });
+    B.push({ t: 'story', text: 'Ce n’est pas dans la fiche de ce lieu. Essayez une autre gare, ou demandez-moi les chiffres.' });
     return B;
   }
 
   /* ---------- cerveau distant (Claude via /api/ask), avec repli local ---------- */
   async function brain(kind, q) {
     const ctx = {
-      kind, q, lens: S.lens, place: S.open ? { title: S.title, parent: S.eyebrow, facts: S.facts, hasTour: S.hasTour } : null,
+      kind, q, place: S.open ? { title: S.title, parent: S.eyebrow, facts: S.facts, hasTour: S.hasTour } : null,
       root: ROOT, stations: S.stations.map((s) => ({ id: s.id, label: s.label })),
       seen: Object.fromEntries(Object.entries(S.seen).map(([k, v]) => [k, v.facts])),
       points: (() => { const st = S.open && stationFor(S.title); return st ? S.hotspots.filter((h) => h.visibilityGroupId === st.id).map((h) => h.label) : []; })(),
     };
-    if (S.brain !== 'off') {
+    if (!S.noBrain) {
       try {
         const ctl = new AbortController(); const to = setTimeout(() => ctl.abort(), 12000);
         const r = await fetch('/api/ask', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(ctx), signal: ctl.signal });
         clearTimeout(to);
-        if (r.ok) { const j = await r.json(); if (Array.isArray(j.blocks) && j.blocks.length) { setBrain('live'); return j.blocks; } }
-        else if (r.status === 501 || r.status === 404) setBrain('off');
+        if (r.ok) { const j = await r.json(); if (Array.isArray(j.blocks) && j.blocks.length) return j.blocks; }
+        else if (r.status === 501 || r.status === 404) S.noBrain = true; // pas de clé sur le serveur : on ne réessaie plus
       } catch (e) { /* repli */ }
     }
     return null;
-  }
-  function setBrain(m) {
-    if (S.brain === m) return; S.brain = m;
-    const b = R('pz-brain'); b.classList.toggle('local', m !== 'live');
-    b.querySelector('span').textContent = m === 'live' ? 'IA en direct' : 'IA démo';
-    b.title = m === 'live' ? 'Réponses générées par Claude à partir des fiches' : 'Démo : réponses composées à partir des fiches du viewer';
   }
 
   /* ---------- rendu des blocs ---------- */
@@ -657,24 +602,26 @@
         for (const q of b.items || []) { const c = document.createElement('button'); c.type = 'button'; c.className = 'pz-chip'; c.textContent = q; c.onclick = () => ask(q); el.append(c); }
         break;
       }
-      case 'action': { const a = document.createElement('button'); a.type = 'button'; a.className = 'pz-act'; a.textContent = b.label; a.onclick = () => b.ask ? ask(b.ask) : b.id && fly(b.id); el.append(a); break; }
-      case 'src': el.innerHTML = `<p class="pz-src">${esc(b.text)}</p>`; break;
       case 'fly': setTimeout(() => fly(b.id), 400); return null;
       case 'narrate': setTimeout(narrate, 500); return null;
       default: return null;
     }
     return el;
   }
-  let tourEl = null, tourMap = '';
+  let tourEl = null, tourMap = '', tourMk = '';
   function syncTour(force) {
     if (!tourEl || !tourEl.isConnected) return;
     const c = V.ctrl(); if (!c) return;
-    const m = c.querySelector('svg.camera-spatial-map');
-    if (m && (force || m.outerHTML !== tourMap)) {
-      tourMap = m.outerHTML; const cl = m.cloneNode(true); cl.setAttribute('class', 'map'); cl.removeAttribute('style');
-      const h = tourEl.querySelector('.map-h'); h.innerHTML = ''; h.append(cl);
+    const m = V.map();
+    if (m) {
+      const h = tourEl.querySelector('.map-h'), sig = mapSig(m);
+      if (force || sig !== tourMap) {
+        tourMap = sig; const cl = m.cloneNode(true); cl.setAttribute('class', 'map'); cl.removeAttribute('style'); h.replaceChildren(cl);
+        tourMk = '';
+      }
+      tourMk = copyMarker(m, h, tourMk);
     }
-    const p = parseFloat(c.querySelector('.camera-spatial-handle')?.getAttribute('aria-valuenow') || '0') || 0;
+    const p = tourProg();
     tourEl.querySelector('.bar i').style.transform = `scaleX(${Math.min(1, Math.max(0, p))})`;
     if (Math.abs(p - (S.tourP || 0)) > 1e-4) { S.tourMove = performance.now(); S.tourP = p; }
     const pp = tourEl.querySelector('.pp'); const want = playing() ? 'pause' : 'play';
@@ -721,7 +668,7 @@
     const kind = (S.open ? S.title : '') + '|' + S.open;
     if (kind === composedKey && feed.childElementCount) { // même lieu, un détail arrive : mise à jour sur place, sans repasser par le squelette
       const remote = await brain('compose'); if (g !== S.gen) return;
-      return render(remote || composeLocal(S.lens));
+      return render(remote || composeLocal());
     }
     composedKey = kind;
     const t0 = performance.now();
@@ -733,7 +680,7 @@
     const remote = await brain('compose');
     await wait(Math.max(0, 300 - (performance.now() - t0))); // juste le temps de voir la fiche se composer
     if (g !== S.gen) return;
-    render(remote || composeLocal(S.lens));
+    render(remote || composeLocal());
     busy(false, 1000);
   }
   async function ask(q) {
@@ -756,7 +703,7 @@
     if (!focusTarget(id)) render([{ t: 'story', text: 'La vue 3D n’est pas encore prête.' }], { append: true });
   }
 
-  /* ---------- en-tête : fil d'Ariane + regards ---------- */
+  /* ---------- en-tête : fil d'Ariane ---------- */
   let headSig = '';
   function renderHead() {
     const c = R('pz-crumb'); c.innerHTML = '';
@@ -799,7 +746,7 @@
   async function narrate() {
     if (S.narr || !S.stations.length) return;
     const run = S.narr = { i: 0, stop: false };
-    root.classList.add('narrating'); input.blur(); R('pz-tell').lastChild.textContent = 'Arrêter le récit';
+    root.classList.add('narrating'); input.blur();
     const pips = R('pz-pips'); pips.innerHTML = S.stations.map(() => '<i><b></b></i>').join('');
     const t = R('pz-cap-t');
     R('pz-cap-n').textContent = ROOT; R('pz-cap-i').textContent = `${S.stations.length} gares`;
@@ -825,24 +772,10 @@
   }
   function endNarr() {
     if (!S.narr) return; S.narr.stop = true; S.narr = null; window.speechSynthesis && speechSynthesis.cancel();
-    root.classList.remove('narrating'); R('pz-tell').lastChild.textContent = 'Raconter la ligne'; S.key = ''; tick(true);
+    root.classList.remove('narrating'); S.key = ''; tick(true);
   }
   R('pz-stop').onclick = endNarr;
   R('pz-voice').onclick = () => { S.voice = !S.voice; R('pz-voice').innerHTML = S.voice ? I.sound : I.mute; if (S.voice) speak(R('pz-cap-t').textContent); else speechSynthesis.cancel(); };
-  R('pz-tell').onclick = () => (S.narr ? endNarr() : narrate());
-
-  /* ---------- Origine / Prisme ---------- */
-  const setMode = (m) => {
-    document.documentElement.classList.toggle('pz-orig', m === 'off');
-    for (const b of R('pz-seg').children) b.setAttribute('aria-pressed', String(b.dataset.m === m));
-    try { sessionStorage.setItem('pz-mode', m); } catch (e) {}
-  };
-  for (const b of R('pz-seg').children) b.onclick = () => setMode(b.dataset.m);
-  { // un clic ou un toucher dans le coin les fait apparaître quelques secondes (écrans tactiles, pas de survol)
-    const top = R('pz-top'); let t = 0;
-    top.addEventListener('pointerdown', () => { top.classList.add('show'); clearTimeout(t); t = setTimeout(() => top.classList.remove('show'), 4500); });
-  }
-  try { if (sessionStorage.getItem('pz-mode') === 'off') setMode('off'); } catch (e) {}
 
   /* ---------- saisie ---------- */
   R('pz-form').addEventListener('submit', (e) => { e.preventDefault(); ask(); });
@@ -907,12 +840,15 @@
     return [n && cap(n), alt && 'quai à ' + alt[1]].filter(Boolean).join(' · ') || 'Touchez pour la fiche';
   }
   // ce que dit le point pendant le parcours, en une ou deux lignes (tout vient de la fiche du viewer)
+  let blurbFor = null, blurbTxt = '';
   function tourBlurb() {
+    if (blurbFor === S.facts) return blurbTxt; // S.facts est remplacé d'un bloc à chaque nouvel état
+    blurbFor = S.facts;
     const { pairs, notes } = parse(S.facts), t = norm(S.title);
     const n = notes.find((x) => !isAccess(x) && !t.includes(norm(x)) && !norm(x).includes(t));
     const nums = pairs.filter(([k, v]) => !isAccess(k + ' ' + v)).slice(0, 3).map(([k, v]) => `${k.replace(/\s+du quai$/i, '').toLowerCase()} ${headline(v)[0]}`);
     const acc = pairs.some(([k, v]) => isAccess(k + ' ' + v)) || notes.some(isAccess);
-    return [n && cap(n), ...nums, acc && 'accessible'].filter(Boolean).join(' · ') || S.eyebrow || 'Touchez pour la fiche';
+    return (blurbTxt = [n && cap(n), ...nums, acc && 'accessible'].filter(Boolean).join(' · ') || S.eyebrow || 'Touchez pour la fiche');
   }
   function mini() {
     const m = miniMode();
@@ -978,16 +914,15 @@
   let boostRaf = 0, boostIdeal = null, boostT = 0, boostKey = 0;
   function boostFrame(t) {
     boostRaf = 0;
-    const h = V.ctrl()?.querySelector('.camera-spatial-handle');
+    const h = V.handle();
     if (!S.hasTour || !h || !playing() || S.speed <= 1 || tourTarget != null || S.narr) { boostIdeal = null; boostT = 0; return; }
     const p = tourProg(), dt = boostT ? Math.min(0.1, (t - boostT) / 1000) : 0; boostT = t;
     if (boostIdeal == null || Math.abs(p - boostIdeal) > 0.04) boostIdeal = p; // on a sauté ailleurs (curseur, autre point) : on repart d'ici
     boostIdeal += S.speed * NATIVE * dt;
-    if (p < 0.99 && boostIdeal - p > 0.0016 && t - boostKey > 75) { boostKey = t; for (const n of ['keydown', 'keyup']) h.dispatchEvent(new KeyboardEvent(n, { key: 'ArrowRight', bubbles: true, cancelable: true })); }
+    if (p < 0.99 && boostIdeal - p > 0.0016 && t - boostKey > 75) { boostKey = t; sendKey(h, 'ArrowRight'); }
     boostRaf = requestAnimationFrame(boostFrame);
   }
   function boostKick() { if (!boostRaf && S.hasTour && S.speed > 1 && playing()) boostRaf = requestAnimationFrame(boostFrame); }
-  const tourProg = () => parseFloat(V.ctrl()?.querySelector('.camera-spatial-handle')?.getAttribute('aria-valuenow') || '0') || 0;
   // on avance la caméra du viewer en lui envoyant les touches de son propre curseur, jusqu'à la position voulue
   let tourTarget = null, tourHeld = false, lastKey = 0;
   function seekLoop(t) {
@@ -997,8 +932,8 @@
     else if (t - lastKey > 70) {
       lastKey = t;
       const key = tourTarget < 0.005 ? 'Home' : tourTarget > 0.995 ? 'End' : d >= 0.1 ? 'PageUp' : d <= -0.1 ? 'PageDown' : d > 0 ? 'ArrowRight' : 'ArrowLeft';
-      const h = V.ctrl()?.querySelector('.camera-spatial-handle');
-      if (h) for (const n of ['keydown', 'keyup']) h.dispatchEvent(new KeyboardEvent(n, { key, bubbles: true, cancelable: true }));
+      const h = V.handle();
+      if (h) sendKey(h, key);
       else if (window.__stubSeek) window.__stubSeek(tourTarget);
     }
     mini(); requestAnimationFrame(seekLoop);
@@ -1048,11 +983,6 @@
   // plan du parcours : les calques ne sont reconstruits que si le tracé change ; le repère, lui, suit la caméra image par image
   let planSig = '', mkSig = '', planRaf = 0;
   const tourOn = () => S.hasTour && !S.narr && !(S.compact && !S.shut);
-  function markerSync(m) {
-    const mk = m.querySelector('.camera-spatial-marker'); const sig = mk ? mk.outerHTML : '';
-    if (sig === mkSig) return; mkSig = sig;
-    const old = planMk.querySelector('.camera-spatial-marker'); if (mk && old) old.replaceWith(mk.cloneNode(true));
-  }
   function pinSync() {
     const ring = planMk.querySelector('.camera-spatial-ring'); const r = ring && ring.getBoundingClientRect();
     const ok = !!r && r.width > 0.5 && planMk.classList.contains('on');
@@ -1062,29 +992,28 @@
   function planFrame() {
     planRaf = 0;
     if (!tourOn()) { pin.classList.remove('on'); return; }
-    const m = V.ctrl()?.querySelector('svg.camera-spatial-map');
-    if (m) { markerSync(m); pinSync(); }
+    const m = V.map();
+    if (m) { mkSig = copyMarker(m, planMk, mkSig); pinSync(); }
     planRaf = requestAnimationFrame(planFrame);
   }
   function planSync() {
     const on = tourOn();
     for (const e of [plan, planMk, planSh, planSc]) e.classList.toggle('on', on);
     if (!on) { planSig = ''; pin.classList.remove('on'); return; }
-    const m = V.ctrl()?.querySelector('svg.camera-spatial-map'); if (!m) return;
-    const sig = (m.getAttribute('viewBox') || '') + '#' + Array.from(m.querySelectorAll('path'), (e) => e.getAttribute('d') || '').join('|');
+    const m = V.map(); if (!m) return;
+    const sig = mapSig(m);
     if (sig !== planSig) {
       planSig = sig; mkSig = '';
       for (const host of [planSh, plan, planMk]) { const c = m.cloneNode(true); c.removeAttribute('style'); c.removeAttribute('class'); host.replaceChildren(c); }
     }
-    markerSync(m); pinSync();
+    mkSig = copyMarker(m, planMk, mkSig); pinSync();
     if (!planRaf) planRaf = requestAnimationFrame(planFrame);
   }
   timer = setInterval(tick, 120);
-  S.brain = 'pending';
   layout(); tick(true);
 
   window.__prism = {
-    destroy() { clearInterval(timer); clearTimeout(composeT); cancelAnimationFrame(planRaf); endNarr(); root.remove(); pin.remove(); plan.remove(); planMk.remove(); planSh.remove(); planSc.remove(); css.remove(); removeEventListener('pointerdown', onCanvas, true); removeEventListener('keydown', onKey); removeEventListener('resize', layout); document.documentElement.classList.remove('pz-orig'); },
+    destroy() { clearInterval(timer); clearTimeout(composeT); cancelAnimationFrame(planRaf); endNarr(); root.remove(); pin.remove(); plan.remove(); planMk.remove(); planSh.remove(); planSc.remove(); css.remove(); removeEventListener('pointerdown', onCanvas, true); removeEventListener('keydown', onKey); removeEventListener('resize', layout); document.documentElement.classList.remove('pz-hc', 'pz-hcm', 'pz-mt'); },
     state: S, compose, ask, narrate,
   };
 })();

@@ -14,7 +14,7 @@ export default async function handler(req) {
   const known = !secret || given === secret || cookie.split(/;\s*/).includes('pk=' + secret);
   const remember = secret && given === secret ? `pk=${secret}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=2592000` : null;
 
-  // Entrée : / redirige vers l'adresse d'entrée du prototype
+  // Entrée : / redirige vers l'adresse d'entrée du viewer
   if (url.searchParams.has('entry')) {
     if (!known) return denied();
     const h = { location: cfg.entry(origin), 'cache-control': 'no-store' };
@@ -67,5 +67,5 @@ export default async function handler(req) {
 }
 
 function denied() {
-  return new Response('Prototype privé. Demandez le lien complet à Fedelo Studio.', { status: 401, headers: { 'content-type': 'text/plain; charset=utf-8' } });
+  return new Response('Accès privé. Demandez le lien complet à Fedelo Studio.', { status: 401, headers: { 'content-type': 'text/plain; charset=utf-8' } });
 }

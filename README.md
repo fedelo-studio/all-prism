@@ -31,13 +31,13 @@ La barre d'outils Vercel est coupée dans les réglages du projet (Settings > Ge
 - Une seule surface : la fiche est composée par l'IA à chaque arrêt de caméra, à partir d'un registre de blocs
   (phrase-titre, chiffres, récit, accessibilité, lieux, comparaison, parcours, questions suivantes).
 - Les onglets de regard (Essentiel, Voyageur, Technique, Accessible) ont été retirés le 18 novembre 2026 à la demande de Felipe.
-- Les réglages de démonstration en haut à droite (variante A / B, Origine / Prisme) sont masqués au repos : ils apparaissent
-  au survol du coin ou au clic dedans.
+- Les réglages de démonstration (variante A / B, Origine / Prisme) ont été retirés de la V2 le 18 novembre 2026 à la demande de Felipe :
+  plus de badge « IA démo », plus de mention « composé à partir de la fiche », plus de commutateur Origine / Prisme. Ils restent dans l'historique git (avant le commit « Version propre »).
 - Les questions s'ajoutent dans la fiche et peuvent déplacer la caméra (« Emmène-moi à… »). Le prisme se souvient
   des gares ouvertes et peut les comparer.
 - « Raconter la ligne » : visite automatique des gares, sous-titres et voix (bouton son).
 - Cerveau : `api/ask.js` appelle Claude si `ANTHROPIC_API_KEY` est posée dans Vercel (modèle via `ASK_MODEL`,
-  par défaut `claude-haiku-5-5`). Sans clé, badge « IA démo » et compositeur local qui n'utilise que le texte des fiches.
+  par défaut `claude-haiku-5-5`). Sans clé, l'interface bascule sans rien afficher sur un compositeur local qui n'utilise que le texte des fiches.
 - Test local : `python3 -m http.server 8765` à la racine, puis
   `http://localhost:8765/test/stub-v3.html?config=config.json&manifestUrl=manifest.json`.
 
@@ -78,3 +78,10 @@ parcours guidé = lecture, curseur pour avancer, Quitter. Sur téléphone elle r
   On ajoute de petites avances (flèche droite du curseur du viewer) pendant qu'il joue, sans le mettre en pause ; mesuré sur la vraie 3D : 4× tient à ~0,02 par seconde.
   Toucher la vitesse alors que le parcours est en pause le relance.
 - La maquette locale (`test/stub-v3.html`) imite maintenant cette commande (`data-playing`, `pointerdown` puis `click`, 0,5 % par seconde, flèche droite plus longue en lecture) et a un second point de parcours (`gare-1-quai`).
+
+### Version propre et dernière passe de code (18 novembre 2026)
+- Retiré de l'interface : badge « IA démo / IA en direct », mention « Composé à partir de la fiche du viewer », commutateur Origine / Prisme et son bouton du coin,
+  phrase « en version complète, je chercherais… ». Le message d'accès refusé de `api/px.js` ne parle plus de prototype.
+- Code : regards (voyageur, technique, accessible) supprimés puisque plus rien ne les choisit (`api/ask.js` ne reçoit plus `lens`) ; bloc `action` jamais produit supprimé ;
+  accès au viewer regroupé (`V.handle`, `V.map`, `tourProg`, `sendKey`) ; le tracé du parcours dans la fiche n'est reconstruit que s'il change (le repère est copié seul) ;
+  texte d'info du parcours mémorisé ; `destroy()` retire aussi les classes posées sur `<html>`.

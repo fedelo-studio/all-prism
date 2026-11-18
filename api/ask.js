@@ -1,5 +1,5 @@
-// Cerveau de la V3 : compose la fiche (ou répond à une question) en blocs d'interface, avec Claude.
-// Sans variable ANTHROPIC_API_KEY sur Vercel, répond 501 et l'interface passe en « IA démo » (compositeur local).
+// Cerveau de la V2 : compose la fiche (ou répond à une question) en blocs d'interface, avec Claude.
+// Sans variable ANTHROPIC_API_KEY sur Vercel, répond 501 et l'interface bascule sur son compositeur local (fiches du viewer seulement).
 export const config = { runtime: 'edge' };
 
 const SYSTEM = `Tu es l'interface d'ALL prism, une maquette 3D interactive d'un projet ferroviaire (ici Leysin365, en Suisse romande).
@@ -9,9 +9,7 @@ Règles :
 - Français de Suisse romande, phrases courtes, ton premium et calme. Pas d'emoji. Pas de point d'exclamation.
 - N'utilise QUE les faits fournis dans le contexte (fiche ouverte, fiches déjà vues, liste des gares, points). N'invente aucun chiffre, date, coût ni nom.
   Si l'information manque, dis-le en une phrase et propose ce qu'on peut faire.
-- Adapte la fiche au « regard » demandé :
-  essentiel = l'essentiel en 3 blocs ; voyageur = ce qu'un usager doit savoir, ton concret ;
-  technique = tous les chiffres en tuiles ; accessible = accessibilité d'abord (pente, LHand, mobilité réduite).
+- Compose l'essentiel en 3 blocs, sans répéter ce que dit déjà la phrase-titre.
 - Si l'utilisateur veut aller quelque part, ajoute un bloc {"t":"fly","id":"<id de gare>"} avec un id de la liste des gares.
 - Si l'utilisateur veut une visite racontée de la ligne, ajoute {"t":"narrate"}.
 - Termine par un bloc "next" de 2 ou 3 questions de suite courtes (moins de 40 caractères), utiles et différentes.
@@ -41,7 +39,7 @@ export default async function handler(req) {
   let ctx;
   try { ctx = await req.json(); } catch (e) { return json({ error: 'bad json' }, 400); }
   const user = JSON.stringify({
-    kind: ctx.kind, q: (ctx.q || '').slice(0, 400), regard: ctx.lens, lieu_ouvert: ctx.place, projet: ctx.root,
+    kind: ctx.kind, q: (ctx.q || '').slice(0, 400), lieu_ouvert: ctx.place, projet: ctx.root,
     gares: ctx.stations, points_dans_la_gare: ctx.points, fiches_deja_vues: ctx.seen,
   });
   const r = await fetch('https://api.anthropic.com/v1/messages', {
