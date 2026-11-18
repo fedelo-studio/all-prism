@@ -214,11 +214,13 @@
   .pz-grab{display:none}
   .pz-c.pz-kb #pz-panel{max-height:none;top:calc(8px + env(safe-area-inset-top))}
   /* ===== variante B : la barre ===== */
-  .pz-vb #pz-panel{left:50%;transform:translateX(-50%);width:440px;max-height:calc(100% - 96px);transition:opacity .34s var(--ease)}
-  .pz-vb.narrating #pz-panel{transform:translateX(-50%);opacity:0;pointer-events:none}
+  .pz-vb #pz-panel{left:20px;transform:none;width:400px;max-height:min(680px,calc(100% - 96px));transition:opacity .34s var(--ease)}
+  .pz-vb.narrating #pz-panel{transform:none;opacity:0;pointer-events:none}
+  .pz-vb #pz-cap{left:20px;transform:translate(0,24px);width:min(560px,calc(100% - 40px))}
+  .pz-vb.narrating #pz-cap{transform:none}
   .pz-vb #pz-panel.shut .pz-head,.pz-vb #pz-panel.shut .pz-lens,.pz-vb #pz-panel.shut .pz-feed,.pz-vb #pz-panel.shut .pz-ask,.pz-vb #pz-panel.shut .pz-grab{display:none}
   .pz-vb #pz-panel:not(.shut) #pz-mini{display:none}
-  .pz-vb #pz-panel.shut{width:auto;min-width:300px;max-width:min(560px,calc(100% - 40px));border-radius:26px}
+  .pz-vb #pz-panel.shut{width:auto;min-width:0;max-width:min(520px,calc(100% - 40px));border-radius:26px}
   #pz-mini{display:none}
   .pz-vb #pz-mini{display:flex;align-items:center;gap:12px;padding:8px 8px 8px 16px;min-height:56px;cursor:pointer}
   #pz-mini .ic{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;flex:none;color:#c9d6ff}
@@ -244,10 +246,39 @@
   .pz-vb .pz-head .pz-fold:hover{background:var(--fill2)}
   .pz-fold{display:none}
   .pz-vb .pz-fold{display:grid}
-  .pz-c.pz-vb #pz-panel{left:8px;right:8px;transform:none;width:auto;max-height:70%}
-  .pz-c.pz-vb #pz-panel.shut{min-width:0;max-width:none}
-  .pz-c.pz-vb.narrating #pz-panel{transform:none}
-  .pz-c.pz-vb #pz-mini{min-height:60px}
+  /* téléphone : tout à gauche, rien au centre ; feuille basse, la 3D reste visible au-dessus */
+  .pz-c.pz-vb #pz-panel{left:8px;right:8px;width:auto;max-height:52%}
+  .pz-c.pz-vb #pz-panel.shut{right:auto;max-width:calc(100% - 16px)}
+  .pz-c.pz-vb #pz-mini{min-height:52px;padding:6px 6px 6px 12px;gap:10px}
+  .pz-c.pz-vb #pz-mini [data-a=open],.pz-c.pz-vb #pz-mini .bt span{display:none}
+  .pz-c.pz-vb #pz-mini .bt{width:40px;padding:0}
+  .pz-c.pz-vb #pz-mini .scrub{min-width:0;width:44vw}
+  .pz-c.pz-vb #pz-mini .tx small{max-width:56vw}
+  .pz-c.pz-vb .pz-photo,.pz-c.pz-vb .pz-src{display:none}
+  .pz-c.pz-vb .pz-lens{margin-top:8px}
+  .pz-c.pz-vb .pz-lens button{height:28px;font-size:12px;padding:0 10px}
+  .pz-c.pz-vb .pz-tiles{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+  .pz-c.pz-vb .pz-tile{padding:10px}
+  .pz-c.pz-vb .pz-tile strong{font-size:17px;line-height:22px}
+  .pz-c.pz-vb .pz-tile span{font-size:12px;line-height:15px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .pz-c.pz-vb .pz-lead{font-size:19px;line-height:24px}
+  .pz-c.pz-vb .pz-tour{display:none}
+  .pz-c.pz-vb #pz-cap{left:8px;right:8px;width:auto}
+  /* plan du parcours : posé dans la profondeur de la 3D, fondu par mode de fusion */
+  #pz-plan,#pz-planmk{position:fixed;z-index:2147482990;pointer-events:none;right:3vw;bottom:9vh;width:min(54vw,780px);opacity:0;
+    transform:perspective(1200px) rotateX(56deg) rotateZ(-6deg) translateY(30px);transform-origin:50% 100%;transition:opacity .9s var(--ease,ease),transform 1.2s cubic-bezier(.2,.7,.2,1)}
+  #pz-plan{mix-blend-mode:overlay}
+  #pz-plan.on{opacity:.95;transform:perspective(1200px) rotateX(56deg) rotateZ(-6deg)}
+  #pz-planmk.on{opacity:1;transform:perspective(1200px) rotateX(56deg) rotateZ(-6deg)}
+  #pz-plan svg,#pz-planmk svg{width:100%;height:auto;display:block;overflow:visible}
+  #pz-plan path{fill:none!important;stroke-linecap:round;stroke-linejoin:round}
+  #pz-plan path.camera-spatial-route-edge{stroke:#fff!important;stroke-width:9px!important;opacity:.55}
+  #pz-plan path.camera-spatial-route{stroke:#fff!important;stroke-width:3px!important}
+  #pz-plan circle,#pz-plan .camera-spatial-marker{display:none}
+  #pz-planmk path{display:none}
+  #pz-planmk circle{fill:${accent}!important;stroke:#fff!important;stroke-width:1.5px!important;filter:drop-shadow(0 0 4px ${accent})}
+  html.pz-orig #pz-plan,html.pz-orig #pz-planmk{display:none}
+  .pz-hcm #pz-plan,.pz-hcm #pz-planmk{right:auto;left:6vw;bottom:auto;top:16vh;width:88vw}
   #pz-vars{display:flex;gap:2px;padding:4px;border-radius:22px;pointer-events:auto}
   #pz-vars button{height:32px;padding:0 12px;border-radius:16px;font-size:13px;line-height:18px;color:var(--soft)}
   #pz-vars button[aria-pressed=true]{background:var(--fill2);color:#fff}
@@ -279,6 +310,9 @@
       <p id="pz-cap-t"></p><div class="pz-pips" id="pz-pips"></div>
     </section>`;
   document.body.append(root);
+  const plan = document.createElement('div'), planMk = document.createElement('div');
+  plan.id = 'pz-plan'; planMk.id = 'pz-planmk'; plan.setAttribute('aria-hidden', 'true'); planMk.setAttribute('aria-hidden', 'true');
+  if (VB) document.body.append(plan, planMk);
   const R = (id) => document.getElementById(id);
   const panel = R('pz-panel'), feed = R('pz-feed'), input = R('pz-in');
 
@@ -729,7 +763,7 @@
 
   function layout() {
     S.compact = innerWidth < 640;
-    root.classList.toggle('pz-c', S.compact); document.documentElement.classList.toggle('pz-hc', S.compact);
+    root.classList.toggle('pz-c', S.compact); document.documentElement.classList.toggle('pz-hc', S.compact); document.documentElement.classList.toggle('pz-hcm', S.compact && VB);
     slide(); kb();
   }
   addEventListener('resize', layout);
@@ -771,7 +805,7 @@
     if (sig !== miniSig) {
       miniSig = sig;
       if (m === 'idle') {
-        miniEl.innerHTML = `<span class="ic">${I.spark}</span><span class="tx"><b>Demander à ${esc(ROOT)}</b><small>${S.stations.length ? S.stations.length + ' gares · ' : ''}une question, une gare, un récit</small></span>` +
+        miniEl.innerHTML = `<span class="ic">${I.spark}</span><span class="tx"><b>Demander à ${esc(ROOT)}</b><small>${S.stations.length ? S.stations.length + ' gares' + (S.compact ? '' : ' · une question, une gare, un récit') : ''}</small></span>` +
           `<button type="button" class="bt" data-a="tell">${I.play}<span>Raconter</span></button><button type="button" class="bt round" data-a="open" aria-label="Ouvrir">${I.up}</button>`;
       } else if (m === 'place') {
         miniEl.innerHTML = `<button type="button" class="bt round" data-a="back" aria-label="Retour">${I.back}</button><span class="tx"><b>${esc(S.title)}</b><small>${esc(subline())}</small></span>` +
@@ -847,14 +881,24 @@
   let timer = 0;
   function tick(force) {
     if (read() || force) { if (!S.narr) compose(); context(); }
-    syncTour(); mini();
+    syncTour(); mini(); planSync();
+  }
+  let planSrc = '';
+  function planSync() {
+    if (!VB) return;
+    const on = S.hasTour && !S.narr;
+    plan.classList.toggle('on', on); planMk.classList.toggle('on', on);
+    if (!on) return;
+    const m = V.ctrl()?.querySelector('svg.camera-spatial-map'); if (!m || m.outerHTML === planSrc) return;
+    planSrc = m.outerHTML;
+    for (const host of [plan, planMk]) { const c = m.cloneNode(true); c.removeAttribute('style'); c.removeAttribute('class'); host.replaceChildren(c); }
   }
   timer = setInterval(tick, 200);
   S.brain = 'pending';
   layout(); tick(true);
 
   window.__prism = {
-    destroy() { clearInterval(timer); endNarr(); root.remove(); css.remove(); removeEventListener('pointerdown', onCanvas, true); removeEventListener('keydown', onKey); removeEventListener('resize', layout); document.documentElement.classList.remove('pz-orig'); },
+    destroy() { clearInterval(timer); endNarr(); root.remove(); plan.remove(); planMk.remove(); css.remove(); removeEventListener('pointerdown', onCanvas, true); removeEventListener('keydown', onKey); removeEventListener('resize', layout); document.documentElement.classList.remove('pz-orig'); },
     state: S, compose, ask, narrate,
   };
 })();
