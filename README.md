@@ -51,7 +51,7 @@ La barre d'outils Vercel est coupée dans les réglages du projet (Settings > Ge
 
 ### Prisme plus vif et voile du plan (18 novembre 2026, retour de Felipe)
 - Palette de l'IA inchangée (tête blanche, queue chaude jaune / corail, queue froide bleu / glacier) mais plus saturée et à queues plus longues.
-  Un trait de lumière fait le tour de la barre au repos (anneau 2 px + halo en bande), plus vif au survol, et le prisme « s'allume »
+  Un trait de lumière fait le tour de la barre au repos (anneau 1 px + halo en bande, intensité réduite d'un cran après le retour de Felipe), plus vif au survol, et le prisme « s'allume »
   (deux têtes, tour en 1,5 s, éclat du halo) dès que l'IA compose, au moins 1 s visible. Les calques tournent par `transform` : pas de repeinte.
 - Le voile sombre sous le plan de visite reprend la maquette Figma (fichier du design system, page « Pastilles · V2 », « Ombre douce (plan) ») :
   noir à 20 %, flou 140, ellipse 760 x 620 centrée sur le coin bas droit d'une vue 1512 x 757 (460 x 520 sur téléphone, centre à 40 px du bas),
