@@ -363,7 +363,7 @@
   const S = {
     open: false, title: '', eyebrow: '', facts: [], photo: '', hasTour: false, key: '',
     lens: 'essentiel', stations: [], hotspots: [], seen: {}, busy: false, brain: 'local',
-    compact: false, narr: null, voice: false, gen: 0, ready: false,
+    compact: false, narr: null, voice: false, gen: 0, ready: false, hold: 0,
   };
 
   /* ---------- lecture du viewer ---------- */
@@ -389,9 +389,11 @@
       const now = performance.now();
       if (!pend || pend.key !== key) { pend = { key, t: now }; return false; }
       const less = (S.open && !open) || (S.hasTour && !(tour && open));
+      // après un clic dans la 3D ou un « emmène-moi », le viewer ferme sa fiche, vole, puis en ouvre une autre : on garde la fiche actuelle pendant ce temps
+      if (less && now < S.hold) return false;
       if (now - pend.t < (less ? 330 : 110)) return false;
     }
-    pend = null;
+    pend = null; if (open) S.hold = 0;
     Object.assign(S, { key, open, title, eyebrow: eb, facts, photo, hasTour: tour && open });
     if (open) S.seen[title] = { facts: facts.slice(), eyebrow: eb };
     return true;
@@ -407,7 +409,7 @@
       return true;
     } catch (e) { return false; }
   }
-  const back = (n = 1) => { for (let i = 0; i < n; i++) setTimeout(() => V.close()?.click(), i * 320); };
+  const back = (n = 1) => { S.hold = 0; for (let i = 0; i < n; i++) setTimeout(() => V.close()?.click(), i * 320); };
   const stationFor = (txt) => {
     const a = norm(txt); let best = null, sc = 0;
     for (const s of S.stations) {
@@ -704,6 +706,7 @@
     render(remote || answerLocal(q), { append: true });
   }
   function fly(id) {
+    S.hold = performance.now() + 3500;
     if (S.compact && !VB) panel.classList.add('min');
     if (VB && S.compact) setShut(true);
     if (!focusTarget(id)) render([{ t: 'story', text: 'La vue 3D n’est pas encore prête.' }], { append: true });
@@ -804,7 +807,7 @@
   input.addEventListener('focus', () => { if (S.compact) panel.classList.remove('min'); kb(); });
   input.addEventListener('blur', () => setTimeout(kb, 60));
   panel.querySelector('.pz-grab').onclick = () => (VB ? R('pz-fold').click() : panel.classList.toggle('min'));
-  const onCanvas = (e) => { if (!root.contains(e.target) && S.narr) endNarr(); };
+  const onCanvas = (e) => { if (root.contains(e.target)) return; S.hold = performance.now() + 1700; if (S.narr) endNarr(); };
   addEventListener('pointerdown', onCanvas, true);
   const onKey = (e) => { if (e.key === 'Escape' && S.narr) endNarr(); };
   addEventListener('keydown', onKey);
