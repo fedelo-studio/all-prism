@@ -22,7 +22,7 @@
   const $ = (s, r = document) => r.querySelector(s);
   const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const Q = new URLSearchParams(location.search);
-  const SHOW_K = 1.25; // mode Showroom : tout passe à 125 % (lien /showroom, ou #showroom ajouté à n'importe quel lien)
+  const SHOW_K = 1.25; // mode Showroom : tout passe à 125 % (réglage en haut à droite, lien /showroom, ou #showroom ajouté à n'importe quel lien)
   const showOn = () => /showroom/i.test(location.pathname + location.hash + location.search);
   const ROOT = (document.title.split('|').pop() || '').trim() || 'Vue d’ensemble';
   const accent = (getComputedStyle(document.documentElement).getPropertyValue('--all-prism-theme-accent-color') || '#ed695a').trim() || '#ed695a';
@@ -57,7 +57,10 @@
   const css = document.createElement('style');
   css.id = 'pz-style';
   css.textContent = `
-  html:root #poi-card-panel,html:root .camera-spatial-control,html:root #interaction-hint{opacity:0!important;pointer-events:none!important}
+  html:root:not(.pz-orig) #poi-card-panel,html:root:not(.pz-orig) .camera-spatial-control,html:root:not(.pz-orig) #interaction-hint{opacity:0!important;pointer-events:none!important}
+  /* mode Origine : il ne reste que les réglages du coin, le viewer d'A-LL reprend la main */
+  .pz-orig #pz>*:not(#pz-top):not(svg){opacity:0!important;visibility:hidden!important;pointer-events:none!important;transition:opacity .22s,visibility 0s .22s!important}
+  html.pz-orig #pz-plansc,html.pz-orig #pz-pin,html.pz-orig #pz-plan,html.pz-orig #pz-planmk,html.pz-orig #pz-plansh{display:none}
   #pz{position:fixed;inset:0;z-index:2147483000;pointer-events:none;
     font:400 15px/20px -apple-system,BlinkMacSystemFont,"SF Pro Text","Inter","Helvetica Neue",Arial,sans-serif;letter-spacing:-.01em;color:var(--ink);
     -webkit-font-smoothing:antialiased;text-align:left;
@@ -181,6 +184,19 @@
   .pz-ask input::placeholder{color:var(--soft)}
   .pz-ask button{width:40px;height:40px;border-radius:10px;display:grid;place-items:center;background:var(--fill2)!important;transition:background .2s,transform .2s var(--ease)}
   .pz-ask button:hover{background:rgba(255,255,255,.26)!important}
+
+  /* en haut à droite : les modes de l'interface (Origine, Prisme, Showroom). Masqués au repos, ils apparaissent au survol du coin ou au clic dedans */
+  #pz-top{position:absolute;right:0;top:0;padding:20px 20px 28px 56px;display:flex;gap:8px;align-items:center;pointer-events:auto}
+  #pz-top #pz-seg{opacity:0;transform:translateY(-6px);pointer-events:none;transition:opacity .28s var(--ease),transform .34s var(--ease)}
+  #pz-top:has(:focus-visible) #pz-seg,#pz-top.show #pz-seg{opacity:1;transform:none;pointer-events:auto}
+  @media (hover:hover){#pz-top:hover #pz-seg{opacity:1;transform:none;pointer-events:auto}}
+  @media (prefers-reduced-motion:reduce){#pz-top #pz-seg{transition:none}}
+  .pz-seg{display:flex;gap:2px;padding:4px;border-radius:22px;pointer-events:auto}
+  .pz-seg button{height:32px;padding:0 14px;border-radius:16px;font-size:13px;line-height:18px;color:var(--soft);transition:background .2s,color .2s}
+  .pz-seg button:hover{color:#fff}
+  .pz-seg button[aria-pressed=true]{background:var(--fill2);color:#fff}
+  .pz-c #pz-top{display:none}
+  .pz-show #pz-top{padding:22.4px 22.4px 28px 56px}
 
   /* récit : sous-titres façon documentaire */
   #pz-cap{position:absolute;left:50%;bottom:28px;width:min(720px,calc(100% - 32px));transform:translate(-50%,24px);opacity:0;pointer-events:none;border-radius:28px;padding:12px 12px 16px;transition:opacity .3s var(--ease),transform .42s var(--ease)}
@@ -334,7 +350,7 @@
     background:radial-gradient(ellipse 100% 47.4vh at 100% calc(100% - 40px),rgba(0,0,0,.2) 0,rgba(0,0,0,.195) 27%,rgba(0,0,0,.168) 44%,rgba(0,0,0,.1) 63%,rgba(0,0,0,.032) 82%,rgba(0,0,0,0) 100%)}
   .pz-hcm #pz-plansh,.pz-hcm #pz-plan,.pz-hcm #pz-planmk{right:24px;bottom:calc(92px + env(safe-area-inset-bottom));top:auto;height:min(34vh,300px)}
   vercel-live-feedback{display:none!important}
-  :root.pz-hc #footer{top:calc(16px + env(safe-area-inset-top));bottom:auto!important;left:16px;right:auto!important}
+  :root.pz-hc:not(.pz-orig) #footer{top:calc(16px + env(safe-area-inset-top));bottom:auto!important;left:16px;right:auto!important}
   /* entrées : tout ce qui change de texte arrive avec un court fondu, jamais d'un coup */
   @keyframes pz-up{from{opacity:0;transform:translateY(6px)}}
   #pz-mini.swap>*{animation:pz-up .28s var(--ease) backwards}
@@ -360,6 +376,7 @@
       <div id="pz-feed" class="pz-feed" aria-live="polite"></div>
       <form id="pz-form" class="pz-ask" autocomplete="off">${I.spark}<input id="pz-in" type="text" enterkeyhint="send" placeholder="Demander à Leysin365…" aria-label="Poser une question"><button type="submit" aria-label="Envoyer">${I.send}</button></form>
     </section>
+    <div id="pz-top"><div id="pz-seg" class="pz-seg pz-glass" role="group" aria-label="Mode de l’interface"><button type="button" data-m="off">Origine</button><button type="button" data-m="on" aria-pressed="true">Prisme</button><button type="button" data-m="show">Showroom</button></div></div>
     <section id="pz-cap" class="pz-glass" aria-live="polite">
       <div class="pz-cap-h"><div><div class="k">Récit · <span id="pz-cap-i"></span></div><div class="n" id="pz-cap-n"></div></div><span class="sp"></span>
         <button type="button" id="pz-voice" aria-label="Voix">${I.mute}</button><button type="button" id="pz-stop" aria-label="Arrêter le récit">${I.close}</button></div>
@@ -377,7 +394,7 @@
   const S = {
     open: false, title: '', eyebrow: '', facts: [], photo: '', hasTour: false, key: '',
     stations: [], hotspots: [], seen: {}, busy: false, noBrain: false,
-    compact: false, show: false, narr: null, voice: false, gen: 0, ready: false, hold: 0,
+    compact: false, mode: 'on', show: false, narr: null, voice: false, gen: 0, ready: false, hold: 0,
   };
 
   /* ---------- lecture du viewer ---------- */
@@ -783,6 +800,24 @@
   R('pz-stop').onclick = endNarr;
   R('pz-voice').onclick = () => { S.voice = !S.voice; R('pz-voice').innerHTML = S.voice ? I.sound : I.mute; if (S.voice) speak(R('pz-cap-t').textContent); else speechSynthesis.cancel(); };
 
+  /* ---------- modes : Origine / Prisme / Showroom ---------- */
+  const seg = R('pz-seg');
+  const applyMode = (m) => {
+    S.mode = m; document.documentElement.classList.toggle('pz-orig', m === 'off');
+    for (const b of seg.children) b.setAttribute('aria-pressed', String(b.dataset.m === m));
+    try { sessionStorage.setItem('pz-mode', m); } catch (e) {}
+  };
+  for (const b of seg.children) b.onclick = () => { if (b.dataset.m === 'off' && S.narr) endNarr(); applyMode(b.dataset.m); layout(); };
+  { // un clic ou un toucher dans le coin les fait apparaître quelques secondes (écrans tactiles, pas de survol)
+    const top = R('pz-top'); let t = 0;
+    top.addEventListener('pointerdown', () => { top.classList.add('show'); clearTimeout(t); t = setTimeout(() => top.classList.remove('show'), 4500); });
+  }
+  { // au démarrage : le lien /showroom (ou #showroom) l'emporte, sinon le dernier choix de l'onglet
+    let m = 'on'; try { const k = sessionStorage.getItem('pz-mode'); if (k === 'off' || k === 'show') m = k; } catch (e) {}
+    applyMode(showOn() ? 'show' : m);
+  }
+  const onHash = () => { if (showOn()) applyMode('show'); layout(); };
+
   /* ---------- saisie ---------- */
   R('pz-form').addEventListener('submit', (e) => { e.preventDefault(); ask(); });
   for (const e of ['keydown', 'keyup', 'keypress']) input.addEventListener(e, (ev) => ev.stopPropagation());
@@ -807,12 +842,12 @@
 
   function layout() {
     S.compact = innerWidth < 640;
-    S.show = showOn() && !S.compact; // grand écran tactile ou casque ; jamais sur téléphone
+    S.show = S.mode === 'show' && !S.compact; // grand écran tactile ou casque ; jamais sur téléphone
     root.classList.toggle('pz-show', S.show); document.documentElement.classList.toggle('pz-hshow', S.show);
     root.classList.toggle('pz-c', S.compact); document.documentElement.classList.toggle('pz-hc', S.compact); document.documentElement.classList.toggle('pz-hcm', S.compact);
     kb();
   }
-  addEventListener('resize', layout); addEventListener('hashchange', layout);
+  addEventListener('resize', layout); addEventListener('hashchange', onHash);
 
   /* ---------- données du projet ---------- */
   const cfgP = Q.get('config') ? fetch(Q.get('config')).then((r) => r.json()).then((j) => {
@@ -1007,7 +1042,7 @@
   layout(); tick(true);
 
   window.__prism = {
-    destroy() { clearInterval(timer); clearTimeout(composeT); cancelAnimationFrame(planRaf); endNarr(); root.remove(); pin.remove(); plan.remove(); planMk.remove(); planSh.remove(); planSc.remove(); css.remove(); removeEventListener('pointerdown', onCanvas, true); removeEventListener('keydown', onKey); removeEventListener('resize', layout); removeEventListener('hashchange', layout); document.documentElement.classList.remove('pz-hc', 'pz-hcm', 'pz-mt', 'pz-hshow'); },
+    destroy() { clearInterval(timer); clearTimeout(composeT); cancelAnimationFrame(planRaf); endNarr(); root.remove(); pin.remove(); plan.remove(); planMk.remove(); planSh.remove(); planSc.remove(); css.remove(); removeEventListener('pointerdown', onCanvas, true); removeEventListener('keydown', onKey); removeEventListener('resize', layout); removeEventListener('hashchange', onHash); document.documentElement.classList.remove('pz-hc', 'pz-hcm', 'pz-mt', 'pz-hshow', 'pz-orig'); },
     state: S, compose, ask, narrate,
   };
 })();

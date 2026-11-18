@@ -81,8 +81,10 @@ parcours guidé = lecture, curseur pour avancer, Quitter. Sur téléphone elle r
 ### Mode Showroom (réactivé le 18 novembre 2026 à la demande de Felipe)
 Pour un grand écran tactile ou un casque : toute l'interface passe à 125 %, comme le mode « Showroom » de la collection « Écran » du design system Figma
 (barre 70, boutons 50, fiche 500, rayon 35, marge 28, verre plus clair). Le plan du parcours et son repère suivent.
-- On l'ouvre avec le lien `/showroom`, ou en ajoutant `#showroom` à n'importe quel lien du prototype (le changement est pris à chaud). Aucun bouton dans l'interface : la version reste propre.
-- Jamais sur téléphone (largeur sous 640 px) : le lien y ouvre l'interface normale.
+- Réglages en haut à droite, remis le 18 novembre 2026 au soir à la demande de Felipe : **Origine / Prisme / Showroom**. Masqués au repos, ils apparaissent au survol du coin ou au clic dedans
+  (quelques secondes sur un écran tactile). Origine rend la main au viewer d'A-LL, Prisme est la V2, Showroom la V2 à 125 %. Le choix est gardé pour l'onglet (`sessionStorage`, clé `pz-mode`).
+- On peut aussi l'ouvrir directement avec le lien `/showroom`, ou en ajoutant `#showroom` à n'importe quel lien du prototype.
+- Jamais sur téléphone (largeur sous 640 px) : les réglages y sont masqués et le lien ouvre l'interface normale.
 - Technique : `#pz` est réduit à 80 % puis agrandi par `transform:scale(1.25)` (`SHOW_K` dans `public/v3/prism.js`) ; `vercel.json` envoie `/showroom` vers l'entrée avec `showroom=1` et `api/px.js` ajoute `#showroom` à la redirection.
 
 ### Version propre et dernière passe de code (18 novembre 2026)
