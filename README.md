@@ -62,7 +62,8 @@ La barre d'outils Vercel est coupée dans les réglages du projet (Settings > Ge
   (licence MIT, `assets/regular/person-arms-spread.svg` du dépôt phosphor-icons/core), à la place du bonhomme tracé à la main.
 - Poignée grise en haut de la fiche sur téléphone retirée en variante B (le chevron de repli suffit) ; l'en-tête reprend 12 px de marge haute.
 
-### Variante B « la barre » (`/b`, ou bouton « B · Barre » en haut à droite)
+### La barre (seule interface de la branche `v2` ; `/` et `/b` ouvrent la même chose)
+La variante A (la fiche) est supprimée sur cette branche, avec son interrupteur A/B ; `main` (1.5) et `v1` ne bougent pas.
 Même cerveau et mêmes blocs, mais l'IA vit dans une barre en bas au centre. Repliée, la barre devient un mini widget
 qui change selon l'écran : vue d'ensemble = « Demander à Leysin365 » + Raconter ; lieu = nom, repère, retour ;
 parcours guidé = lecture, curseur pour avancer, Quitter. Sur téléphone elle reste repliée par défaut.

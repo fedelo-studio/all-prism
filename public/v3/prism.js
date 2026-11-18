@@ -22,7 +22,6 @@
   const $ = (s, r = document) => r.querySelector(s);
   const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const Q = new URLSearchParams(location.search);
-  const VB = Q.get('pzv') === 'b' || /^#b\b/.test(location.hash); // variante B : l'IA vit dans la barre, repliée en mini widget
   const ROOT = (document.title.split('|').pop() || '').trim() || 'Vue d’ensemble';
   const accent = (getComputedStyle(document.documentElement).getPropertyValue('--all-prism-theme-accent-color') || '#ed695a').trim() || '#ed695a';
   const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
@@ -196,10 +195,10 @@
   /* en haut à droite */
   /* réglages de démonstration (variante, Origine / Prisme) : masqués au repos, ils apparaissent au survol du coin ou au clic dedans */
   #pz-top{position:absolute;right:0;top:0;padding:20px 20px 28px 56px;display:flex;gap:8px;align-items:center;pointer-events:auto}
-  #pz-top #pz-vars,#pz-top #pz-seg{opacity:0;transform:translateY(-6px);pointer-events:none;transition:opacity .28s var(--ease),transform .34s var(--ease)}
-  #pz-top:has(:focus-visible) #pz-vars,#pz-top:has(:focus-visible) #pz-seg,#pz-top.show #pz-vars,#pz-top.show #pz-seg{opacity:1;transform:none;pointer-events:auto}
-  @media (hover:hover){#pz-top:hover #pz-vars,#pz-top:hover #pz-seg{opacity:1;transform:none;pointer-events:auto}}
-  @media (prefers-reduced-motion:reduce){#pz-top #pz-vars,#pz-top #pz-seg{transition:none}}
+  #pz-top #pz-seg{opacity:0;transform:translateY(-6px);pointer-events:none;transition:opacity .28s var(--ease),transform .34s var(--ease)}
+  #pz-top:has(:focus-visible) #pz-seg,#pz-top.show #pz-seg{opacity:1;transform:none;pointer-events:auto}
+  @media (hover:hover){#pz-top:hover #pz-seg{opacity:1;transform:none;pointer-events:auto}}
+  @media (prefers-reduced-motion:reduce){#pz-top #pz-seg{transition:none}}
   .pz-seg{display:flex;gap:2px;padding:4px;border-radius:22px;pointer-events:auto}
   .pz-seg button{height:32px;padding:0 14px;border-radius:16px;font-size:13px;line-height:18px;color:var(--soft);transition:background .2s,color .2s}
   .pz-seg button[aria-pressed=true]{background:var(--fill2);color:#fff}
@@ -228,9 +227,6 @@
   /* téléphone : le prisme devient une feuille, le compositeur reste en bas */
   .pz-c #pz-panel{left:16px;right:16px;width:auto;bottom:calc(16px + env(safe-area-inset-bottom));max-height:62%;border-radius:28px}
   .pz-c .pz-feed{padding-left:16px;padding-right:16px}
-  .pz-c #pz-panel.min .pz-feed{display:none}
-  .pz-c .pz-grab{display:block;width:36px;height:5px;border-radius:3px;background:rgba(255,255,255,.4);margin:8px auto 0;flex:none}
-  .pz-c .pz-head{padding-top:4px;min-height:44px}
   .pz-c #pz-top{right:16px;top:calc(16px + env(safe-area-inset-top));padding:0;pointer-events:none}
   .pz-c .pz-seg{display:none}
   .pz-c #pz-cap{bottom:calc(16px + env(safe-area-inset-bottom));width:calc(100% - 32px)}
@@ -238,16 +234,13 @@
   .pz-c .pz-tiles{grid-template-columns:1fr 1fr}
   .pz-c .pz-crumb>*:not(:last-child){display:none}
   .pz-c .pz-photo{aspect-ratio:16/6}
-  .pz-grab{display:none}
   .pz-c.pz-kb #pz-panel{max-height:none;top:calc(16px + env(safe-area-inset-top))}
   /* ===== variante B : la barre ===== */
   .pz-vb #pz-panel{left:20px;transform:none;width:400px;max-height:min(680px,calc(100% - 96px));transition:opacity .26s var(--ease)}
   #pz.pz-vb.narrating #pz-panel{transform:none;opacity:0;pointer-events:none}
   .pz-vb #pz-cap{left:20px;transform:translate(0,24px);width:min(560px,calc(100% - 40px))}
   #pz.pz-vb.narrating #pz-cap{transform:none}
-  .pz-vb #pz-panel.shut .pz-head,.pz-vb #pz-panel.shut .pz-feed,.pz-vb #pz-panel.shut .pz-ask,.pz-vb #pz-panel.shut .pz-grab{display:none}
-  .pz-vb .pz-grab{display:none!important}
-  .pz-c.pz-vb .pz-head{padding-top:12px;min-height:52px}
+  .pz-vb #pz-panel.shut .pz-head,.pz-vb #pz-panel.shut .pz-feed,.pz-vb #pz-panel.shut .pz-ask{display:none}
   .pz-vb #pz-panel:not(.shut) #pz-mini{display:none}
   .pz-vb #pz-panel.shut{width:auto;min-width:0;max-width:min(520px,calc(100% - 40px));border-radius:28px}
   #pz-mini{display:none}
@@ -341,10 +334,6 @@
   html.pz-orig #pz-plan,html.pz-orig #pz-planmk,html.pz-orig #pz-plansh{display:none}
   .pz-hcm #pz-plansh,.pz-hcm #pz-plan,.pz-hcm #pz-planmk{right:24px;bottom:calc(92px + env(safe-area-inset-bottom));top:auto;height:min(34vh,300px)}
   html:not(.pz-orig) vercel-live-feedback{display:none!important}
-  #pz-vars{display:flex;gap:2px;padding:4px;border-radius:22px;pointer-events:auto}
-  #pz-vars button{height:32px;padding:0 12px;border-radius:16px;font-size:13px;line-height:18px;color:var(--soft)}
-  #pz-vars button[aria-pressed=true]{background:var(--fill2);color:#fff}
-  .pz-c #pz-vars{display:none}
   .pz-vb #pz-tell{display:none}
   html.pz-hc:not(.pz-orig) #footer{top:calc(16px + env(safe-area-inset-top));bottom:auto!important;left:16px;right:auto!important}
   /* entrées : tout ce qui change de texte arrive avec un court fondu, jamais d'un coup */
@@ -368,12 +357,11 @@
     <section id="pz-panel" class="pz-glass" aria-label="Prisme">
       <span class="pz-rg" aria-hidden="true"><u class="s"></u><u class="f"></u></span><span class="pz-bl" aria-hidden="true"><i><u class="s"></u><u class="f"></u></i></span>
       <div id="pz-mini" role="group" aria-label="Prisme replié"></div>
-      <i class="pz-grab"></i>
       <header class="pz-head"><div id="pz-crumb" class="pz-crumb"></div><span id="pz-brain" class="pz-brain local" title=""><b></b><span>IA</span></span><button type="button" class="pz-fold" id="pz-fold" aria-label="Réduire">${I.down}</button></header>
       <div id="pz-feed" class="pz-feed" aria-live="polite"></div>
       <form id="pz-form" class="pz-ask" autocomplete="off">${I.spark}<input id="pz-in" type="text" enterkeyhint="send" placeholder="Demander à Leysin365…" aria-label="Poser une question"><button type="submit" aria-label="Envoyer">${I.send}</button></form>
     </section>
-    <div id="pz-top"><div id="pz-vars" class="pz-glass" aria-label="Variante"><button type="button" data-v="a">A · Fiche</button><button type="button" data-v="b">B · Barre</button></div>
+    <div id="pz-top">
       <div id="pz-seg" class="pz-seg pz-glass"><button type="button" data-m="off">Origine</button><button type="button" data-m="on" aria-pressed="true">Prisme</button></div><button id="pz-tell" class="pz-glass" type="button">${I.spark}<span>Raconter la ligne</span></button></div>
     <section id="pz-cap" class="pz-glass" aria-live="polite">
       <div class="pz-cap-h"><div><div class="k">Récit · <span id="pz-cap-i"></span></div><div class="n" id="pz-cap-n"></div></div><span class="sp"></span>
@@ -384,7 +372,7 @@
   const plan = document.createElement('div'), planMk = document.createElement('div'), planSh = document.createElement('div'), planSc = document.createElement('div'); planSc.id = 'pz-plansc'; planSc.setAttribute('aria-hidden', 'true'); planSh.id = 'pz-plansh'; planSh.setAttribute('aria-hidden', 'true');
   plan.id = 'pz-plan'; planMk.id = 'pz-planmk'; document.documentElement.style.setProperty('--pz-acc', accent); plan.setAttribute('aria-hidden', 'true'); planMk.setAttribute('aria-hidden', 'true');
   const pin = document.createElement('div'); pin.id = 'pz-pin'; pin.setAttribute('aria-hidden', 'true'); pin.innerHTML = '<i class="ha"></i><i class="gl"></i><i class="co"></i>';
-  if (VB) document.body.append(planSc, planSh, plan, planMk, pin);
+  document.body.append(planSc, planSh, plan, planMk, pin);
   const R = (id) => document.getElementById(id);
   const panel = R('pz-panel'), feed = R('pz-feed'), input = R('pz-in');
 
@@ -728,8 +716,7 @@
   async function ask(q) {
     q = (q || input.value).trim(); if (!q) return;
     input.value = ''; input.blur();
-    if (S.compact) panel.classList.remove('min');
-    if (VB) setShut(false);
+    setShut(false);
     const g = ++S.gen;
     render([{ t: 'q', text: q }], { append: true });
     const sk = skeleton(true); busy(true);
@@ -742,8 +729,7 @@
   }
   function fly(id) {
     S.hold = performance.now() + 9000; // le vol vers une autre gare dure 4 à 6 s : la fiche reste en place jusqu'à l'ouverture de la nouvelle
-    if (S.compact && !VB) panel.classList.add('min');
-    if (VB && S.compact) setShut(true);
+    if (S.compact) setShut(true);
     if (!focusTarget(id)) render([{ t: 'story', text: 'La vue 3D n’est pas encore prête.' }], { append: true });
   }
 
@@ -839,9 +825,8 @@
   R('pz-form').addEventListener('submit', (e) => { e.preventDefault(); ask(); });
   for (const e of ['keydown', 'keyup', 'keypress']) input.addEventListener(e, (ev) => ev.stopPropagation());
   for (const e of ['wheel', 'touchmove', 'pointerdown']) panel.addEventListener(e, (ev) => ev.stopPropagation(), { passive: true });
-  input.addEventListener('focus', () => { if (S.compact) panel.classList.remove('min'); kb(); });
+  input.addEventListener('focus', () => { kb(); });
   input.addEventListener('blur', () => setTimeout(kb, 60));
-  panel.querySelector('.pz-grab').onclick = () => (VB ? R('pz-fold').click() : panel.classList.toggle('min'));
   const onCanvas = (e) => { if (root.contains(e.target)) return; S.hold = Math.max(S.hold, performance.now() + 1700); if (S.narr) endNarr(); };
   addEventListener('pointerdown', onCanvas, true);
   const onKey = (e) => { if (e.key === 'Escape' && S.narr) endNarr(); };
@@ -860,7 +845,7 @@
 
   function layout() {
     S.compact = innerWidth < 640;
-    root.classList.toggle('pz-c', S.compact); document.documentElement.classList.toggle('pz-hc', S.compact); document.documentElement.classList.toggle('pz-hcm', S.compact && VB);
+    root.classList.toggle('pz-c', S.compact); document.documentElement.classList.toggle('pz-hc', S.compact); document.documentElement.classList.toggle('pz-hcm', S.compact);
     kb();
   }
   addEventListener('resize', layout);
@@ -880,9 +865,9 @@
   S.shut = true;
   let enterT = 0;
   function setShut(v, quiet) {
-    if (!VB || S.shut === v) return;
+    if (S.shut === v) return;
     const r0 = panel.getBoundingClientRect();
-    S.shut = v; panel.classList.toggle('shut', v); panel.classList.remove('min'); miniSig = ''; mini();
+    S.shut = v; panel.classList.toggle('shut', v); miniSig = ''; mini();
     if (!v && !RM && !quiet) { panel.classList.add('enter'); clearTimeout(enterT); enterT = setTimeout(() => panel.classList.remove('enter'), 520); }
     const r1 = panel.getBoundingClientRect();
     if (!RM && !quiet && (Math.abs(r1.width - r0.width) > 2 || Math.abs(r1.height - r0.height) > 2))
@@ -899,7 +884,6 @@
     return [n && cap(n), alt && 'quai à ' + alt[1]].filter(Boolean).join(' · ') || 'Touchez pour la fiche';
   }
   function mini() {
-    if (!VB) return;
     const m = miniMode();
     const sig = [m, S.title, S.facts.length, S.stations.length, S.compact].join('|');
     if (sig !== miniSig) {
@@ -968,16 +952,11 @@
   // ce qui se passe à l'écran décide de l'état : arrivée sur un lieu = fiche ouverte (bureau), parcours = widget de lecture, vue d'ensemble = barre
   let lastPlace = '';
   function context() {
-    if (!VB) return;
     const here = (S.open ? S.title : '') + '|' + S.hasTour;
     if (here === lastPlace) return; lastPlace = here;
     if (S.hasTour || !S.open || S.compact || S.userShut) setShut(true); else setShut(false);
   }
-  if (VB) { root.classList.add('pz-vb'); panel.classList.add('shut'); }
-  for (const b of R('pz-vars').children) {
-    b.setAttribute('aria-pressed', String((b.dataset.v === 'b') === VB));
-    b.onclick = () => { if ((b.dataset.v === 'b') === VB) return; const u = new URL(location.href); b.dataset.v === 'b' ? u.searchParams.set('pzv', 'b') : u.searchParams.delete('pzv'); u.hash = ''; location.href = u.toString(); };
-  }
+  root.classList.add('pz-vb'); panel.classList.add('shut');
 
   /* ---------- boucle : on suit le viewer ---------- */
   let timer = 0;
@@ -1008,7 +987,6 @@
     planRaf = requestAnimationFrame(planFrame);
   }
   function planSync() {
-    if (!VB) return;
     const on = tourOn();
     for (const e of [plan, planMk, planSh, planSc]) e.classList.toggle('on', on);
     if (!on) { planSig = ''; pin.classList.remove('on'); return; }

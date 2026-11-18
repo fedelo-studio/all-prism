@@ -17,8 +17,7 @@ export default async function handler(req) {
   // Entrée : / redirige vers l'adresse d'entrée du prototype
   if (url.searchParams.has('entry')) {
     if (!known) return denied();
-    const v = url.searchParams.get('v'); // variante de l'interface (/b → variante B)
-    const h = { location: cfg.entry(origin) + (v && /^[a-z]$/.test(v) ? '&pzv=' + v : ''), 'cache-control': 'no-store' };
+    const h = { location: cfg.entry(origin), 'cache-control': 'no-store' };
     if (remember) h['set-cookie'] = remember;
     return new Response(null, { status: 302, headers: h });
   }

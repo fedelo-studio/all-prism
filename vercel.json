@@ -6,7 +6,7 @@
     },
     {
       "source": "/b",
-      "destination": "/api/px?entry=1&v=b"
+      "destination": "/api/px?entry=1"
     },
     {
       "source": "/build-from-unity/:path*",
