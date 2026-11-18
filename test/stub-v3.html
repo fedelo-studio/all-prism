@@ -21,16 +21,26 @@ const P={
  'target-gare-2':{title:'Leysin Centre',eyebrow:'',img:'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22300%22%3E%3Crect width=%22400%22 height=%22300%22 fill=%22%23887766%22/%3E%3C/svg%3E',text:'• Halte souterraine\n• Altitude du quai : 1296 m\n• Dimensions du quai : 100 m de long et 3,15 m de large\n• Pente du quai : 2,5%\n• Accessible pour les personnes à mobilité réduite (Conforme Lhand)'},
  'target-gare-1':{title:'Halte Village',eyebrow:'',img:'',text:'• Halte en surface\n• Altitude du quai : 1253 m\n• Dimensions du quai : 80 m de long et 3,00 m de large'},
  'target-gare-3':{title:'Gare Télécabine',eyebrow:'',img:'',text:'• Correspondance avec la télécabine\n• Altitude du quai : 1340 m\n• Pente du quai : 1,2%\n• Accessible pour les personnes à mobilité réduite (Conforme Lhand)'},
+ 'gare-1-quai':{title:'Accès souterrain',eyebrow:'Halte Village',img:'',text:'• Halte semi-enterrée\n• Altitude du quai : 1269 m\n• Dimensions du quai : 100 m de long et 3,15 m de large\n• Pente du quai : 0,5%\n• Accessible pour les personnes à mobilité réduite (Conforme Lhand)',tour:true},
  'gare-2-quai':{title:'Halte ferroviaire souterraine',eyebrow:'Leysin Centre',img:'',text:'• Halte souterraine\n• Altitude du quai : 1296 m\n• Dimensions du quai : 100 m de long et 3,15 m de large\n• Pente du quai : 2,5%',tour:true}
 };
 let stack=[];
 function show(id){const d=P[id]||{title:id,eyebrow:'',img:'',text:'• Texte'};const $=s=>document.querySelector(s);
  $('#poi-card-panel').dataset.open='true';$('#poi-card-title').textContent=d.title;const e=$('#poi-card-eyebrow');e.textContent=d.eyebrow;e.style.display=d.eyebrow?'':'none';
  const i=$('#poi-card-image');i.src=d.img;i.style.display=d.img?'':'none';$('#poi-card-text').textContent=d.text;
- const c=$('.camera-spatial-control');if(d.tour)c.removeAttribute('hidden');else c.setAttribute('hidden','');}
+ const c=$('.camera-spatial-control');if(d.tour){c.removeAttribute('hidden');setP(0);play(true)}else{c.setAttribute('hidden','');play(false)}}
 window.unityInstance={SendMessage(o,m,v){const j=JSON.parse(v);stack.push(j.targetId);show(j.targetId);}};
-document.querySelector('#poi-card-close-button').onclick=()=>{stack.pop();if(stack.length)show(stack[stack.length-1]);else{document.querySelector('#poi-card-panel').dataset.open='false';document.querySelector('#poi-card-title').textContent='';document.querySelector('.camera-spatial-control').setAttribute('hidden','')}};
-let prog=0,tm=null;document.querySelector('.camera-spatial-transport').onclick=()=>{if(tm){clearInterval(tm);tm=null}else tm=setInterval(()=>{prog=Math.min(1,prog+.01);document.querySelector('.camera-spatial-handle').setAttribute('aria-valuenow',prog)},50)};
-window.__open=show;window.__stubSeek=(v)=>{prog=v;document.querySelector('.camera-spatial-handle').setAttribute('aria-valuenow',prog)};
+document.querySelector('#poi-card-close-button').onclick=()=>{stack.pop();if(stack.length)show(stack[stack.length-1]);else{document.querySelector('#poi-card-panel').dataset.open='false';document.querySelector('#poi-card-title').textContent='';document.querySelector('.camera-spatial-control').setAttribute('hidden','');play(false)}};
+// commande du parcours, calquée sur celle du viewer d'A-LL : elle n'écoute que pointerdown puis click, indique data-playing,
+// avance à 0,5 % par seconde, et chaque flèche droite de son curseur avance un peu plus quand elle joue
+let prog=0,tm=null,presented=false,presT=0;
+const CT=document.querySelector('.camera-spatial-control'),HD=document.querySelector('.camera-spatial-handle'),TR=document.querySelector('.camera-spatial-transport');
+CT.dataset.playing=TR.dataset.playing='false';
+function setP(v){prog=Math.max(0,Math.min(1,v));HD.setAttribute('aria-valuenow',prog)}
+function play(on){if(on&&!tm)tm=setInterval(()=>setP(prog+.005*.05),50);if(!on&&tm){clearInterval(tm);tm=null}CT.dataset.playing=TR.dataset.playing=String(!!tm)}
+TR.addEventListener('pointerdown',()=>{presented=true;clearTimeout(presT);presT=setTimeout(()=>presented=false,2500)});
+TR.addEventListener('click',()=>{if(presented)play(!tm)});
+HD.addEventListener('keydown',e=>{const d={ArrowRight:tm?.006:.002,ArrowLeft:-.002,PageUp:.1,PageDown:-.1}[e.key];if(d!==undefined)setP(prog+d);if(e.key==='Home')setP(0);if(e.key==='End')setP(1)});
+window.__open=show;window.__stubSeek=setP;
 </script>
 <script src="../public/v3/prism.js"></script></body></html>

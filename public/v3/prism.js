@@ -271,7 +271,7 @@
   /* téléphone : tout à gauche, rien au centre ; feuille basse, la 3D reste visible au-dessus */
   .pz-c.pz-vb #pz-panel{left:16px;right:16px;width:auto;max-height:52%}
   .pz-c.pz-vb #pz-panel.shut{right:auto;max-width:calc(100% - 32px)}
-  .pz-c.pz-vb #pz-mini [data-a=open],.pz-c.pz-vb #pz-mini .bt span{display:none}
+  .pz-c.pz-vb #pz-mini .bt[data-a=open],.pz-c.pz-vb #pz-mini .bt span{display:none}
   .pz-c.pz-vb #pz-mini .bt{width:40px;padding:0}
   .pz-c.pz-vb #pz-mini .tx:nth-last-child(2){padding-right:14px}
   .pz-c.pz-vb #pz-mini .scrub{min-width:0;width:calc(100vw - 32px - 16px - 80px - 20px);max-width:260px}
@@ -280,6 +280,29 @@
   .pz-c #pz-mini .scrub .pre{display:none}
   .pz-c.pz-vb .pz-lead{font-size:19px;line-height:24px}
   .pz-c.pz-vb .pz-tour{display:none}
+  /* vitesse de lecture : un bouton, un tour de roue 2× → 4× → 1× */
+  #pz .spd{height:40px;min-width:46px;padding:0 10px;border-radius:20px;display:grid;place-items:center;flex:none;background:var(--fill)!important;font-size:14px;line-height:18px;font-weight:600;font-variant-numeric:tabular-nums;transition:background .2s,transform .2s var(--ease)}
+  #pz .spd:hover{background:var(--fill2)!important}
+  #pz .spd:active{transform:scale(.94)}
+  .pz-tour .spd{height:36px;min-width:42px}
+  /* parcours guidé sur téléphone : une carte à deux lignes. En haut, ce que dit le point (touchez pour la fiche) ; en bas, les commandes de lecture */
+  #pz-mini .tc{display:contents}
+  #pz-mini .ti{display:none}
+  .pz-c.pz-vb #pz-panel.shut.mt{right:16px;max-width:none;width:auto}
+  .pz-c.pz-vb #pz-mini.tour{flex-direction:column;align-items:stretch;gap:4px;height:auto;padding:6px 8px 8px}
+  .pz-c.pz-vb #pz-mini.tour .tc{display:flex;align-items:center;gap:10px}
+  .pz-c.pz-vb #pz-mini.tour .tc .scrub{flex:1;width:auto;max-width:none;min-width:0}
+  .pz-c.pz-vb #pz-mini.tour .ti{display:flex;align-items:center;gap:10px;min-height:54px;padding:4px 4px 4px 10px;border-radius:20px;text-align:left;transition:background .2s}
+  .pz-c.pz-vb #pz-mini.tour .ti:active{background:var(--fill)}
+  .pz-c.pz-vb #pz-mini.tour .ti .tx{padding-right:0;justify-content:center}
+  .pz-c.pz-vb #pz-mini.tour .ti .tx small{white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+  .pz-c.pz-vb #pz-mini.tour .ti .ch{width:32px;height:32px;border-radius:50%;background:var(--fill);display:grid;place-items:center;flex:none}
+  /* fiche ouverte pendant le parcours (téléphone) : les commandes restent épinglées sous l'en-tête */
+  .pz-c.pz-vb #pz-panel.mt:not(.shut) #pz-mini{display:flex;order:1;height:auto;padding:2px 12px 10px;cursor:default}
+  .pz-c.pz-vb #pz-panel.mt:not(.shut) #pz-mini .ti{display:none}
+  .pz-c.pz-vb #pz-panel.mt:not(.shut) .pz-feed{order:2}
+  .pz-c.pz-vb #pz-panel.mt:not(.shut) .pz-ask{order:3}
+  .pz-hcm.pz-mt #pz-plansh,.pz-hcm.pz-mt #pz-plan,.pz-hcm.pz-mt #pz-planmk{bottom:calc(146px + env(safe-area-inset-bottom))}
   .pz-c.pz-vb #pz-cap{left:16px;right:16px;width:auto}
   /* plan du parcours : posé dans la profondeur de la 3D, fondu par mode de fusion */
   /* trois calques superposés : une ombre douce, le tracé fondu dans la scène (fusion « écran »), le repère de position net */
@@ -624,8 +647,8 @@
         el.append(t); break;
       }
       case 'tour': {
-        el.innerHTML = `<div class="pz-tour"><div class="pz-k" style="margin:0">Parcours guidé</div><div class="map-h"></div><div class="row"><button type="button" class="pp" aria-label="Lecture">${I.play}</button><div class="bar"><i></i></div></div></div>`;
-        el.querySelector('.pp').onclick = () => V.ctrl()?.querySelector('.camera-spatial-transport')?.click();
+        el.innerHTML = `<div class="pz-tour"><div class="pz-k" style="margin:0">Parcours guidé</div><div class="map-h"></div><div class="row"><button type="button" class="pp" aria-label="Lecture">${I.play}</button><div class="bar"><i></i></div><button type="button" class="spd" aria-label="Vitesse de lecture"><b></b></button></div></div>`;
+        el.querySelector('.pp').onclick = togglePlay; el.querySelector('.spd').onclick = cycleSpeed;
         tourEl = el; syncTour(true); break;
       }
       case 'q': el.innerHTML = `<p class="pz-q">${esc(b.text)}</p>`; el.style.display = 'flex'; el.style.justifyContent = 'flex-end'; break;
@@ -653,10 +676,10 @@
     }
     const p = parseFloat(c.querySelector('.camera-spatial-handle')?.getAttribute('aria-valuenow') || '0') || 0;
     tourEl.querySelector('.bar i').style.transform = `scaleX(${Math.min(1, Math.max(0, p))})`;
-    const playing = performance.now() - (S.tourMove || 0) < 700;
     if (Math.abs(p - (S.tourP || 0)) > 1e-4) { S.tourMove = performance.now(); S.tourP = p; }
-    const pp = tourEl.querySelector('.pp'); const want = playing ? 'pause' : 'play';
-    if (pp.dataset.s !== want) { pp.dataset.s = want; pp.innerHTML = I[want]; }
+    const pp = tourEl.querySelector('.pp'); const want = playing() ? 'pause' : 'play';
+    if (pp.dataset.s !== want) { pp.dataset.s = want; pp.innerHTML = I[want]; pp.setAttribute('aria-label', want === 'pause' ? 'Pause' : 'Lecture'); }
+    speedLabel(tourEl.querySelector('.spd'));
   }
 
   function render(blocks, { append = false } = {}) {
@@ -883,9 +906,19 @@
     const alt = pairs.find(([k]) => /altitude/i.test(k));
     return [n && cap(n), alt && 'quai à ' + alt[1]].filter(Boolean).join(' · ') || 'Touchez pour la fiche';
   }
+  // ce que dit le point pendant le parcours, en une ou deux lignes (tout vient de la fiche du viewer)
+  function tourBlurb() {
+    const { pairs, notes } = parse(S.facts), t = norm(S.title);
+    const n = notes.find((x) => !isAccess(x) && !t.includes(norm(x)) && !norm(x).includes(t));
+    const nums = pairs.filter(([k, v]) => !isAccess(k + ' ' + v)).slice(0, 3).map(([k, v]) => `${k.replace(/\s+du quai$/i, '').toLowerCase()} ${headline(v)[0]}`);
+    const acc = pairs.some(([k, v]) => isAccess(k + ' ' + v)) || notes.some(isAccess);
+    return [n && cap(n), ...nums, acc && 'accessible'].filter(Boolean).join(' · ') || S.eyebrow || 'Touchez pour la fiche';
+  }
   function mini() {
     const m = miniMode();
-    const sig = [m, S.title, S.facts.length, S.stations.length, S.compact].join('|');
+    const sig = [m, S.title, S.facts.length, S.stations.length, S.compact, m === 'tour' ? tourBlurb() : ''].join('|');
+    panel.classList.toggle('mt', m === 'tour' && S.compact); miniEl.classList.toggle('tour', m === 'tour');
+    document.documentElement.classList.toggle('pz-mt', m === 'tour' && S.compact && S.shut);
     if (sig !== miniSig) {
       miniSig = sig;
       swap(miniEl);
@@ -896,9 +929,12 @@
         miniEl.innerHTML = `<button type="button" class="bt round" data-a="back" aria-label="Retour">${I.back}</button><span class="tx"><b>${esc(S.title)}</b><small>${esc(subline())}</small></span>` +
           `<button type="button" class="bt round" data-a="open" aria-label="Ouvrir la fiche">${I.up}</button>`;
       } else {
-        miniEl.innerHTML = `<button type="button" class="pp" data-a="play" aria-label="Lecture">${I.play}</button>` +
-          `<div class="scrub"><small><span><b class="pre">Parcours · </b>${esc(S.title)}</span><em>0 %</em></small><div class="trk" role="slider" tabindex="0" aria-label="Avancer dans le parcours" aria-valuemin="0" aria-valuemax="100"><i></i><u></u></div></div>` +
-          `<button type="button" class="bt" data-a="exit">${I.close}<span>Quitter</span></button><button type="button" class="bt round" data-a="open" aria-label="Ouvrir la fiche">${I.up}</button>`;
+        const c = S.compact; // téléphone : l'info du point en haut (touchable), les commandes en dessous ; bureau : une seule ligne
+        miniEl.innerHTML = (c ? `<button type="button" class="ti" data-a="open" aria-label="Ouvrir la fiche : ${esc(S.title)}"><span class="tx"><b>${esc(S.title)}</b><small>${esc(tourBlurb())}</small></span><span class="ch">${I.up}</span></button>` : '') +
+          `<div class="tc"><button type="button" class="pp" data-a="play" aria-label="Lecture">${I.play}</button>` +
+          `<div class="scrub"><small><span>${c ? 'Parcours guidé' : `<b class="pre">Parcours · </b>${esc(S.title)}`}</span><em>0 %</em></small><div class="trk" role="slider" tabindex="0" aria-label="Avancer dans le parcours" aria-valuemin="0" aria-valuemax="100"><i></i><u></u></div></div>` +
+          `<button type="button" class="spd" data-a="speed"><b></b></button>` +
+          `<button type="button" class="bt" data-a="exit" aria-label="Quitter le parcours">${I.close}<span>Quitter</span></button>${c ? '' : `<button type="button" class="bt round" data-a="open" aria-label="Ouvrir la fiche">${I.up}</button>`}</div>`;
         bindScrub(miniEl.querySelector('.trk'));
       }
     }
@@ -906,11 +942,51 @@
       const p = tourTarget != null ? tourTarget : tourProg();
       const pv = (Math.min(1, Math.max(0, p)) * 100).toFixed(1) + '%';
       if (miniEl.style.getPropertyValue('--v') !== pv) miniEl.style.setProperty('--v', pv);
-      const em = miniEl.querySelector('.scrub em'), tx = Math.round(p * 100) + '\u202F%'; if (em && em.textContent !== tx) em.textContent = tx;
-      const pp = miniEl.querySelector('.pp'); const want = performance.now() - (S.tourMove || 0) < 700 ? 'pause' : 'play';
-      if (pp && pp.dataset.s !== want) { pp.dataset.s = want; pp.innerHTML = I[want]; }
+      const em = miniEl.querySelector('.scrub em'), tx = Math.round(p * 100) + ' %'; if (em && em.textContent !== tx) em.textContent = tx;
+      const pp = miniEl.querySelector('.pp'); const want = playing() ? 'pause' : 'play';
+      if (pp && pp.dataset.s !== want) { pp.dataset.s = want; pp.innerHTML = I[want]; pp.setAttribute('aria-label', want === 'pause' ? 'Pause' : 'Lecture'); }
+      speedLabel(miniEl.querySelector('.spd'));
+      boostKick();
     }
   }
+  /* ---------- lecture du parcours ----------
+     La commande d'A-LL n'écoute que le vrai geste (pointerdown puis click) et indique elle-même si elle joue (data-playing).
+     À sa vitesse, le parcours entier dure ~200 s (0,5 % par seconde) : pour aller plus vite, on ajoute de petites avances
+     (touche flèche droite de son curseur) pendant qu'il joue, sans le mettre en pause. */
+  const NATIVE = 0.005, SPEEDS = [2, 4, 1];
+  S.speed = 2;
+  function playing() {
+    const c = V.ctrl();
+    return c && c.dataset.playing !== undefined ? c.dataset.playing === 'true' : performance.now() - (S.tourMove || 0) < 700;
+  }
+  function togglePlay() {
+    const t = V.ctrl()?.querySelector('.camera-spatial-transport'); if (!t) return;
+    t.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true, cancelable: true, pointerType: 'mouse', isPrimary: true, button: 0 }));
+    t.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+    setTimeout(tick, 60);
+  }
+  function speedLabel(btn) {
+    if (!btn) return;
+    const b = btn.firstElementChild || btn, tx = S.speed + '×';
+    if (b.textContent !== tx) { b.textContent = tx; btn.setAttribute('aria-label', `Vitesse de lecture : ${tx}. Touchez pour changer`); }
+  }
+  function cycleSpeed() {
+    S.speed = SPEEDS[(SPEEDS.indexOf(S.speed) + 1) % SPEEDS.length]; boostIdeal = null;
+    if (!playing()) togglePlay(); // choisir une vitesse, c'est vouloir avancer
+    mini(); if (tourEl && tourEl.isConnected) syncTour();
+  }
+  let boostRaf = 0, boostIdeal = null, boostT = 0, boostKey = 0;
+  function boostFrame(t) {
+    boostRaf = 0;
+    const h = V.ctrl()?.querySelector('.camera-spatial-handle');
+    if (!S.hasTour || !h || !playing() || S.speed <= 1 || tourTarget != null || S.narr) { boostIdeal = null; boostT = 0; return; }
+    const p = tourProg(), dt = boostT ? Math.min(0.1, (t - boostT) / 1000) : 0; boostT = t;
+    if (boostIdeal == null || Math.abs(p - boostIdeal) > 0.04) boostIdeal = p; // on a sauté ailleurs (curseur, autre point) : on repart d'ici
+    boostIdeal += S.speed * NATIVE * dt;
+    if (p < 0.99 && boostIdeal - p > 0.0016 && t - boostKey > 75) { boostKey = t; for (const n of ['keydown', 'keyup']) h.dispatchEvent(new KeyboardEvent(n, { key: 'ArrowRight', bubbles: true, cancelable: true })); }
+    boostRaf = requestAnimationFrame(boostFrame);
+  }
+  function boostKick() { if (!boostRaf && S.hasTour && S.speed > 1 && playing()) boostRaf = requestAnimationFrame(boostFrame); }
   const tourProg = () => parseFloat(V.ctrl()?.querySelector('.camera-spatial-handle')?.getAttribute('aria-valuenow') || '0') || 0;
   // on avance la caméra du viewer en lui envoyant les touches de son propre curseur, jusqu'à la position voulue
   let tourTarget = null, tourHeld = false, lastKey = 0;
@@ -943,18 +1019,22 @@
     if (e.target.closest('.scrub')) return;
     if (a === 'tell') return narrate();
     if (a === 'back') return back(1);
-    if (a === 'exit') { S.userShut = true; return back(1); } // on sort du parcours : retour au simple widget du lieu
-    if (a === 'play') return V.ctrl()?.querySelector('.camera-spatial-transport')?.click();
-    S.userShut = false; setShut(false);
+    if (a === 'exit') { S.userShut = true; S.userOpen = false; return back(1); } // on sort du parcours : retour au simple widget du lieu
+    if (a === 'play') return togglePlay();
+    if (a === 'speed') return cycleSpeed();
+    S.userShut = false; if (miniMode() === 'tour') S.userOpen = true; // fiche ouverte pendant le parcours : elle le reste d'un point à l'autre
+    setShut(false);
     if (miniMode() === 'idle' && !S.compact) setTimeout(() => input.focus(), 60);
   });
-  R('pz-fold').onclick = () => { S.userShut = true; setShut(true); };
+  R('pz-fold').onclick = () => { S.userShut = true; S.userOpen = false; setShut(true); };
   // ce qui se passe à l'écran décide de l'état : arrivée sur un lieu = fiche ouverte (bureau), parcours = widget de lecture, vue d'ensemble = barre
   let lastPlace = '';
   function context() {
     const here = (S.open ? S.title : '') + '|' + S.hasTour;
     if (here === lastPlace) return; lastPlace = here;
-    if (S.hasTour || !S.open || S.compact || S.userShut) setShut(true); else setShut(false);
+    if (!S.hasTour) S.userOpen = false;
+    if (S.hasTour && S.userOpen) setShut(false);
+    else if (S.hasTour || !S.open || S.compact || S.userShut) setShut(true); else setShut(false);
   }
   root.classList.add('pz-vb'); panel.classList.add('shut');
 
@@ -967,7 +1047,7 @@
   }
   // plan du parcours : les calques ne sont reconstruits que si le tracé change ; le repère, lui, suit la caméra image par image
   let planSig = '', mkSig = '', planRaf = 0;
-  const tourOn = () => S.hasTour && !S.narr;
+  const tourOn = () => S.hasTour && !S.narr && !(S.compact && !S.shut);
   function markerSync(m) {
     const mk = m.querySelector('.camera-spatial-marker'); const sig = mk ? mk.outerHTML : '';
     if (sig === mkSig) return; mkSig = sig;

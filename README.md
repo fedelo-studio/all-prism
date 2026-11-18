@@ -67,3 +67,14 @@ La variante A (la fiche) est supprimée sur cette branche, avec son interrupteur
 Même cerveau et mêmes blocs, mais l'IA vit dans une barre en bas au centre. Repliée, la barre devient un mini widget
 qui change selon l'écran : vue d'ensemble = « Demander à Leysin365 » + Raconter ; lieu = nom, repère, retour ;
 parcours guidé = lecture, curseur pour avancer, Quitter. Sur téléphone elle reste repliée par défaut.
+
+### Parcours guidé : infos, ouverture et vitesses (18 novembre 2026, retour de Felipe sur téléphone)
+- Téléphone : pendant le parcours, la barre devient une carte à deux lignes. En haut, ce que dit le point (nom, puis une ou deux lignes tirées de sa fiche :
+  altitude, dimensions, pente, accessible) ; toucher cette ligne ouvre la fiche. En bas, lecture / pause, curseur, vitesse, Quitter.
+  La fiche ouverte garde les commandes épinglées sous son en-tête et reste ouverte d'un point à l'autre jusqu'à ce qu'on la replie ; le plan du parcours est masqué tant qu'elle est ouverte.
+- Le bouton lecture / pause ne marchait pas sur la vraie 3D : la commande d'A-LL n'écoute que le vrai geste (`pointerdown` puis `click`), un simple `.click()` est ignoré.
+  Il rejoue maintenant ce geste, et l'état (lecture ou pause) est lu sur `data-playing` de la commande du viewer, plus sur le mouvement du curseur.
+- Vitesses : bouton « 2× » à côté du curseur, un tour de roue 2× → 4× → 1× (2× par défaut ; la vitesse d'origine du viewer fait 0,5 % par seconde, soit ~200 s pour tout le parcours).
+  On ajoute de petites avances (flèche droite du curseur du viewer) pendant qu'il joue, sans le mettre en pause ; mesuré sur la vraie 3D : 4× tient à ~0,02 par seconde.
+  Toucher la vitesse alors que le parcours est en pause le relance.
+- La maquette locale (`test/stub-v3.html`) imite maintenant cette commande (`data-playing`, `pointerdown` puis `click`, 0,5 % par seconde, flèche droite plus longue en lecture) et a un second point de parcours (`gare-1-quai`).
