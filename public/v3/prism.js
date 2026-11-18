@@ -246,6 +246,8 @@
   .pz-vb #pz-cap{left:20px;transform:translate(0,24px);width:min(560px,calc(100% - 40px))}
   #pz.pz-vb.narrating #pz-cap{transform:none}
   .pz-vb #pz-panel.shut .pz-head,.pz-vb #pz-panel.shut .pz-feed,.pz-vb #pz-panel.shut .pz-ask,.pz-vb #pz-panel.shut .pz-grab{display:none}
+  .pz-vb .pz-grab{display:none!important}
+  .pz-c.pz-vb .pz-head{padding-top:12px;min-height:52px}
   .pz-vb #pz-panel:not(.shut) #pz-mini{display:none}
   .pz-vb #pz-panel.shut{width:auto;min-width:0;max-width:min(520px,calc(100% - 40px));border-radius:28px}
   #pz-mini{display:none}

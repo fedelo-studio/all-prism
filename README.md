@@ -60,6 +60,7 @@ La barre d'outils Vercel est coupée dans les réglages du projet (Settings > Ge
   lentille de verre fine de 24 px autour (20 px sur téléphone), une seule onde mince et lente. Plus de halo plein ni de disque de 36 px.
 - Icône d'accessibilité (bloc « Accessibilité » des réponses) : pictogramme Phosphor « person-arms-spread », graisse regular, 18 px
   (licence MIT, `assets/regular/person-arms-spread.svg` du dépôt phosphor-icons/core), à la place du bonhomme tracé à la main.
+- Poignée grise en haut de la fiche sur téléphone retirée en variante B (le chevron de repli suffit) ; l'en-tête reprend 12 px de marge haute.
 
 ### Variante B « la barre » (`/b`, ou bouton « B · Barre » en haut à droite)
 Même cerveau et mêmes blocs, mais l'IA vit dans une barre en bas au centre. Repliée, la barre devient un mini widget
