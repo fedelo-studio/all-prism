@@ -706,7 +706,7 @@
     render(remote || answerLocal(q), { append: true });
   }
   function fly(id) {
-    S.hold = performance.now() + 3500;
+    S.hold = performance.now() + 9000; // le vol vers une autre gare dure 4 à 6 s : la fiche reste en place jusqu'à l'ouverture de la nouvelle
     if (S.compact && !VB) panel.classList.add('min');
     if (VB && S.compact) setShut(true);
     if (!focusTarget(id)) render([{ t: 'story', text: 'La vue 3D n’est pas encore prête.' }], { append: true });
@@ -807,7 +807,7 @@
   input.addEventListener('focus', () => { if (S.compact) panel.classList.remove('min'); kb(); });
   input.addEventListener('blur', () => setTimeout(kb, 60));
   panel.querySelector('.pz-grab').onclick = () => (VB ? R('pz-fold').click() : panel.classList.toggle('min'));
-  const onCanvas = (e) => { if (root.contains(e.target)) return; S.hold = performance.now() + 1700; if (S.narr) endNarr(); };
+  const onCanvas = (e) => { if (root.contains(e.target)) return; S.hold = Math.max(S.hold, performance.now() + 1700); if (S.narr) endNarr(); };
   addEventListener('pointerdown', onCanvas, true);
   const onKey = (e) => { if (e.key === 'Escape' && S.narr) endNarr(); };
   addEventListener('keydown', onKey);
