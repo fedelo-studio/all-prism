@@ -12,7 +12,7 @@ export default {
     a: 'https://staging.all-prism.app',
     s: 'https://staging.assets.all-prism.app',
   },
-  inject: ['/skin.js'],
+  inject: ['/v3/prism.js'], // V3 « Prisme vivant » (la v2 reste sur main : public/skin.js)
   // Les bulles de la carte sont dessinées par le viewer lui-même, à partir de son manifeste.
   // On ne peut pas les redessiner, mais on peut changer leurs réglages au passage : fond fumé, texte blanc, un peu plus grandes. Ne pas mettre spriteColorHex en blanc : texte blanc sur bulle blanche.
   patch(path, j) {

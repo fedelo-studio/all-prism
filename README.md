@@ -21,3 +21,16 @@ Ce dépôt est créé à partir du modèle `fedelo-proto-overlay`.
 ## Limites de l'interface
 Voir l'en-tête de `public/skin.js` : étiquettes dessinées dans le canvas Unity (non restylables d'ici),
 commande IA en réponses d'exemple, pas de déplacement à la main sur le tracé du parcours.
+
+## V3 « Prisme vivant » (branche de travail, la v2 reste sur main)
+`proto.config.mjs` injecte `public/v3/prism.js` au lieu de `public/skin.js`.
+- Une seule surface : la fiche est composée par l'IA à chaque arrêt de caméra, à partir d'un registre de blocs
+  (phrase-titre, chiffres, récit, accessibilité, lieux, comparaison, parcours, questions suivantes).
+- Quatre regards sur le même lieu : Essentiel, Voyageur, Technique, Accessible.
+- Les questions s'ajoutent dans la fiche et peuvent déplacer la caméra (« Emmène-moi à… »). Le prisme se souvient
+  des gares ouvertes et peut les comparer.
+- « Raconter la ligne » : visite automatique des gares, sous-titres et voix (bouton son).
+- Cerveau : `api/ask.js` appelle Claude si `ANTHROPIC_API_KEY` est posée dans Vercel (modèle via `ASK_MODEL`,
+  par défaut `claude-haiku-5-5`). Sans clé, badge « IA démo » et compositeur local qui n'utilise que le texte des fiches.
+- Test local : `python3 -m http.server 8765` à la racine, puis
+  `http://localhost:8765/test/stub-v3.html?config=config.json&manifestUrl=manifest.json`.
