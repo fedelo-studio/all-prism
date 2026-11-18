@@ -655,7 +655,7 @@
     render(remote || answerLocal(q), { append: true });
   }
   function fly(id) {
-    if (S.compact) panel.classList.add('min');
+    if (S.compact && !VB) panel.classList.add('min');
     if (VB && S.compact) setShut(true);
     if (!focusTarget(id)) render([{ t: 'story', text: 'La vue 3D n’est pas encore prête.' }], { append: true });
   }
@@ -797,11 +797,11 @@
   function setShut(v, quiet) {
     if (!VB || S.shut === v) return;
     const r0 = panel.getBoundingClientRect();
-    S.shut = v; panel.classList.toggle('shut', v); miniSig = ''; mini();
+    S.shut = v; panel.classList.toggle('shut', v); panel.classList.remove('min'); miniSig = ''; mini();
     if (!v) slide();
     const r1 = panel.getBoundingClientRect();
     if (!RM && !quiet && (Math.abs(r1.width - r0.width) > 2 || Math.abs(r1.height - r0.height) > 2))
-      panel.animate([{ width: r0.width + 'px', height: r0.height + 'px', borderRadius: v ? '28px' : '26px' }, { width: r1.width + 'px', height: r1.height + 'px' }],
+      panel.animate([{ width: r0.width + 'px', height: r0.height + 'px', borderRadius: '28px' }, { width: r1.width + 'px', height: r1.height + 'px' }],
         { duration: 480, easing: 'cubic-bezier(.2,.9,.26,1.05)' });
   }
   const miniEl = R('pz-mini');
