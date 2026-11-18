@@ -3,8 +3,7 @@
  * Idée : une seule surface. Plus de fiche figée d'un côté et de barre IA de l'autre :
  * la fiche EST la réponse de l'IA. Elle se compose à chaque arrêt de caméra à partir
  * d'un petit registre de blocs (phrase-titre, chiffres, récit, accessibilité, lieux,
- * comparaison, parcours, questions suivantes), selon le regard choisi (Essentiel,
- * Voyageur, Technique, Accessible). Une question posée ajoute des blocs à la fiche
+ * comparaison, parcours, questions suivantes). Une question posée ajoute des blocs à la fiche
  * et peut déplacer la caméra. « Raconter la ligne » fait visiter les gares seul,
  * avec sous-titres et voix.
  *
@@ -100,11 +99,6 @@
   .pz-brain.local b{background:#ffb547;box-shadow:0 0 8px #ffb547}
 
   /* regards */
-  .pz-lens{position:relative;display:flex;gap:2px;margin:12px 12px 0;padding:3px;border-radius:16px;background:rgba(0,0,0,.22);flex:none;overflow-x:auto;scrollbar-width:none}
-  .pz-lens::-webkit-scrollbar{display:none}
-  .pz-lens button{position:relative;z-index:1;flex:1 0 auto;height:30px;padding:0 12px;text-align:center;border-radius:13px;font-size:13px;line-height:18px;font-weight:500;color:var(--soft);transition:color .2s;white-space:nowrap}
-  .pz-lens button[aria-pressed=true]{color:#fff}
-  .pz-lens u{position:absolute;z-index:0;top:3px;height:30px;border-radius:13px;background:var(--fill2);box-shadow:inset 0 1px 0 rgba(255,255,255,.18);transition:transform .34s var(--spring),width .34s var(--spring)}
 
   /* fil des blocs */
   .pz-feed{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:none;padding:6px 20px 8px;display:flex;flex-direction:column;gap:14px;
@@ -177,7 +171,12 @@
   .pz-ask button:hover{background:rgba(255,255,255,.26)!important}
 
   /* en haut à droite */
-  #pz-top{position:absolute;right:20px;top:20px;display:flex;gap:8px;align-items:center;pointer-events:none}
+  /* réglages de démonstration (variante, Origine / Prisme) : masqués au repos, ils apparaissent au survol du coin ou au clic dedans */
+  #pz-top{position:absolute;right:0;top:0;padding:20px 20px 28px 56px;display:flex;gap:8px;align-items:center;pointer-events:auto}
+  #pz-top #pz-vars,#pz-top #pz-seg{opacity:0;transform:translateY(-6px);pointer-events:none;transition:opacity .28s var(--ease),transform .34s var(--ease)}
+  #pz-top:has(:focus-visible) #pz-vars,#pz-top:has(:focus-visible) #pz-seg,#pz-top.show #pz-vars,#pz-top.show #pz-seg{opacity:1;transform:none;pointer-events:auto}
+  @media (hover:hover){#pz-top:hover #pz-vars,#pz-top:hover #pz-seg{opacity:1;transform:none;pointer-events:auto}}
+  @media (prefers-reduced-motion:reduce){#pz-top #pz-vars,#pz-top #pz-seg{transition:none}}
   .pz-seg{display:flex;gap:2px;padding:4px;border-radius:22px;pointer-events:auto}
   .pz-seg button{height:32px;padding:0 14px;border-radius:16px;font-size:13px;line-height:18px;color:var(--soft);transition:background .2s,color .2s}
   .pz-seg button[aria-pressed=true]{background:var(--fill2);color:#fff}
@@ -205,10 +204,10 @@
   /* téléphone : le prisme devient une feuille, le compositeur reste en bas */
   .pz-c #pz-panel{left:16px;right:16px;width:auto;bottom:calc(16px + env(safe-area-inset-bottom));max-height:62%;border-radius:28px}
   .pz-c .pz-feed{padding-left:16px;padding-right:16px}
-  .pz-c #pz-panel.min .pz-feed,.pz-c #pz-panel.min .pz-lens{display:none}
+  .pz-c #pz-panel.min .pz-feed{display:none}
   .pz-c .pz-grab{display:block;width:36px;height:5px;border-radius:3px;background:rgba(255,255,255,.4);margin:8px auto 0;flex:none}
   .pz-c .pz-head{padding-top:4px;min-height:44px}
-  .pz-c #pz-top{right:16px;top:calc(16px + env(safe-area-inset-top))}
+  .pz-c #pz-top{right:16px;top:calc(16px + env(safe-area-inset-top));padding:0;pointer-events:none}
   .pz-c .pz-seg{display:none}
   .pz-c #pz-cap{bottom:calc(16px + env(safe-area-inset-bottom));width:calc(100% - 32px)}
   .pz-c #pz-cap-t{font-size:17px;line-height:24px;min-height:48px}
@@ -222,7 +221,7 @@
   #pz.pz-vb.narrating #pz-panel{transform:none;opacity:0;pointer-events:none}
   .pz-vb #pz-cap{left:20px;transform:translate(0,24px);width:min(560px,calc(100% - 40px))}
   #pz.pz-vb.narrating #pz-cap{transform:none}
-  .pz-vb #pz-panel.shut .pz-head,.pz-vb #pz-panel.shut .pz-lens,.pz-vb #pz-panel.shut .pz-feed,.pz-vb #pz-panel.shut .pz-ask,.pz-vb #pz-panel.shut .pz-grab{display:none}
+  .pz-vb #pz-panel.shut .pz-head,.pz-vb #pz-panel.shut .pz-feed,.pz-vb #pz-panel.shut .pz-ask,.pz-vb #pz-panel.shut .pz-grab{display:none}
   .pz-vb #pz-panel:not(.shut) #pz-mini{display:none}
   .pz-vb #pz-panel.shut{width:auto;min-width:0;max-width:min(520px,calc(100% - 40px));border-radius:28px}
   #pz-mini{display:none}
@@ -258,8 +257,6 @@
   .pz-c.pz-vb #pz-mini .tx:nth-last-child(2){padding-right:14px}
   .pz-c.pz-vb #pz-mini .scrub{min-width:0;width:calc(100vw - 32px - 16px - 80px - 20px);max-width:260px}
   .pz-c.pz-vb .pz-photo,.pz-c.pz-vb .pz-src{display:none}
-  .pz-c.pz-vb .pz-lens{margin-top:8px}
-  .pz-c .pz-lens button{height:28px;font-size:12px;padding:0 8px}
   #pz-mini .scrub .pre{font-weight:inherit}
   .pz-c #pz-mini .scrub .pre{display:none}
   .pz-c.pz-vb .pz-lead{font-size:19px;line-height:24px}
@@ -323,12 +320,11 @@
       <div id="pz-mini" role="group" aria-label="Prisme replié"></div>
       <i class="pz-grab"></i>
       <header class="pz-head"><div id="pz-crumb" class="pz-crumb"></div><span id="pz-brain" class="pz-brain local" title=""><b></b><span>IA</span></span><button type="button" class="pz-fold" id="pz-fold" aria-label="Réduire">${I.down}</button></header>
-      <nav id="pz-lens" class="pz-lens" aria-label="Regard"><u></u></nav>
       <div id="pz-feed" class="pz-feed" aria-live="polite"></div>
       <form id="pz-form" class="pz-ask" autocomplete="off">${I.spark}<input id="pz-in" type="text" enterkeyhint="send" placeholder="Demander à Leysin365…" aria-label="Poser une question"><button type="submit" aria-label="Envoyer">${I.send}</button></form>
     </section>
-    <div id="pz-top"><div id="pz-vars" class="pz-glass" aria-label="Variante"><button type="button" data-v="a">A · Fiche</button><button type="button" data-v="b">B · Barre</button></div><button id="pz-tell" class="pz-glass" type="button">${I.spark}<span>Raconter la ligne</span></button>
-      <div id="pz-seg" class="pz-seg pz-glass"><button type="button" data-m="off">Origine</button><button type="button" data-m="on" aria-pressed="true">Prisme</button></div></div>
+    <div id="pz-top"><div id="pz-vars" class="pz-glass" aria-label="Variante"><button type="button" data-v="a">A · Fiche</button><button type="button" data-v="b">B · Barre</button></div>
+      <div id="pz-seg" class="pz-seg pz-glass"><button type="button" data-m="off">Origine</button><button type="button" data-m="on" aria-pressed="true">Prisme</button></div><button id="pz-tell" class="pz-glass" type="button">${I.spark}<span>Raconter la ligne</span></button></div>
     <section id="pz-cap" class="pz-glass" aria-live="polite">
       <div class="pz-cap-h"><div><div class="k">Récit · <span id="pz-cap-i"></span></div><div class="n" id="pz-cap-n"></div></div><span class="sp"></span>
         <button type="button" id="pz-voice" aria-label="Voix">${I.mute}</button><button type="button" id="pz-stop" aria-label="Arrêter le récit">${I.close}</button></div>
@@ -347,7 +343,6 @@
     lens: 'essentiel', stations: [], hotspots: [], seen: {}, busy: false, brain: 'local',
     compact: false, narr: null, voice: false, gen: 0,
   };
-  const LENSES = [['essentiel', 'Essentiel'], ['voyageur', 'Voyageur'], ['technique', 'Technique'], ['accessible', 'Accessible']];
 
   /* ---------- lecture du viewer ---------- */
   const V = {
@@ -691,17 +686,6 @@
       c.append(b);
     });
   }
-  const lensNav = R('pz-lens');
-  for (const [id, label] of LENSES) {
-    const b = document.createElement('button'); b.type = 'button'; b.dataset.l = id; b.textContent = label; b.setAttribute('aria-pressed', String(id === S.lens));
-    b.onclick = () => { if (S.lens === id) return; S.lens = id; for (const x of lensNav.querySelectorAll('button')) x.setAttribute('aria-pressed', String(x.dataset.l === id)); slide(); compose(); };
-    lensNav.append(b);
-  }
-  function slide() {
-    const on = lensNav.querySelector('[aria-pressed=true]'); const u = lensNav.querySelector('u'); if (!on) return;
-    u.style.width = on.offsetWidth + 'px'; u.style.transform = `translateX(${on.offsetLeft - 3}px)`; u.style.left = '3px';
-  }
-
   /* ---------- récit : la ligne racontée ---------- */
   function narrLine(name, facts) {
     const { pairs, notes } = parse(facts || []);
@@ -763,6 +747,10 @@
     try { sessionStorage.setItem('pz-mode', m); } catch (e) {}
   };
   for (const b of R('pz-seg').children) b.onclick = () => setMode(b.dataset.m);
+  { // un clic ou un toucher dans le coin les fait apparaître quelques secondes (écrans tactiles, pas de survol)
+    const top = R('pz-top'); let t = 0;
+    top.addEventListener('pointerdown', () => { top.classList.add('show'); clearTimeout(t); t = setTimeout(() => top.classList.remove('show'), 4500); });
+  }
   try { if (sessionStorage.getItem('pz-mode') === 'off') setMode('off'); } catch (e) {}
 
   /* ---------- saisie ---------- */
@@ -791,7 +779,7 @@
   function layout() {
     S.compact = innerWidth < 640;
     root.classList.toggle('pz-c', S.compact); document.documentElement.classList.toggle('pz-hc', S.compact); document.documentElement.classList.toggle('pz-hcm', S.compact && VB);
-    slide(); kb();
+    kb();
   }
   addEventListener('resize', layout);
 
@@ -810,7 +798,6 @@
     if (!VB || S.shut === v) return;
     const r0 = panel.getBoundingClientRect();
     S.shut = v; panel.classList.toggle('shut', v); panel.classList.remove('min'); miniSig = ''; mini();
-    if (!v) slide();
     const r1 = panel.getBoundingClientRect();
     if (!RM && !quiet && (Math.abs(r1.width - r0.width) > 2 || Math.abs(r1.height - r0.height) > 2))
       panel.animate([{ width: r0.width + 'px', height: r0.height + 'px', borderRadius: '28px' }, { width: r1.width + 'px', height: r1.height + 'px' }],

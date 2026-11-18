@@ -30,7 +30,9 @@ La barre d'outils Vercel est coupée dans les réglages du projet (Settings > Ge
 `proto.config.mjs` injecte `public/v3/prism.js` au lieu de `public/skin.js`.
 - Une seule surface : la fiche est composée par l'IA à chaque arrêt de caméra, à partir d'un registre de blocs
   (phrase-titre, chiffres, récit, accessibilité, lieux, comparaison, parcours, questions suivantes).
-- Quatre regards sur le même lieu : Essentiel, Voyageur, Technique, Accessible.
+- Les onglets de regard (Essentiel, Voyageur, Technique, Accessible) ont été retirés le 18 novembre 2026 à la demande de Felipe.
+- Les réglages de démonstration en haut à droite (variante A / B, Origine / Prisme) sont masqués au repos : ils apparaissent
+  au survol du coin ou au clic dedans.
 - Les questions s'ajoutent dans la fiche et peuvent déplacer la caméra (« Emmène-moi à… »). Le prisme se souvient
   des gares ouvertes et peut les comparer.
 - « Raconter la ligne » : visite automatique des gares, sous-titres et voix (bouton son).
