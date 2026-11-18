@@ -34,7 +34,7 @@
   const cap = (s) => s ? s[0].toUpperCase() + s.slice(1) : s;
   const low = (s) => s ? s[0].toLowerCase() + s.slice(1) : s;
 
-  /* ---------- icônes (traits 1.6, 20px) ---------- */
+  /* ---------- icônes (traits 1.6, 20px ; accessibilité = Phosphor « person-arms-spread », regular) ---------- */
   const I = {
     spark: '<svg class="pz-spk" width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M10 2.5c.4 3.6 1.9 5.6 5.5 6.3v.4c-3.6.7-5.1 2.7-5.5 6.3h-.4c-.4-3.6-1.9-5.6-5.5-6.3v-.4c3.6-.7 5.1-2.7 5.5-6.3h.4Z" fill="url(#pzg)"/><path d="M15.6 2.4c.1 1 .6 1.6 1.6 1.8v.2c-1 .2-1.5.8-1.6 1.8h-.2c-.1-1-.6-1.6-1.6-1.8v-.2c1-.2 1.5-.8 1.6-1.8h.2Z" fill="url(#pzg)" opacity=".7"/></svg>',
     send: '<svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M10 15.5v-11M5.5 9 10 4.5 14.5 9" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>',
@@ -45,7 +45,7 @@
     stop: '<svg width="14" height="14" viewBox="0 0 20 20"><rect x="4.5" y="4.5" width="11" height="11" rx="2" fill="currentColor"/></svg>',
     sound: '<svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M3.5 8v4h3l4 3.5v-11l-4 3.5h-3Z" fill="currentColor"/><path d="M13.5 7.2a4 4 0 0 1 0 5.6M15.6 5a7 7 0 0 1 0 10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>',
     mute: '<svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M3.5 8v4h3l4 3.5v-11l-4 3.5h-3Z" fill="currentColor"/><path d="m13.5 8 4 4m0-4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>',
-    access: '<svg width="16" height="16" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="3.6" r="1.6" fill="currentColor"/><path d="M5 6.6h10M10 6.6v5m0 0-3 5m3-5 3 5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+    access: '<svg width="18" height="18" viewBox="0 0 256 256" fill="currentColor"><path d="M160,40a32,32,0,1,0-32,32A32,32,0,0,0,160,40ZM128,56a16,16,0,1,1,16-16A16,16,0,0,1,128,56ZM231.5,87.71A19.62,19.62,0,0,0,212,72H44a20,20,0,0,0-8.38,38.16l.13,0,50.75,22.35-21,79.72A20,20,0,0,0,102,228.8l26-44.87,26,44.87a20,20,0,0,0,36.4-16.52l-21-79.72,50.75-22.35.13,0A19.64,19.64,0,0,0,231.5,87.71Zm-17.8,7.9-56.93,25.06a8,8,0,0,0-4.51,9.36L175.13,217a7,7,0,0,0,.49,1.35,4,4,0,0,1-5,5.45,4,4,0,0,1-2.25-2.07,6.31,6.31,0,0,0-.34-.63L134.92,164a8,8,0,0,0-13.84,0L88,221.05a6.31,6.31,0,0,0-.34.63,4,4,0,0,1-2.25,2.07,4,4,0,0,1-5-5.45,7,7,0,0,0,.49-1.35L103.74,130a8,8,0,0,0-4.51-9.36L42.3,95.61A4,4,0,0,1,44,88H212a4,4,0,0,1,1.73,7.61Z"/></svg>',
     pin: '<svg width="14" height="14" viewBox="0 0 20 20"><circle cx="10" cy="10" r="4" fill="currentColor"/></svg>',
     down: '<svg width="16" height="16" viewBox="0 0 20 20" fill="none"><path d="m5 7.5 5 5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
     up: '<svg width="16" height="16" viewBox="0 0 20 20" fill="none"><path d="m5 12.5 5-5 5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
@@ -136,6 +136,7 @@
   @keyframes pz-w{from{opacity:0;filter:blur(5px);transform:translateY(3px)}}
   .pz-story{font-size:15px;line-height:22px;color:var(--soft);text-wrap:pretty}
   .pz-story b{color:var(--ink);font-weight:500}
+  .pz-k svg{flex:none;margin:-2px 0}
   .pz-k{font-size:11px;line-height:14px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--soft);margin-bottom:8px;display:flex;align-items:center;gap:6px}
   .pz-tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
   .pz-tile:last-child:nth-child(odd){grid-column:1/-1}
