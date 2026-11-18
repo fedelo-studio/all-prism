@@ -286,9 +286,21 @@
   #pz-plansh path.camera-spatial-route{fill:none!important;stroke:rgba(12,22,34,.55)!important;stroke-width:5px!important;stroke-linecap:round;stroke-linejoin:round}
   #pz-plansh .camera-spatial-context path{fill:none!important;stroke:rgba(12,22,34,.4)!important;stroke-width:2.4px!important}
   #pz-planmk svg>*:not(.camera-spatial-marker){visibility:hidden}
-  #pz-planmk .camera-spatial-ring{fill:rgba(255,255,255,.95)!important;stroke:none!important}
-  #pz-planmk .camera-spatial-dot{fill:var(--pz-acc)!important;stroke:none!important}
-  #pz-planmk .camera-spatial-marker{filter:drop-shadow(0 0 5px var(--pz-acc))}
+  /* repère de position : un disque à la couleur du client, liseré blanc, halo qui respire */
+  #pz-planmk .camera-spatial-marker circle{transform-box:fill-box;transform-origin:center}
+  #pz-planmk .camera-spatial-ring{fill:var(--pz-acc)!important;stroke:#fff!important;stroke-width:2.5px!important;vector-effect:non-scaling-stroke;transform:scale(1.9)}
+  #pz-planmk .camera-spatial-dot{display:none}
+  #pz-planmk{filter:drop-shadow(0 0 6px var(--pz-acc)) drop-shadow(0 1px 2px rgba(0,0,0,.45))}
+  #pz-planmk.on{animation:pz-mk 2s ease-in-out infinite}
+  @keyframes pz-mk{50%{filter:drop-shadow(0 0 14px var(--pz-acc)) drop-shadow(0 1px 2px rgba(0,0,0,.45))}}
+  @media (prefers-reduced-motion:reduce){#pz-planmk.on{animation:none}}
+  .pz-hcm #pz-planmk .camera-spatial-ring{transform:scale(2.4)}
+  /* léger dégradé depuis le coin bas droit : le plan se détache sans faire panneau */
+  #pz-plansc{position:fixed;z-index:2147482989;pointer-events:none;right:0;bottom:0;width:min(78vw,1100px);height:min(92vh,860px);opacity:0;transition:opacity .9s cubic-bezier(.2,.7,.2,1);
+    background:radial-gradient(ellipse 100% 100% at 100% 100%,rgba(6,10,16,.46) 0%,rgba(6,10,16,.3) 30%,rgba(6,10,16,.12) 55%,rgba(6,10,16,0) 78%)}
+  #pz-plansc.on{opacity:1}
+  .pz-hcm #pz-plansc{width:100vw;height:62vh}
+  html.pz-orig #pz-plansc{display:none}
   html.pz-orig #pz-plan,html.pz-orig #pz-planmk,html.pz-orig #pz-plansh{display:none}
   .pz-hcm #pz-plansh,.pz-hcm #pz-plan,.pz-hcm #pz-planmk{right:24px;bottom:calc(92px + env(safe-area-inset-bottom));top:auto;height:min(34vh,300px)}
   html:not(.pz-orig) vercel-live-feedback{display:none!important}
@@ -323,9 +335,9 @@
       <p id="pz-cap-t"></p><div class="pz-pips" id="pz-pips"></div>
     </section>`;
   document.body.append(root);
-  const plan = document.createElement('div'), planMk = document.createElement('div'), planSh = document.createElement('div'); planSh.id = 'pz-plansh'; planSh.setAttribute('aria-hidden', 'true');
+  const plan = document.createElement('div'), planMk = document.createElement('div'), planSh = document.createElement('div'), planSc = document.createElement('div'); planSc.id = 'pz-plansc'; planSc.setAttribute('aria-hidden', 'true'); planSh.id = 'pz-plansh'; planSh.setAttribute('aria-hidden', 'true');
   plan.id = 'pz-plan'; planMk.id = 'pz-planmk'; document.documentElement.style.setProperty('--pz-acc', accent); plan.setAttribute('aria-hidden', 'true'); planMk.setAttribute('aria-hidden', 'true');
-  if (VB) document.body.append(planSh, plan, planMk);
+  if (VB) document.body.append(planSc, planSh, plan, planMk);
   const R = (id) => document.getElementById(id);
   const panel = R('pz-panel'), feed = R('pz-feed'), input = R('pz-in');
 
@@ -902,7 +914,7 @@
   function planSync() {
     if (!VB) return;
     const on = S.hasTour && !S.narr;
-    plan.classList.toggle('on', on); planMk.classList.toggle('on', on); planSh.classList.toggle('on', on);
+    plan.classList.toggle('on', on); planMk.classList.toggle('on', on); planSh.classList.toggle('on', on); planSc.classList.toggle('on', on);
     if (!on) return;
     const m = V.ctrl()?.querySelector('svg.camera-spatial-map'); if (!m || m.outerHTML === planSrc) return;
     planSrc = m.outerHTML;
@@ -913,7 +925,7 @@
   layout(); tick(true);
 
   window.__prism = {
-    destroy() { clearInterval(timer); endNarr(); root.remove(); plan.remove(); planMk.remove(); planSh.remove(); css.remove(); removeEventListener('pointerdown', onCanvas, true); removeEventListener('keydown', onKey); removeEventListener('resize', layout); document.documentElement.classList.remove('pz-orig'); },
+    destroy() { clearInterval(timer); endNarr(); root.remove(); plan.remove(); planMk.remove(); planSh.remove(); planSc.remove(); css.remove(); removeEventListener('pointerdown', onCanvas, true); removeEventListener('keydown', onKey); removeEventListener('resize', layout); document.documentElement.classList.remove('pz-orig'); },
     state: S, compose, ask, narrate,
   };
 })();
