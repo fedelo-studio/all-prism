@@ -49,6 +49,14 @@ La barre d'outils Vercel est coupée dans les réglages du projet (Settings > Ge
 - Le plan du parcours n'est reconstruit que si le tracé change ; le repère de position suit la caméra image par image
   (pastille HTML `#pz-pin` posée sur l'ancre du calque incliné). Les animations infinies sont en pause quand elles ne se voient pas.
 
+### Prisme plus vif et voile du plan (18 novembre 2026, retour de Felipe)
+- Palette de l'IA inchangée (tête blanche, queue chaude jaune / corail, queue froide bleu / glacier) mais plus saturée et à queues plus longues.
+  Un trait de lumière fait le tour de la barre au repos (anneau 2 px + halo en bande), plus vif au survol, et le prisme « s'allume »
+  (deux têtes, tour en 1,5 s, éclat du halo) dès que l'IA compose, au moins 1 s visible. Les calques tournent par `transform` : pas de repeinte.
+- Le voile sombre sous le plan de visite reprend la maquette Figma (fichier du design system, page « Pastilles · V2 », « Ombre douce (plan) ») :
+  noir à 20 %, flou 140, ellipse 760 x 620 centrée sur le coin bas droit d'une vue 1512 x 757 (460 x 520 sur téléphone, centre à 40 px du bas),
+  rendu en dégradé radial. Avant : jusqu'à 40 %.
+
 ### Variante B « la barre » (`/b`, ou bouton « B · Barre » en haut à droite)
 Même cerveau et mêmes blocs, mais l'IA vit dans une barre en bas au centre. Repliée, la barre devient un mini widget
 qui change selon l'écran : vue d'ensemble = « Demander à Leysin365 » + Raconter ; lieu = nom, repère, retour ;

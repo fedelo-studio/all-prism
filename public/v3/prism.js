@@ -36,7 +36,7 @@
 
   /* ---------- icônes (traits 1.6, 20px) ---------- */
   const I = {
-    spark: '<svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M10 2.5c.4 3.6 1.9 5.6 5.5 6.3v.4c-3.6.7-5.1 2.7-5.5 6.3h-.4c-.4-3.6-1.9-5.6-5.5-6.3v-.4c3.6-.7 5.1-2.7 5.5-6.3h.4Z" fill="url(#pzg)"/><path d="M15.6 2.4c.1 1 .6 1.6 1.6 1.8v.2c-1 .2-1.5.8-1.6 1.8h-.2c-.1-1-.6-1.6-1.6-1.8v-.2c1-.2 1.5-.8 1.6-1.8h.2Z" fill="url(#pzg)" opacity=".7"/></svg>',
+    spark: '<svg class="pz-spk" width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M10 2.5c.4 3.6 1.9 5.6 5.5 6.3v.4c-3.6.7-5.1 2.7-5.5 6.3h-.4c-.4-3.6-1.9-5.6-5.5-6.3v-.4c3.6-.7 5.1-2.7 5.5-6.3h.4Z" fill="url(#pzg)"/><path d="M15.6 2.4c.1 1 .6 1.6 1.6 1.8v.2c-1 .2-1.5.8-1.6 1.8h-.2c-.1-1-.6-1.6-1.6-1.8v-.2c1-.2 1.5-.8 1.6-1.8h.2Z" fill="url(#pzg)" opacity=".7"/></svg>',
     send: '<svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M10 15.5v-11M5.5 9 10 4.5 14.5 9" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>',
     back: '<svg width="16" height="16" viewBox="0 0 20 20" fill="none"><path d="M12.5 4.5 7 10l5.5 5.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
     go: '<svg width="16" height="16" viewBox="0 0 20 20" fill="none"><path d="M4.5 10h11m-4.5-4.5L15.5 10 11 14.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>',
@@ -63,9 +63,10 @@
     -webkit-font-smoothing:antialiased;text-align:left;
     --ink:rgba(255,255,255,.97);--soft:rgba(235,240,248,.72);--faint:rgba(255,255,255,.12);--fill:rgba(255,255,255,.09);--fill2:rgba(255,255,255,.16);
     --glass:rgba(18,20,24,.56);--accent:${accent};--ease:cubic-bezier(.2,.7,.2,1);--spring:cubic-bezier(.2,.9,.26,1.2);
-    --spectrum:conic-gradient(from var(--pz-a,0deg),#fff 0deg,rgba(255,244,214,.95) 7deg,rgba(255,196,132,.8) 18deg,rgba(255,132,124,.5) 32deg,rgba(255,95,114,.18) 46deg,rgba(255,95,114,0) 60deg,rgba(95,141,255,0) 120deg,rgba(95,141,255,.18) 134deg,rgba(88,150,255,.5) 148deg,rgba(120,190,255,.8) 162deg,rgba(214,240,255,.95) 173deg,#fff 180deg,rgba(255,244,214,.95) 187deg,rgba(255,196,132,.8) 198deg,rgba(255,132,124,.5) 212deg,rgba(255,95,114,.18) 226deg,rgba(255,95,114,0) 240deg,rgba(95,141,255,0) 300deg,rgba(95,141,255,.18) 314deg,rgba(88,150,255,.5) 328deg,rgba(120,190,255,.8) 342deg,rgba(214,240,255,.95) 353deg,#fff 360deg);
-    --halo:conic-gradient(from var(--pz-a,0deg),#5f8dff,#4ea4ff,#bfe0ff,#ffdf96,#ffab62,#ff5f72,#5f8dff);
-    --ai-tint:linear-gradient(115deg,rgba(95,141,255,.07),rgba(78,164,255,.05) 30%,rgba(255,255,255,.02) 50%,rgba(255,171,98,.05) 70%,rgba(255,95,114,.07))}
+    --spectrum:conic-gradient(from var(--pz-a,0deg),#fff 0deg,rgba(255,244,214,1) 5deg,rgba(255,200,120,.95) 13deg,rgba(255,138,110,.85) 27deg,rgba(255,84,112,.55) 45deg,rgba(255,84,112,0) 70deg,rgba(70,130,255,0) 110deg,rgba(70,130,255,.55) 135deg,rgba(64,150,255,.85) 153deg,rgba(120,200,255,.95) 167deg,rgba(220,244,255,1) 175deg,#fff 180deg,rgba(255,244,214,1) 185deg,rgba(255,200,120,.95) 193deg,rgba(255,138,110,.85) 207deg,rgba(255,84,112,.55) 225deg,rgba(255,84,112,0) 250deg,rgba(70,130,255,0) 290deg,rgba(70,130,255,.55) 315deg,rgba(64,150,255,.85) 333deg,rgba(120,200,255,.95) 347deg,rgba(220,244,255,1) 355deg,#fff 360deg);
+    --beam:conic-gradient(from 0deg,#fff 0deg,rgba(255,244,214,1) 6deg,rgba(255,200,120,.95) 16deg,rgba(255,138,110,.85) 34deg,rgba(255,84,112,.55) 56deg,rgba(255,84,112,0) 84deg,rgba(70,130,255,0) 276deg,rgba(70,130,255,.55) 304deg,rgba(64,150,255,.85) 326deg,rgba(120,200,255,.95) 344deg,rgba(220,244,255,1) 354deg,#fff 360deg);
+    --halo:conic-gradient(from var(--pz-a,0deg),#4a86ff,#3fb0ff,#cfeaff,#ffe08a,#ff9d4d,#ff4f6e,#4a86ff);
+    --ai-tint:linear-gradient(115deg,rgba(80,130,255,.2),rgba(70,160,255,.13) 30%,rgba(255,255,255,.05) 50%,rgba(255,170,90,.13) 70%,rgba(255,84,112,.2))}
   :where(#pz) *{box-sizing:border-box;margin:0;padding:0}
   :where(#pz) button{font:inherit;letter-spacing:inherit;color:inherit;background:none;border:0;cursor:pointer;-webkit-tap-highlight-color:transparent;text-align:inherit}
   #pz button:focus-visible{outline:2px solid #fff;outline-offset:2px}
@@ -79,12 +80,32 @@
   /* --- le prisme : la colonne vivante --- */
   #pz-panel{position:absolute;left:20px;bottom:20px;width:384px;max-height:calc(100% - 40px);border-radius:28px;display:flex;flex-direction:column;
     transition:transform .4s var(--ease),opacity .26s var(--ease),max-height .28s var(--ease)}
-  #pz-panel::before{content:"";position:absolute;inset:-1px;border-radius:inherit;padding:1.5px;background:var(--spectrum);opacity:0;transition:opacity .5s;
-    -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;animation:pz-turn 3.2s linear infinite paused}
-  #pz-panel::after{content:"";position:absolute;inset:-18px;border-radius:44px;background:var(--halo);filter:blur(34px);opacity:0;transition:opacity .6s;z-index:-1;pointer-events:none;animation:pz-turn 3.2s linear infinite paused}
-  #pz.busy #pz-panel::before{opacity:.9}
-  #pz.busy #pz-panel::after{opacity:.22}
-  #pz.busy #pz-panel::before,#pz.busy #pz-panel::after{animation-play-state:running}
+  /* anneau + halo du prisme : un trait de lumière qui fait le tour de la barre au repos, et qui s'emballe quand l'IA compose.
+     Les calques tournent par transform (compositeur) : aucune repeinte, même en continu. */
+  @keyframes pz-rot{to{rotate:360deg}}
+  .pz-rg,.pz-bl,.pz-bl i{position:absolute;inset:0;border-radius:inherit;pointer-events:none}
+  .pz-rg,.pz-bl i{overflow:hidden}
+  .pz-rg{padding:2px;z-index:2;opacity:.85;transition:opacity .45s var(--ease);
+    -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude}
+  /* halo : seulement une bande le long du bord (le flou la déborde dedans et dehors), jamais un voile sur le texte */
+  .pz-bl{z-index:-1;opacity:.3;filter:blur(18px) saturate(1.6);mix-blend-mode:plus-lighter;transition:opacity .45s var(--ease)}
+  .pz-bl i{padding:9px;-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude}
+  .pz-rg u,.pz-bl u{position:absolute;left:50%;top:50%;width:max(210%,640px);aspect-ratio:1;translate:-50% -50%;text-decoration:none;
+    animation:pz-rot 12s linear infinite;transition:opacity .35s var(--ease)}
+  .pz-rg u.s,.pz-bl u.s{background:var(--beam)}
+  .pz-rg u.f,.pz-bl u.f{background:var(--spectrum);opacity:0;animation-duration:1.5s}
+  #pz-panel:hover .pz-rg,#pz-panel:focus-within .pz-rg{opacity:1}
+  #pz-panel:hover .pz-bl,#pz-panel:focus-within .pz-bl{opacity:.5}
+  #pz.busy .pz-rg{opacity:1}
+  #pz.busy .pz-bl{opacity:.85;animation:pz-fl 1s var(--ease)}
+  @keyframes pz-fl{0%{opacity:.3}22%{opacity:1}100%{opacity:.85}}
+  #pz.busy .pz-rg u.s,#pz.busy .pz-bl u.s{opacity:0}
+  #pz.busy .pz-rg u.f,#pz.busy .pz-bl u.f{opacity:1}
+  /* l'IA s'allume : la barre repliée prend aussi la teinte bleu / corail de la 1.5 */
+  .pz-vb #pz-panel.shut{background:var(--ai-tint),var(--glass)}
+  .pz-spk{filter:drop-shadow(0 0 5px rgba(140,200,255,.6)) drop-shadow(0 0 9px rgba(255,190,120,.35))}
+  #pz.busy .pz-spk{animation:pz-spk .8s ease-in-out infinite alternate}
+  @keyframes pz-spk{from{transform:scale(1);filter:drop-shadow(0 0 5px rgba(140,200,255,.6)) drop-shadow(0 0 9px rgba(255,190,120,.35))}to{transform:scale(1.22);filter:drop-shadow(0 0 8px rgba(160,215,255,.95)) drop-shadow(0 0 14px rgba(255,200,130,.7))}}
   #pz.narrating #pz-panel{transform:translateX(calc(-100% - 40px));opacity:0;pointer-events:none}
 
   .pz-head{display:flex;align-items:center;gap:6px;padding:12px 12px 0 12px;min-height:52px;flex:none}
@@ -304,11 +325,14 @@
   .pz-hcm #pz-pin .co{width:13px;height:13px;margin:-6.5px 0 0 -6.5px}
   @keyframes pz-pulse{from{transform:scale(.5);opacity:.95}to{transform:scale(1.2);opacity:0}}
   @media (prefers-reduced-motion:reduce){#pz-pin .ha{animation:none;opacity:.5}}
-  /* léger dégradé depuis le coin bas droit : le plan se détache sans faire panneau */
-  #pz-plansc{position:fixed;z-index:2147482989;pointer-events:none;right:0;bottom:0;width:min(78vw,1100px);height:min(92vh,860px);opacity:0;transition:opacity .5s cubic-bezier(.2,.7,.2,1);
-    background:radial-gradient(ellipse 100% 100% at 100% 100%,rgba(6,10,16,.4) 0%,rgba(6,10,16,.24) 32%,rgba(6,10,16,.08) 58%,rgba(6,10,16,0) 76%)}
+  /* voile depuis le coin bas droit : repris de la maquette Figma « Pastilles · V2 » (Ombre douce du plan : noir à 20 %, flou 140),
+     rendu ici en dégradé radial qui reproduit le flou (gaussienne d'écart-type 70) autour de l'ellipse 760 x 620 centrée sur le coin d'une vue de 1512 x 757 */
+  #pz-plansc{position:fixed;z-index:2147482989;pointer-events:none;right:0;bottom:0;width:34.4vw;height:59.4vh;opacity:0;transition:opacity .5s cubic-bezier(.2,.7,.2,1);
+    background:radial-gradient(ellipse 100% 100% at 100% 100%,rgba(0,0,0,.2) 0,rgba(0,0,0,.195) 46%,rgba(0,0,0,.168) 60%,rgba(0,0,0,.1) 71%,rgba(0,0,0,.032) 86%,rgba(0,0,0,0) 100%)}
   #pz-plansc.on{opacity:1}
-  .pz-hcm #pz-plansc{width:100vw;height:62vh}
+  /* téléphone : ellipse 460 x 520 de la maquette (390 x 844), centre à 40 px du bas */
+  .pz-hcm #pz-plansc{width:94.9vw;height:calc(47.4vh + 40px);
+    background:radial-gradient(ellipse 100% 47.4vh at 100% calc(100% - 40px),rgba(0,0,0,.2) 0,rgba(0,0,0,.195) 27%,rgba(0,0,0,.168) 44%,rgba(0,0,0,.1) 63%,rgba(0,0,0,.032) 82%,rgba(0,0,0,0) 100%)}
   html.pz-orig #pz-plansc,html.pz-orig #pz-pin{display:none}
   html.pz-orig #pz-plan,html.pz-orig #pz-planmk,html.pz-orig #pz-plansh{display:none}
   .pz-hcm #pz-plansh,.pz-hcm #pz-plan,.pz-hcm #pz-planmk{right:24px;bottom:calc(92px + env(safe-area-inset-bottom));top:auto;height:min(34vh,300px)}
@@ -336,8 +360,9 @@
   const root = document.createElement('div');
   root.id = 'pz';
   root.setAttribute('translate', 'no');
-  root.innerHTML = `<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><linearGradient id="pzg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#bfe0ff"/><stop offset=".5" stop-color="#ffffff"/><stop offset="1" stop-color="#ffdf96"/></linearGradient></defs></svg>
+  root.innerHTML = `<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><linearGradient id="pzg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8cc8ff"/><stop offset=".5" stop-color="#ffffff"/><stop offset="1" stop-color="#ffc66b"/></linearGradient></defs></svg>
     <section id="pz-panel" class="pz-glass" aria-label="Prisme">
+      <span class="pz-rg" aria-hidden="true"><u class="s"></u><u class="f"></u></span><span class="pz-bl" aria-hidden="true"><i><u class="s"></u><u class="f"></u></i></span>
       <div id="pz-mini" role="group" aria-label="Prisme replié"></div>
       <i class="pz-grab"></i>
       <header class="pz-head"><div id="pz-crumb" class="pz-crumb"></div><span id="pz-brain" class="pz-brain local" title=""><b></b><span>IA</span></span><button type="button" class="pz-fold" id="pz-fold" aria-label="Réduire">${I.down}</button></header>
@@ -662,7 +687,14 @@
     if (append) feed.scrollTo({ top: feed.scrollHeight, behavior: 'smooth' });
     return el;
   }
-  const busy = (on) => { S.busy = on; root.classList.toggle('busy', on); };
+  let busyT = 0, busyAt = 0;
+  const busy = (on, min = 0) => { // `min` : durée minimale visible, pour que l'éclat se voie même quand la composition est instantanée
+    clearTimeout(busyT);
+    if (on) { busyAt = performance.now(); S.busy = true; root.classList.add('busy'); busyT = setTimeout(() => busy(false), 4000); return; }
+    const left = min - (performance.now() - busyAt);
+    if (S.busy && left > 30) { busyT = setTimeout(() => busy(false), left); return; }
+    S.busy = false; root.classList.remove('busy');
+  };
 
   /* ---------- composer la fiche ---------- */
   let composeT = 0;
@@ -678,17 +710,16 @@
     }
     composedKey = kind;
     const t0 = performance.now();
-    const slow = setTimeout(() => g === S.gen && busy(true), 450); // le halo « l'IA réfléchit » n'apparaît que si l'attente se voit
+    busy(true); // le prisme s'allume dès que l'IA compose, même si la fiche arrive vite
     feed.classList.add('out'); await wait(110);
-    if (g !== S.gen) return clearTimeout(slow);
+    if (g !== S.gen) return;
     feed.classList.remove('out');
     skeleton(false);
     const remote = await brain('compose');
     await wait(Math.max(0, 300 - (performance.now() - t0))); // juste le temps de voir la fiche se composer
-    clearTimeout(slow);
     if (g !== S.gen) return;
     render(remote || composeLocal(S.lens));
-    busy(false);
+    busy(false, 1000);
   }
   async function ask(q) {
     q = (q || input.value).trim(); if (!q) return;
@@ -701,7 +732,7 @@
     const t0 = performance.now();
     const remote = await brain('ask', q);
     await wait(Math.max(0, 520 - (performance.now() - t0)));
-    sk.remove(); busy(false);
+    sk.remove(); busy(false, 1000);
     if (g !== S.gen) return;
     render(remote || answerLocal(q), { append: true });
   }
