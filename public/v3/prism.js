@@ -315,16 +315,17 @@
   #pz-pin{position:fixed;left:0;top:0;width:0;height:0;z-index:2147482993;pointer-events:none;opacity:0;transition:opacity .35s var(--ease)}
   #pz-pin.on{opacity:1}
   #pz-pin i{position:absolute;left:0;top:0;border-radius:50%}
-  #pz-pin .ha{width:68px;height:68px;margin:-34px 0 0 -34px;background:radial-gradient(closest-side,color-mix(in srgb,var(--pz-acc) 55%,transparent) 50%,color-mix(in srgb,var(--pz-acc) 0%,transparent));animation:pz-pulse 2.4s cubic-bezier(.2,.6,.3,1) infinite}
+  /* repère de position, version légère : un petit cœur à la couleur du client, une lentille de verre fine autour, une onde mince et lente */
+  #pz-pin .ha{width:40px;height:40px;margin:-20px 0 0 -20px;border:1px solid color-mix(in srgb,var(--pz-acc) 65%,#fff);opacity:0;animation:pz-pulse 3s cubic-bezier(.2,.6,.3,1) infinite}
   #pz-pin:not(.on) .ha{animation-play-state:paused}
-  #pz-pin .gl{width:36px;height:36px;margin:-18px 0 0 -18px;background:linear-gradient(160deg,rgba(255,255,255,.55),rgba(255,255,255,.14));-webkit-backdrop-filter:blur(8px) saturate(170%);backdrop-filter:blur(8px) saturate(170%);
-    box-shadow:inset 0 0 0 1.25px rgba(255,255,255,.78),inset 0 1.5px 0 rgba(255,255,255,.95),0 10px 22px -8px rgba(0,0,0,.55)}
-  #pz-pin .co{width:16px;height:16px;margin:-8px 0 0 -8px;background:radial-gradient(circle at 34% 28%,color-mix(in srgb,var(--pz-acc) 40%,#fff),var(--pz-acc) 62%);box-shadow:0 0 0 2.25px #fff,0 3px 10px color-mix(in srgb,var(--pz-acc) 85%,transparent)}
-  .pz-hcm #pz-pin .ha{width:56px;height:56px;margin:-28px 0 0 -28px}
-  .pz-hcm #pz-pin .gl{width:30px;height:30px;margin:-15px 0 0 -15px}
-  .pz-hcm #pz-pin .co{width:13px;height:13px;margin:-6.5px 0 0 -6.5px}
-  @keyframes pz-pulse{from{transform:scale(.5);opacity:.95}to{transform:scale(1.2);opacity:0}}
-  @media (prefers-reduced-motion:reduce){#pz-pin .ha{animation:none;opacity:.5}}
+  #pz-pin .gl{width:24px;height:24px;margin:-12px 0 0 -12px;background:linear-gradient(160deg,rgba(255,255,255,.26),rgba(255,255,255,.05));-webkit-backdrop-filter:blur(6px) saturate(160%);backdrop-filter:blur(6px) saturate(160%);
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,.62),inset 0 1px 0 rgba(255,255,255,.9),0 6px 14px -6px rgba(0,0,0,.5)}
+  #pz-pin .co{width:9px;height:9px;margin:-4.5px 0 0 -4.5px;background:radial-gradient(circle at 34% 28%,color-mix(in srgb,var(--pz-acc) 35%,#fff),var(--pz-acc) 65%);box-shadow:0 0 0 1.5px rgba(255,255,255,.95),0 0 10px color-mix(in srgb,var(--pz-acc) 70%,transparent)}
+  .pz-hcm #pz-pin .ha{width:32px;height:32px;margin:-16px 0 0 -16px}
+  .pz-hcm #pz-pin .gl{width:20px;height:20px;margin:-10px 0 0 -10px}
+  .pz-hcm #pz-pin .co{width:8px;height:8px;margin:-4px 0 0 -4px}
+  @keyframes pz-pulse{from{transform:scale(.55);opacity:.7}to{transform:scale(1.15);opacity:0}}
+  @media (prefers-reduced-motion:reduce){#pz-pin .ha{animation:none;opacity:.35}}
   /* voile depuis le coin bas droit : repris de la maquette Figma « Pastilles · V2 » (Ombre douce du plan : noir à 20 %, flou 140),
      rendu ici en dégradé radial qui reproduit le flou (gaussienne d'écart-type 70) autour de l'ellipse 760 x 620 centrée sur le coin d'une vue de 1512 x 757 */
   #pz-plansc{position:fixed;z-index:2147482989;pointer-events:none;right:0;bottom:0;width:34.4vw;height:59.4vh;opacity:0;transition:opacity .5s cubic-bezier(.2,.7,.2,1);

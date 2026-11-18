@@ -56,6 +56,8 @@ La barre d'outils Vercel est coupée dans les réglages du projet (Settings > Ge
 - Le voile sombre sous le plan de visite reprend la maquette Figma (fichier du design system, page « Pastilles · V2 », « Ombre douce (plan) ») :
   noir à 20 %, flou 140, ellipse 760 x 620 centrée sur le coin bas droit d'une vue 1512 x 757 (460 x 520 sur téléphone, centre à 40 px du bas),
   rendu en dégradé radial. Avant : jusqu'à 40 %.
+- Repère de position du parcours allégé (retour de Felipe, 18 novembre au soir) : cœur de 9 px à la couleur du client avec un liseré blanc de 1,5 px,
+  lentille de verre fine de 24 px autour (20 px sur téléphone), une seule onde mince et lente. Plus de halo plein ni de disque de 36 px.
 
 ### Variante B « la barre » (`/b`, ou bouton « B · Barre » en haut à droite)
 Même cerveau et mêmes blocs, mais l'IA vit dans une barre en bas au centre. Repliée, la barre devient un mini widget
