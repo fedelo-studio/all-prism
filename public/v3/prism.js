@@ -23,6 +23,7 @@
   const $ = (s, r = document) => r.querySelector(s);
   const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const Q = new URLSearchParams(location.search);
+  const VB = Q.get('pzv') === 'b' || /^#b\b/.test(location.hash); // variante B : l'IA vit dans la barre, repliée en mini widget
   const ROOT = (document.title.split('|').pop() || '').trim() || 'Vue d’ensemble';
   const accent = (getComputedStyle(document.documentElement).getPropertyValue('--all-prism-theme-accent-color') || '#ed695a').trim() || '#ed695a';
   const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
@@ -47,6 +48,8 @@
     mute: '<svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M3.5 8v4h3l4 3.5v-11l-4 3.5h-3Z" fill="currentColor"/><path d="m13.5 8 4 4m0-4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>',
     access: '<svg width="16" height="16" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="3.6" r="1.6" fill="currentColor"/><path d="M5 6.6h10M10 6.6v5m0 0-3 5m3-5 3 5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>',
     pin: '<svg width="14" height="14" viewBox="0 0 20 20"><circle cx="10" cy="10" r="4" fill="currentColor"/></svg>',
+    down: '<svg width="16" height="16" viewBox="0 0 20 20" fill="none"><path d="m5 7.5 5 5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+    up: '<svg width="16" height="16" viewBox="0 0 20 20" fill="none"><path d="m5 12.5 5-5 5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
     close: '<svg width="14" height="14" viewBox="0 0 20 20" fill="none"><path d="m5 5 10 10M15 5 5 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>',
   };
 
@@ -210,6 +213,47 @@
   .pz-c .pz-photo{aspect-ratio:16/6}
   .pz-grab{display:none}
   .pz-c.pz-kb #pz-panel{max-height:none;top:calc(8px + env(safe-area-inset-top))}
+  /* ===== variante B : la barre ===== */
+  .pz-vb #pz-panel{left:50%;transform:translateX(-50%);width:440px;max-height:calc(100% - 96px);transition:opacity .34s var(--ease)}
+  .pz-vb.narrating #pz-panel{transform:translateX(-50%);opacity:0;pointer-events:none}
+  .pz-vb #pz-panel.shut .pz-head,.pz-vb #pz-panel.shut .pz-lens,.pz-vb #pz-panel.shut .pz-feed,.pz-vb #pz-panel.shut .pz-ask,.pz-vb #pz-panel.shut .pz-grab{display:none}
+  .pz-vb #pz-panel:not(.shut) #pz-mini{display:none}
+  .pz-vb #pz-panel.shut{width:auto;min-width:300px;max-width:min(560px,calc(100% - 40px));border-radius:26px}
+  #pz-mini{display:none}
+  .pz-vb #pz-mini{display:flex;align-items:center;gap:12px;padding:8px 8px 8px 16px;min-height:56px;cursor:pointer}
+  #pz-mini .ic{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;flex:none;color:#c9d6ff}
+  #pz-mini .ic.dot::before{content:"";width:9px;height:9px;border-radius:50%;background:var(--accent);box-shadow:0 0 10px var(--accent)}
+  #pz-mini .tx{flex:1;min-width:0;display:flex;flex-direction:column}
+  #pz-mini .tx b{font-size:15px;line-height:20px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  #pz-mini .tx small{font-size:13px;line-height:17px;color:var(--soft);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  #pz-mini .bt{height:40px;min-width:40px;padding:0 12px;border-radius:20px;display:flex;align-items:center;justify-content:center;gap:6px;background:var(--fill)!important;font-size:13px;line-height:18px;font-weight:500;flex:none;transition:background .2s}
+  #pz-mini .bt:hover{background:var(--fill2)!important}
+  #pz-mini .bt.round{padding:0;width:40px}
+  #pz-mini .pp{width:40px;height:40px;border-radius:50%;background:#fff!important;color:#15171a!important;display:grid;place-items:center;flex:none}
+  #pz-mini .scrub{flex:1;min-width:120px;display:flex;flex-direction:column;gap:7px;padding:4px 0;cursor:default}
+  #pz-mini .scrub small{font-size:13px;line-height:17px;color:var(--soft);display:flex;justify-content:space-between;gap:8px;white-space:nowrap}
+  #pz-mini .scrub small span{overflow:hidden;text-overflow:ellipsis}
+  #pz-mini .scrub small em{font-style:normal;font-variant-numeric:tabular-nums;color:var(--ink)}
+  #pz-mini .trk{position:relative;height:20px;cursor:pointer;touch-action:none}
+  #pz-mini .trk::before{content:"";position:absolute;left:0;right:0;top:8px;height:4px;border-radius:2px;background:var(--faint)}
+  #pz-mini .trk i{position:absolute;left:0;top:8px;height:4px;border-radius:2px;background:#fff;width:var(--v,0%)}
+  #pz-mini .trk u{position:absolute;top:2px;left:var(--v,0%);width:16px;height:16px;margin-left:-8px;border-radius:50%;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.4);transition:transform .2s var(--ease)}
+  #pz-mini .trk:active u{transform:scale(1.2)}
+  #pz-mini .kind{font-size:11px;line-height:14px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--soft)}
+  .pz-vb .pz-head .pz-fold{width:32px;height:32px;border-radius:50%;background:var(--fill);display:grid;place-items:center;flex:none;margin-left:6px}
+  .pz-vb .pz-head .pz-fold:hover{background:var(--fill2)}
+  .pz-fold{display:none}
+  .pz-vb .pz-fold{display:grid}
+  .pz-c.pz-vb #pz-panel{left:8px;right:8px;transform:none;width:auto;max-height:70%}
+  .pz-c.pz-vb #pz-panel.shut{min-width:0;max-width:none}
+  .pz-c.pz-vb.narrating #pz-panel{transform:none}
+  .pz-c.pz-vb #pz-mini{min-height:60px}
+  #pz-vars{display:flex;gap:2px;padding:4px;border-radius:22px;pointer-events:auto}
+  #pz-vars button{height:32px;padding:0 12px;border-radius:16px;font-size:13px;line-height:18px;color:var(--soft)}
+  #pz-vars button[aria-pressed=true]{background:var(--fill2);color:#fff}
+  .pz-c #pz-vars{display:none}
+  .pz-vb #pz-tell{display:none}
+  html.pz-hc:not(.pz-orig) #footer{top:calc(14px + env(safe-area-inset-top));bottom:auto!important;left:14px;right:auto!important}
   @media (prefers-reduced-motion:reduce){#pz *{animation:none!important;transition:none!important}}
   `;
   document.head.append(css);
@@ -220,13 +264,14 @@
   root.setAttribute('translate', 'no');
   root.innerHTML = `
     <section id="pz-panel" class="pz-glass" aria-label="Prisme">
+      <div id="pz-mini" role="group" aria-label="Prisme replié"></div>
       <i class="pz-grab"></i>
-      <header class="pz-head"><div id="pz-crumb" class="pz-crumb"></div><span id="pz-brain" class="pz-brain local" title=""><b></b><span>IA</span></span></header>
+      <header class="pz-head"><div id="pz-crumb" class="pz-crumb"></div><span id="pz-brain" class="pz-brain local" title=""><b></b><span>IA</span></span><button type="button" class="pz-fold" id="pz-fold" aria-label="Réduire">${I.down}</button></header>
       <nav id="pz-lens" class="pz-lens" aria-label="Regard"><u></u></nav>
       <div id="pz-feed" class="pz-feed" aria-live="polite"></div>
       <form id="pz-form" class="pz-ask" autocomplete="off">${I.spark}<input id="pz-in" type="text" enterkeyhint="send" placeholder="Demander à Leysin365…" aria-label="Poser une question"><button type="submit" aria-label="Envoyer">${I.send}</button></form>
     </section>
-    <div id="pz-top"><button id="pz-tell" class="pz-glass" type="button">${I.spark}<span>Raconter la ligne</span></button>
+    <div id="pz-top"><div id="pz-vars" class="pz-glass" aria-label="Variante"><button type="button" data-v="a">A · Fiche</button><button type="button" data-v="b">B · Barre</button></div><button id="pz-tell" class="pz-glass" type="button">${I.spark}<span>Raconter la ligne</span></button>
       <div id="pz-seg" class="pz-seg pz-glass"><button type="button" data-m="off">Origine</button><button type="button" data-m="on" aria-pressed="true">Prisme</button></div></div>
     <section id="pz-cap" class="pz-glass" aria-live="polite">
       <div class="pz-cap-h"><div><div class="k">Récit · <span id="pz-cap-i"></span></div><div class="n" id="pz-cap-n"></div></div><span class="sp"></span>
@@ -549,6 +594,7 @@
     q = (q || input.value).trim(); if (!q) return;
     input.value = ''; input.blur();
     if (S.compact) panel.classList.remove('min');
+    if (VB) setShut(false);
     const g = ++S.gen;
     render([{ t: 'q', text: q }], { append: true });
     const sk = skeleton(true); busy(true);
@@ -561,6 +607,7 @@
   }
   function fly(id) {
     if (S.compact) panel.classList.add('min');
+    if (VB && S.compact) setShut(true);
     if (!focusTarget(id)) render([{ t: 'story', text: 'La vue 3D n’est pas encore prête.' }], { append: true });
   }
 
@@ -663,7 +710,7 @@
   for (const e of ['wheel', 'touchmove', 'pointerdown']) panel.addEventListener(e, (ev) => ev.stopPropagation(), { passive: true });
   input.addEventListener('focus', () => { if (S.compact) panel.classList.remove('min'); kb(); });
   input.addEventListener('blur', () => setTimeout(kb, 60));
-  panel.querySelector('.pz-grab').onclick = () => panel.classList.toggle('min');
+  panel.querySelector('.pz-grab').onclick = () => (VB ? R('pz-fold').click() : panel.classList.toggle('min'));
   const onCanvas = (e) => { if (!root.contains(e.target) && S.narr) endNarr(); };
   addEventListener('pointerdown', onCanvas, true);
   const onKey = (e) => { if (e.key === 'Escape' && S.narr) endNarr(); };
@@ -682,7 +729,7 @@
 
   function layout() {
     S.compact = innerWidth < 640;
-    root.classList.toggle('pz-c', S.compact);
+    root.classList.toggle('pz-c', S.compact); document.documentElement.classList.toggle('pz-hc', S.compact);
     slide(); kb();
   }
   addEventListener('resize', layout);
@@ -696,11 +743,111 @@
     S.hotspots = (j.hotspots || []).filter((a) => a && a.id && a.label); if (S.open && level() === 1) compose();
   }).catch(() => {});
 
+  /* ---------- variante B : la barre qui se replie en mini widget ---------- */
+  S.shut = true;
+  function setShut(v, quiet) {
+    if (!VB || S.shut === v) return;
+    const r0 = panel.getBoundingClientRect();
+    S.shut = v; panel.classList.toggle('shut', v); miniSig = ''; mini();
+    if (!v) slide();
+    const r1 = panel.getBoundingClientRect();
+    if (!RM && !quiet && (Math.abs(r1.width - r0.width) > 2 || Math.abs(r1.height - r0.height) > 2))
+      panel.animate([{ width: r0.width + 'px', height: r0.height + 'px', borderRadius: v ? '28px' : '26px' }, { width: r1.width + 'px', height: r1.height + 'px' }],
+        { duration: 480, easing: 'cubic-bezier(.2,.9,.26,1.05)' });
+  }
+  const miniEl = R('pz-mini');
+  let miniSig = '';
+  const miniMode = () => (S.hasTour ? 'tour' : S.open ? 'place' : 'idle');
+  function subline() {
+    const { pairs, notes } = parse(S.facts);
+    const n = notes.find((x) => !norm(S.title).includes(norm(x)) && !isAccess(x));
+    const alt = pairs.find(([k]) => /altitude/i.test(k));
+    return [n && cap(n), alt && 'quai à ' + alt[1]].filter(Boolean).join(' · ') || 'Touchez pour la fiche';
+  }
+  function mini() {
+    if (!VB) return;
+    const m = miniMode();
+    const sig = [m, S.title, S.facts.length, S.stations.length, S.compact].join('|');
+    if (sig !== miniSig) {
+      miniSig = sig;
+      if (m === 'idle') {
+        miniEl.innerHTML = `<span class="ic">${I.spark}</span><span class="tx"><b>Demander à ${esc(ROOT)}</b><small>${S.stations.length ? S.stations.length + ' gares · ' : ''}une question, une gare, un récit</small></span>` +
+          `<button type="button" class="bt" data-a="tell">${I.play}<span>Raconter</span></button><button type="button" class="bt round" data-a="open" aria-label="Ouvrir">${I.up}</button>`;
+      } else if (m === 'place') {
+        miniEl.innerHTML = `<button type="button" class="bt round" data-a="back" aria-label="Retour">${I.back}</button><span class="tx"><b>${esc(S.title)}</b><small>${esc(subline())}</small></span>` +
+          `<button type="button" class="bt round" data-a="open" aria-label="Ouvrir la fiche">${I.up}</button>`;
+      } else {
+        miniEl.innerHTML = `<button type="button" class="pp" data-a="play" aria-label="Lecture">${I.play}</button>` +
+          `<div class="scrub"><small><span>Parcours · ${esc(S.title)}</span><em>0 %</em></small><div class="trk" role="slider" tabindex="0" aria-label="Avancer dans le parcours" aria-valuemin="0" aria-valuemax="100"><i></i><u></u></div></div>` +
+          `<button type="button" class="bt" data-a="exit">${I.close}<span>Quitter</span></button><button type="button" class="bt round" data-a="open" aria-label="Ouvrir la fiche">${I.up}</button>`;
+        bindScrub(miniEl.querySelector('.trk'));
+      }
+    }
+    if (m === 'tour') {
+      const p = tourTarget != null ? tourTarget : tourProg();
+      miniEl.style.setProperty('--v', (Math.min(1, Math.max(0, p)) * 100).toFixed(1) + '%');
+      const em = miniEl.querySelector('.scrub em'); if (em) em.textContent = Math.round(p * 100) + '\u202F%';
+      const pp = miniEl.querySelector('.pp'); const want = performance.now() - (S.tourMove || 0) < 700 ? 'pause' : 'play';
+      if (pp && pp.dataset.s !== want) { pp.dataset.s = want; pp.innerHTML = I[want]; }
+    }
+  }
+  const tourProg = () => parseFloat(V.ctrl()?.querySelector('.camera-spatial-handle')?.getAttribute('aria-valuenow') || '0') || 0;
+  // on avance la caméra du viewer en lui envoyant les touches de son propre curseur, jusqu'à la position voulue
+  let tourTarget = null, tourHeld = false, lastKey = 0;
+  function seekLoop(t) {
+    if (tourTarget == null) return;
+    const cur = tourProg(), d = tourTarget - cur;
+    if (Math.abs(d) < 0.006) { if (!tourHeld) { tourTarget = null; return; } }
+    else if (t - lastKey > 70) {
+      lastKey = t;
+      const key = tourTarget < 0.005 ? 'Home' : tourTarget > 0.995 ? 'End' : d >= 0.1 ? 'PageUp' : d <= -0.1 ? 'PageDown' : d > 0 ? 'ArrowRight' : 'ArrowLeft';
+      const h = V.ctrl()?.querySelector('.camera-spatial-handle');
+      if (h) for (const n of ['keydown', 'keyup']) h.dispatchEvent(new KeyboardEvent(n, { key, bubbles: true, cancelable: true }));
+      else if (window.__stubSeek) window.__stubSeek(tourTarget);
+    }
+    mini(); requestAnimationFrame(seekLoop);
+  }
+  function bindScrub(trk) {
+    const at = (e) => { const r = trk.getBoundingClientRect(); return Math.min(1, Math.max(0, (e.clientX - r.left) / Math.max(1, r.width))); };
+    trk.addEventListener('pointerdown', (e) => { e.stopPropagation(); trk.setPointerCapture(e.pointerId); tourHeld = true; const go = tourTarget == null; tourTarget = at(e); mini(); go && requestAnimationFrame(seekLoop); });
+    trk.addEventListener('pointermove', (e) => { if (tourHeld) { tourTarget = at(e); mini(); } });
+    const up = () => { tourHeld = false; };
+    trk.addEventListener('pointerup', up); trk.addEventListener('pointercancel', up);
+    trk.addEventListener('keydown', (e) => {
+      e.stopPropagation(); const d = { ArrowRight: 0.05, ArrowUp: 0.05, ArrowLeft: -0.05, ArrowDown: -0.05 }[e.key];
+      if (d !== undefined) { e.preventDefault(); const go = tourTarget == null; tourTarget = Math.min(1, Math.max(0, tourProg() + d)); go && requestAnimationFrame(seekLoop); }
+    });
+  }
+  miniEl.addEventListener('click', (e) => {
+    const a = e.target.closest('[data-a]')?.dataset.a;
+    if (e.target.closest('.scrub')) return;
+    if (a === 'tell') return narrate();
+    if (a === 'back') return back(1);
+    if (a === 'exit') { S.userShut = true; return back(1); } // on sort du parcours : retour au simple widget du lieu
+    if (a === 'play') return V.ctrl()?.querySelector('.camera-spatial-transport')?.click();
+    S.userShut = false; setShut(false);
+    if (miniMode() === 'idle' && !S.compact) setTimeout(() => input.focus(), 60);
+  });
+  R('pz-fold').onclick = () => { S.userShut = true; setShut(true); };
+  // ce qui se passe à l'écran décide de l'état : arrivée sur un lieu = fiche ouverte (bureau), parcours = widget de lecture, vue d'ensemble = barre
+  let lastPlace = '';
+  function context() {
+    if (!VB) return;
+    const here = (S.open ? S.title : '') + '|' + S.hasTour;
+    if (here === lastPlace) return; lastPlace = here;
+    if (S.hasTour || !S.open || S.compact || S.userShut) setShut(true); else setShut(false);
+  }
+  if (VB) { root.classList.add('pz-vb'); panel.classList.add('shut'); }
+  for (const b of R('pz-vars').children) {
+    b.setAttribute('aria-pressed', String((b.dataset.v === 'b') === VB));
+    b.onclick = () => { if ((b.dataset.v === 'b') === VB) return; const u = new URL(location.href); b.dataset.v === 'b' ? u.searchParams.set('pzv', 'b') : u.searchParams.delete('pzv'); u.hash = ''; location.href = u.toString(); };
+  }
+
   /* ---------- boucle : on suit le viewer ---------- */
   let timer = 0;
   function tick(force) {
-    if (read() || force) { if (!S.narr) compose(); }
-    syncTour();
+    if (read() || force) { if (!S.narr) compose(); context(); }
+    syncTour(); mini();
   }
   timer = setInterval(tick, 200);
   S.brain = 'pending';

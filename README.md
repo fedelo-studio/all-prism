@@ -34,3 +34,8 @@ commande IA en réponses d'exemple, pas de déplacement à la main sur le tracé
   par défaut `claude-haiku-5-5`). Sans clé, badge « IA démo » et compositeur local qui n'utilise que le texte des fiches.
 - Test local : `python3 -m http.server 8765` à la racine, puis
   `http://localhost:8765/test/stub-v3.html?config=config.json&manifestUrl=manifest.json`.
+
+### Variante B « la barre » (`/b`, ou bouton « B · Barre » en haut à droite)
+Même cerveau et mêmes blocs, mais l'IA vit dans une barre en bas au centre. Repliée, la barre devient un mini widget
+qui change selon l'écran : vue d'ensemble = « Demander à Leysin365 » + Raconter ; lieu = nom, repère, retour ;
+parcours guidé = lecture, curseur pour avancer, Quitter. Sur téléphone elle reste repliée par défaut.

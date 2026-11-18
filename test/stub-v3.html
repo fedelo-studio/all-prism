@@ -31,6 +31,6 @@ function show(id){const d=P[id]||{title:id,eyebrow:'',img:'',text:'• Texte'};c
 window.unityInstance={SendMessage(o,m,v){const j=JSON.parse(v);stack.push(j.targetId);show(j.targetId);}};
 document.querySelector('#poi-card-close-button').onclick=()=>{stack.pop();if(stack.length)show(stack[stack.length-1]);else{document.querySelector('#poi-card-panel').dataset.open='false';document.querySelector('#poi-card-title').textContent='';document.querySelector('.camera-spatial-control').setAttribute('hidden','')}};
 let prog=0,tm=null;document.querySelector('.camera-spatial-transport').onclick=()=>{if(tm){clearInterval(tm);tm=null}else tm=setInterval(()=>{prog=Math.min(1,prog+.01);document.querySelector('.camera-spatial-handle').setAttribute('aria-valuenow',prog)},50)};
-window.__open=show;
+window.__open=show;window.__stubSeek=(v)=>{prog=v;document.querySelector('.camera-spatial-handle').setAttribute('aria-valuenow',prog)};
 </script>
 <script src="../public/v3/prism.js"></script></body></html>
