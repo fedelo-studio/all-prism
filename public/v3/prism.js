@@ -37,7 +37,7 @@
 
   /* ---------- icônes (traits 1.6, 20px) ---------- */
   const I = {
-    spark: '<svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M10 2.5c.4 3.6 1.9 5.6 5.5 6.3v.4c-3.6.7-5.1 2.7-5.5 6.3h-.4c-.4-3.6-1.9-5.6-5.5-6.3v-.4c3.6-.7 5.1-2.7 5.5-6.3h.4Z" fill="currentColor"/><path d="M15.6 2.4c.1 1 .6 1.6 1.6 1.8v.2c-1 .2-1.5.8-1.6 1.8h-.2c-.1-1-.6-1.6-1.6-1.8v-.2c1-.2 1.5-.8 1.6-1.8h.2Z" fill="currentColor" opacity=".7"/></svg>',
+    spark: '<svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M10 2.5c.4 3.6 1.9 5.6 5.5 6.3v.4c-3.6.7-5.1 2.7-5.5 6.3h-.4c-.4-3.6-1.9-5.6-5.5-6.3v-.4c3.6-.7 5.1-2.7 5.5-6.3h.4Z" fill="url(#pzg)"/><path d="M15.6 2.4c.1 1 .6 1.6 1.6 1.8v.2c-1 .2-1.5.8-1.6 1.8h-.2c-.1-1-.6-1.6-1.6-1.8v-.2c1-.2 1.5-.8 1.6-1.8h.2Z" fill="url(#pzg)" opacity=".7"/></svg>',
     send: '<svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M10 15.5v-11M5.5 9 10 4.5 14.5 9" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>',
     back: '<svg width="16" height="16" viewBox="0 0 20 20" fill="none"><path d="M12.5 4.5 7 10l5.5 5.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
     go: '<svg width="16" height="16" viewBox="0 0 20 20" fill="none"><path d="M4.5 10h11m-4.5-4.5L15.5 10 11 14.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>',
@@ -58,13 +58,15 @@
   css.id = 'pz-style';
   css.textContent = `
   html:not(.pz-orig) #poi-card-panel,html:not(.pz-orig) .camera-spatial-control,html:not(.pz-orig) #interaction-hint{opacity:0!important;pointer-events:none!important}
-  .pz-orig #pz>*:not(#pz-top){display:none!important}
+  .pz-orig #pz>*:not(#pz-top):not(svg){display:none!important}
   #pz{position:fixed;inset:0;z-index:2147483000;pointer-events:none;
     font:400 15px/20px -apple-system,BlinkMacSystemFont,"SF Pro Text","Inter","Helvetica Neue",Arial,sans-serif;letter-spacing:-.01em;color:var(--ink);
     -webkit-font-smoothing:antialiased;text-align:left;
     --ink:rgba(255,255,255,.97);--soft:rgba(235,240,248,.72);--faint:rgba(255,255,255,.12);--fill:rgba(255,255,255,.09);--fill2:rgba(255,255,255,.16);
     --glass:rgba(18,20,24,.56);--accent:${accent};--ease:cubic-bezier(.2,.7,.2,1);--spring:cubic-bezier(.2,.9,.26,1.2);
-    --spectrum:conic-gradient(from var(--pz-a,0deg),#ff6b6b,#ffb547,#f6ff6b,#5dffa8,#5ed7ff,#7b8cff,#d16bff,#ff6b6b)}
+    --spectrum:conic-gradient(from var(--pz-a,0deg),#fff 0deg,rgba(255,244,214,.95) 7deg,rgba(255,196,132,.8) 18deg,rgba(255,132,124,.5) 32deg,rgba(255,95,114,.18) 46deg,rgba(255,95,114,0) 60deg,rgba(95,141,255,0) 120deg,rgba(95,141,255,.18) 134deg,rgba(88,150,255,.5) 148deg,rgba(120,190,255,.8) 162deg,rgba(214,240,255,.95) 173deg,#fff 180deg,rgba(255,244,214,.95) 187deg,rgba(255,196,132,.8) 198deg,rgba(255,132,124,.5) 212deg,rgba(255,95,114,.18) 226deg,rgba(255,95,114,0) 240deg,rgba(95,141,255,0) 300deg,rgba(95,141,255,.18) 314deg,rgba(88,150,255,.5) 328deg,rgba(120,190,255,.8) 342deg,rgba(214,240,255,.95) 353deg,#fff 360deg);
+    --halo:conic-gradient(from var(--pz-a,0deg),#5f8dff,#4ea4ff,#bfe0ff,#ffdf96,#ffab62,#ff5f72,#5f8dff);
+    --ai-tint:linear-gradient(115deg,rgba(95,141,255,.07),rgba(78,164,255,.05) 30%,rgba(255,255,255,.02) 50%,rgba(255,171,98,.05) 70%,rgba(255,95,114,.07))}
   :where(#pz) *{box-sizing:border-box;margin:0;padding:0}
   :where(#pz) button{font:inherit;letter-spacing:inherit;color:inherit;background:none;border:0;cursor:pointer;-webkit-tap-highlight-color:transparent;text-align:inherit}
   #pz button:focus-visible{outline:2px solid #fff;outline-offset:2px}
@@ -80,7 +82,7 @@
     transition:transform .52s var(--ease),opacity .34s var(--ease),max-height .34s var(--ease)}
   #pz-panel::before{content:"";position:absolute;inset:-1px;border-radius:inherit;padding:1.5px;background:var(--spectrum);opacity:0;transition:opacity .5s;
     -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;animation:pz-turn 3.2s linear infinite}
-  #pz-panel::after{content:"";position:absolute;inset:-18px;border-radius:44px;background:var(--spectrum);filter:blur(34px);opacity:0;transition:opacity .6s;z-index:-1;pointer-events:none;animation:pz-turn 3.2s linear infinite}
+  #pz-panel::after{content:"";position:absolute;inset:-18px;border-radius:44px;background:var(--halo);filter:blur(34px);opacity:0;transition:opacity .6s;z-index:-1;pointer-events:none;animation:pz-turn 3.2s linear infinite}
   #pz.busy #pz-panel::before{opacity:.9}
   #pz.busy #pz-panel::after{opacity:.22}
   #pz.narrating #pz-panel{transform:translateX(calc(-100% - 40px));opacity:0;pointer-events:none}
@@ -134,7 +136,7 @@
   .pz-place svg{opacity:.5;flex:none}
   .pz-place.static{cursor:default;background:none;box-shadow:inset 0 0 0 1px var(--faint)}
   .pz-hint{font-size:13px;line-height:18px;color:var(--soft)}
-  .pz-access{display:flex;flex-direction:column;gap:2px;padding:14px;border-radius:18px;background:linear-gradient(135deg,rgba(93,215,255,.16),rgba(123,140,255,.10));box-shadow:inset 0 0 0 1px rgba(150,200,255,.18)}
+  .pz-access{display:flex;flex-direction:column;gap:2px;padding:14px;border-radius:18px;background:linear-gradient(135deg,rgba(78,164,255,.16),rgba(95,141,255,.10));box-shadow:inset 0 0 0 1px rgba(150,200,255,.18)}
   .pz-access p{display:flex;gap:10px;align-items:baseline;font-size:15px;line-height:21px;padding:4px 0}
   .pz-access p::before{content:"";width:6px;height:6px;border-radius:50%;background:#8fd8ff;flex:none;transform:translateY(-2px)}
   .pz-table{width:100%;border-collapse:collapse;font-size:13px;line-height:18px;font-variant-numeric:tabular-nums}
@@ -167,9 +169,8 @@
   .pz-anchor{color:var(--ink);text-decoration:underline;text-decoration-color:rgba(255,255,255,.35);text-underline-offset:3px;cursor:pointer}
 
   /* compositeur, intégré au bas du prisme */
-  .pz-ask{position:relative;display:flex;align-items:center;gap:10px;margin:4px 12px 12px;height:52px;padding:0 6px 0 16px;border-radius:16px;background:rgba(0,0,0,.26);box-shadow:inset 0 0 0 1px rgba(255,255,255,.08);flex:none}
+  .pz-ask{position:relative;display:flex;align-items:center;gap:10px;margin:4px 12px 12px;height:52px;padding:0 6px 0 16px;border-radius:16px;background:var(--ai-tint),rgba(0,0,0,.26);box-shadow:inset 0 0 0 1px rgba(255,255,255,.08);flex:none}
   .pz-ask svg{flex:none}
-  .pz-ask>svg{color:#c9d6ff}
   .pz-ask input{flex:1;min-width:0;height:100%;border:0;background:none;font:inherit;font-size:16px;color:var(--ink)}
   .pz-ask input::placeholder{color:var(--soft)}
   .pz-ask button{width:40px;height:40px;border-radius:10px;display:grid;place-items:center;background:var(--fill2)!important;transition:background .2s,transform .2s var(--ease)}
@@ -226,7 +227,7 @@
   .pz-vb #pz-panel.shut{width:auto;min-width:0;max-width:min(520px,calc(100% - 40px));border-radius:28px}
   #pz-mini{display:none}
   .pz-vb #pz-mini{display:flex;align-items:center;gap:10px;padding:8px;height:56px;cursor:pointer}
-  #pz-mini .ic{width:40px;height:40px;margin-right:-6px;border-radius:50%;display:grid;place-items:center;flex:none;color:#c9d6ff}
+  #pz-mini .ic{width:40px;height:40px;margin-right:-6px;border-radius:50%;display:grid;place-items:center;flex:none}
   #pz-mini .ic.dot::before{content:"";width:9px;height:9px;border-radius:50%;background:var(--accent);box-shadow:0 0 10px var(--accent)}
   #pz-mini .tx{flex:1;min-width:0;display:flex;flex-direction:column;padding-right:6px}
   #pz-mini .tx b{font-size:15px;line-height:20px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -317,7 +318,7 @@
   const root = document.createElement('div');
   root.id = 'pz';
   root.setAttribute('translate', 'no');
-  root.innerHTML = `
+  root.innerHTML = `<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><linearGradient id="pzg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#bfe0ff"/><stop offset=".5" stop-color="#ffffff"/><stop offset="1" stop-color="#ffdf96"/></linearGradient></defs></svg>
     <section id="pz-panel" class="pz-glass" aria-label="Prisme">
       <div id="pz-mini" role="group" aria-label="Prisme replié"></div>
       <i class="pz-grab"></i>
